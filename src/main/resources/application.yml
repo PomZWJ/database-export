@@ -1,0 +1,13 @@
+server:
+  port: 9999
+  servlet:
+    context-path: /dbExport
+spring:
+  application:
+    name: db-export
+
+word:
+  model:
+    export: D://export.docx
+    import: import.docx
+    sub-model: sub_model.docx

@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>数据库表结构导出生成WORD文档</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="../bootstrap/css/bootstrap.min.css">
+    <script src="../js/jquery-3.3.1.js"></script>
+    <script src="../bootstrap/js/bootstrap.min.js"></script>
+</head>
+<script type="text/javascript">
+    function o_excute() {
+        $('#messageText').text("正在努力生成中......");
+        $('#myModal').modal('show');
+        $.ajax({
+            url: "/dbExport/makeWord",
+            type: "post",
+            data: {dbKind:'oracle',ip: $('#o_ip').val(),port:$('#o_port').val(),dbName:$('#o_dbName').val(), userName:$('#o_userName').val(), password:$('#o_password').val()},
+            success: function (data) {
+                $('#messageText').text(data.message);
+            }, error: function (data) {
+                $('#messageText').text("未知错误");
+            }
+        });
+    }
+    function m_excute() {
+        $('#messageText').text("正在努力生成中......");
+        $('#myModal').modal('show');
+        $.ajax({
+            url: "/dbExport/makeWord",
+            type: "post",
+            data: {dbKind:'mysql',ip: $('#m_ip').val(),port:$('#m_port').val(),dbName:$('#m_dbName').val(), userName:$('#m_userName').val(), password:$('#m_password').val()},
+            success: function (data) {
+                $('#messageText').text(data.message);
+            }, error: function (data) {
+                $('#messageText').text("未知错误");
+            }
+        });
+    }
+    function s_excute() {
+        $('#messageText').text("正在努力生成中......");
+        $('#myModal').modal('show');
+        $.ajax({
+            url: "/dbExport/makeWord",
+            type: "post",
+            data: {dbKind:'sqlserver',ip: $('#s_ip').val(),port:$('#s_port').val(),dbName:$('#s_dbName').val(), userName:$('#s_userName').val(), password:$('#s_password').val()},
+            success: function (data) {
+                $('#messageText').text(data.message);
+            }, error: function (data) {
+                $('#messageText').text("未知错误");
+            }
+        });
+    }
+</script>
+<div class="container">
+    <h1>YH 数据库表结构导出生成WORD文档</h1>
+    <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
+        <div class="panel panel-default">
+            <div class="panel-heading" role="tab" id="headingOne">
+                <h4 class="panel-title">
+                    <a role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseOne"
+                       aria-expanded="true" aria-controls="collapseOne">
+                        ORACLE
+                    </a>
+                </h4>
+            </div>
+            <div id="collapseOne" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="headingOne">
+                <div class="panel-body">
+                    <form style="margin-top: 20px;margin-left: 100px;margin-right: 400px;">
+                        <label><h1>oracle info</h1></label>
+                        <div class="form-inline">
+                            <div class="form-group">
+                                <label class="sr-only" for="o_ip">ip</label>
+                                <input type="text" class="form-control" id="o_ip" placeholder="127.0.0.1">
+                            </div>
+                            <div class="form-group">
+                                <label class="sr-only" for="o_port">port</label>
+                                <input type="text" class="form-control" id="o_port" placeholder="" value="1521">
+                            </div>
+                            <div class="form-group">
+                                <label class="sr-only" for="o_dbName">dbName</label>
+                                <input type="text" class="form-control" id="o_dbName" placeholder="" value="orcl">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="o_userName">userName</label>
+                            <input type="text" class="form-control" id="o_userName" placeholder="userName">
+                        </div>
+                        <div class="form-group">
+                            <label for="o_password">password</label>
+                            <input type="text" class="form-control" id="o_password" placeholder="password">
+                        </div>
+
+                        <p><a class="btn btn-primary btn-lg" href="javascript:o_excute();"
+                              role="button">生成文档</a></p>
+                        <p style="color: red">生成的文档在D盘下的export.docx</p>
+                    </form>
+
+                </div>
+            </div>
+        </div>
+
+        <div class="panel panel-default">
+            <div class="panel-heading" role="tab" id="headingTwo">
+                <h4 class="panel-title">
+                    <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion"
+                       href="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+                        MYSQL
+                    </a>
+                </h4>
+            </div>
+            <div id="collapseTwo" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingThree">
+                <div class="panel-body">
+                    <form style="margin-top: 20px;margin-left: 100px;margin-right: 400px;">
+                        <label><h1>mysql info</h1></label>
+                        <div class="form-inline">
+                            <div class="form-group">
+                                <label class="sr-only" for="m_ip">ip</label>
+                                <input type="text" class="form-control" id="m_ip" placeholder="127.0.0.1">
+                            </div>
+                            <div class="form-group">
+                                <label class="sr-only" for="m_port">port</label>
+                                <input type="text" class="form-control" id="m_port" placeholder="3306" value="3306">
+                            </div>
+                            <div class="form-group">
+                                <label class="sr-only" for="m_dbName">dbName</label>
+                                <input type="text" class="form-control" id="m_dbName" placeholder="数据库名">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="m_userName">userName</label>
+                            <input type="text" class="form-control" id="m_userName" placeholder="userName">
+                        </div>
+                        <div class="form-group">
+                            <label for="m_password">password</label>
+                            <input type="text" class="form-control" id="m_password" placeholder="password">
+                        </div>
+
+                        <p><a class="btn btn-primary btn-lg" href="javascript:m_excute();" role="button">生成文档</a>
+                        </p>
+                        <p style="color: red">生成的文档在D盘下的export.docx</p>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <div class="panel panel-default">
+            <div class="panel-heading" role="tab" id="headingThree">
+                <h4 class="panel-title">
+                    <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion"
+                       href="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
+                        SQL SERVER
+                    </a>
+                </h4>
+            </div>
+            <div id="collapseThree" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingThree">
+                <div class="panel-body">
+                    <form style="margin-top: 20px;margin-left: 100px;margin-right: 400px;">
+                        <label><h1>sql server info</h1></label>
+                        <div class="form-inline">
+                            <div class="form-group">
+                                <label class="sr-only" for="s_ip">ip</label>
+                                <input type="text" class="form-control" id="s_ip" placeholder="127.0.0.1">
+                            </div>
+                            <div class="form-group">
+                                <label class="sr-only" for="s_port">port</label>
+                                <input type="text" class="form-control" id="s_port" placeholder="1433" value="1433">
+                            </div>
+                            <div class="form-group">
+                                <label class="sr-only" for="s_dbName">dbName</label>
+                                <input type="text" class="form-control" id="s_dbName" placeholder="数据库名">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="s_userName">userName</label>
+                            <input type="text" class="form-control" id="s_userName" placeholder="userName">
+                        </div>
+                        <div class="form-group">
+                            <label for="s_password">password</label>
+                            <input type="text" class="form-control" id="s_password" placeholder="password">
+                        </div>
+
+                        <p><a class="btn btn-primary btn-lg" href="javascript:s_excute();" role="button">生成文档</a>
+                        </p>
+                        <p style="color: red">生成的文档在D盘下的export.docx</p>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- 模态框（Modal） -->
+    <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true"
+         data-keyboard="false">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    <h4 class="modal-title" id="myModalLabel">正在努力生成文档中，成功后文档在D:export.docx</h4>
+                </div>
+                <div class="modal-body" id="messageText">正在努力生成中......</div>
+
+            </div><!-- /.modal-content -->
+        </div><!-- /.modal -->
+    </div>
+
+
+</div>
+</html>
