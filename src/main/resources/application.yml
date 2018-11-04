@@ -9,5 +9,5 @@ spring:
 word:
   model:
     export: D://export.docx
-    import: import.docx
-    sub-model: sub_model.docx
+    import: \import.docx
+    sub-model: \sub_model.docx
