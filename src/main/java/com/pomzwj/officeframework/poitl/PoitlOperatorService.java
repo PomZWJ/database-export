@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Service;
+import org.springframework.util.ResourceUtils;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -85,10 +86,10 @@ public class PoitlOperatorService {
             segmentDataList.add(segmentData);
         }
         //Resource resource = new ClassPathResource(subModelWord);
-        tempMap.put("seg",new DocxRenderData(new File(subModelWord), segmentDataList));
+        tempMap.put("seg",new DocxRenderData(ResourceUtils.getFile(subModelWord), segmentDataList));
         //Resource resource2 = new ClassPathResource(importWord);
         /*1.根据模板生成文档*/
-        XWPFTemplate template = XWPFTemplate.compile(new File(importWord)).render(tempMap);
+        XWPFTemplate template = XWPFTemplate.compile(ResourceUtils.getFile(importWord)).render(tempMap);
         /*2.生成文档*/
 
         FileOutputStream out = new FileOutputStream(exportWord);

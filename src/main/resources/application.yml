@@ -1,5 +1,5 @@
 server:
-  port: 9999
+  port: 6798
   servlet:
     context-path: /dbExport
 spring:
@@ -9,5 +9,5 @@ spring:
 word:
   model:
     export: D://export.docx
-    import: \import.docx
-    sub-model: \sub_model.docx
+    import: classpath:docx/import.docx
+    sub-model: classpath:docx/sub_model.docx
