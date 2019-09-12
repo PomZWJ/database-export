@@ -1,16 +1,12 @@
-# database-export
-#### SpringBoot based open source database table structure export word document tool
+database-export,让生成数据库结构文档更容易
+=========================
 
-## Development Tools
-#### InteliJ IDEA 2017.02
-## Development Environment
-#### 1.SpringBoot 2.0.6
-#### 2.JDK 1.8
-#### 3.Maven 3.5.0
+![Spring Boot 2.0.6](https://img.shields.io/badge/Spring%20Boot-2.0-brightgreen.svg)
+![Thymeleaf 3.0](https://img.shields.io/badge/Thymeleaf-3.0-yellow.svg)
+![JDK 1.8](https://img.shields.io/badge/JDK-1.8-brightgreen.svg)
+![Maven](https://img.shields.io/badge/Maven-3.5.0-yellowgreen.svg)
 
-## Instructions
-#### If you need the source code,you can download it and run in InteliJ IDEA. 
-#### OtherWise, you don't need modify the code,you can download the realseJar floder,These are the programs I have packed.You can run the run.bat file and Access to http://localhost:9999/dbExport/web/index.html in Chrome or Firefox
-
+database-export是一款能生成数据库结构文档的开源springboot工程，能支持最新的数据库版本，可以导出支持office2007版本以上的docx格式的文档
+[github地址](https://github.com/PomZWJ/database-export)
 ## Open Source Licenses
 #### [POI-TL](http://deepoove.com/poi-tl)
