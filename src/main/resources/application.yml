@@ -5,9 +5,17 @@ server:
 spring:
   application:
     name: db-export
+  thymeleaf:
+    cache: false
+    charset: UTF-8
+    template-loader-path: classpath:/templates/
+    prefix: classpath:/templates/thymeleaf/
+    suffix: .html
+    mode: HTML5
+    encoding: UTF-8
 
 word:
   model:
     export: D://export.docx
-    import: classpath:docx/import.docx
-    sub-model: classpath:docx/sub_model.docx
+    import: D://dbmodel//import.docx
+    sub-model: D://dbmodel//sub_model.docx

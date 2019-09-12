@@ -13,4 +13,5 @@ buildNumber.properties
 ##自定义配置
 database-export.iml
 .idea/
+log/
 

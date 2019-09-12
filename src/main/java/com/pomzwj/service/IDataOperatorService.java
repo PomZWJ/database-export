@@ -14,6 +14,6 @@ import java.util.Map;
  * @date 2018/10/29/0029.
  */
 public interface IDataOperatorService {
-    public List<DbTable> getTablename (String dbKind, DbBaseInfo info) throws Exception;
+    public List<DbTable> getTableName (String dbKind, DbBaseInfo info) throws Exception;
     public List<Map>getTabsColumn(String dbKind , String tableName , Connection connection)throws Exception;
 }

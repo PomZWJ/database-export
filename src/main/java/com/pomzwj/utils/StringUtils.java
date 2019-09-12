@@ -20,4 +20,16 @@ public class StringUtils {
         return value.toString();
 
     }
+
+    /**
+     * 判断字符串是不是为空
+     * @param input
+     * @return
+     */
+    public static boolean isEmpty(String input) {
+        if (input == null || "".equals(input.trim())) {
+            return true;
+        }
+        return false;
+    }
 }
