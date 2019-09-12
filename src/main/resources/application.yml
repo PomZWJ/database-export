@@ -17,5 +17,5 @@ spring:
 word:
   model:
     export: D://export.docx
-    import: D://dbmodel//import.docx
-    sub-model: D://dbmodel//sub_model.docx
+    import: docx/import.docx
+    sub-model: docx/sub_model.docx
