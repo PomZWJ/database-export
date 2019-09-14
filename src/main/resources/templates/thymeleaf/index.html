@@ -12,53 +12,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="icon" href="../../static/assetss/images/fav.png" th:href="@{/assetss/images/fav.png}">
     <link rel="stylesheet" href="../../static/bootstrap/css/bootstrap.min.css" th:href="@{/bootstrap/css/bootstrap.min.css}">
+    <link rel="stylesheet" href="../../static/css/index.css" th:href="@{/css/index.css}">
     <script src="../../static/js/jquery-3.3.1.js" th:src="@{/js/jquery-3.3.1.js}"></script>
     <script src="../../static/bootstrap/js/bootstrap.min.js" th:src="@{/bootstrap/js/bootstrap.min.js}"></script>
+    <script src="../../static/js/index.js" th:src="@{/js/index.js}"></script>
 </head>
-<script type="text/javascript">
-    function o_excute() {
-        $('#messageText').text("正在努力生成中......");
-        $('#myModal').modal('show');
-        $.ajax({
-            url: "/dbExport/makeWord",
-            type: "post",
-            data: {dbKind:'oracle',ip: $('#o_ip').val(),port:$('#o_port').val(),dbName:$('#o_dbName').val(), userName:$('#o_userName').val(), password:$('#o_password').val()},
-            success: function (data) {
-                $('#messageText').text(data.message);
-            }, error: function (data) {
-                $('#messageText').text("未知错误");
-            }
-        });
-    }
-    function m_excute() {
-        $('#messageText').text("正在努力生成中......");
-        $('#myModal').modal('show');
-        $.ajax({
-            url: "/dbExport/makeWord",
-            type: "post",
-            data: {dbKind:'mysql',ip: $('#m_ip').val(),port:$('#m_port').val(),dbName:$('#m_dbName').val(), userName:$('#m_userName').val(), password:$('#m_password').val()},
-            success: function (data) {
-                $('#messageText').text(data.message);
-            }, error: function (data) {
-                $('#messageText').text("未知错误");
-            }
-        });
-    }
-    function s_excute() {
-        $('#messageText').text("正在努力生成中......");
-        $('#myModal').modal('show');
-        $.ajax({
-            url: "/dbExport/makeWord",
-            type: "post",
-            data: {dbKind:'sqlserver',ip: $('#s_ip').val(),port:$('#s_port').val(),dbName:$('#s_dbName').val(), userName:$('#s_userName').val(), password:$('#s_password').val()},
-            success: function (data) {
-                $('#messageText').text(data.message);
-            }, error: function (data) {
-                $('#messageText').text("未知错误");
-            }
-        });
-    }
-</script>
+
 <div class="container">
     <div style="text-align: center">
         <img style="width: 80px" th:src="@{/assetss/images/fav.png}"><span style="font-size: 30px">数据库表结构导出生成WORD文档</span>
