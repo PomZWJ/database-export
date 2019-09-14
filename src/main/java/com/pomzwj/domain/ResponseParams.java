@@ -3,7 +3,6 @@ package com.pomzwj.domain;
 import com.pomzwj.exception.MessageCode;
 import com.pomzwj.utils.DateUtils;
 import com.pomzwj.utils.StringUtils;
-import sun.plugin2.message.Message;
 
 import java.io.Serializable;
 import java.util.Map;
