@@ -9,7 +9,13 @@ package com.pomzwj.exception;
 public enum MessageCode {
     SUCCESS("000000","处理成功"),
     UNKNOWN_ERROR("999999","未知错误"),
-    DATABASE_LINK_IS_NULL_ERROR("000001","数据库连接错误，请检查账户密码");
+    DATABASE_LINK_IS_NULL_ERROR("000001","数据库连接错误，请检查账户密码"),
+    DATABASE_NOT_EXISTS_ERROR("000002","数据库不存在"),
+    DATABASE_IP_IS_NULL_ERROR("000003","数据库地址不能为空"),
+    DATABASE_PORT_IS_NULL_ERROR("000004","数据库端口不能为空"),
+    DATABASE_NAME_IS_NULL_ERROR("000005","数据库库名/表空间不能为空"),
+    DATABASE_USER_IS_NULL_ERROR("000006","数据库用户ID不能为空"),
+    DATABASE_PASSWORD_IS_NULL_ERROR("000007","数据库密码不能为空");
 
     String code;
     String msg;
