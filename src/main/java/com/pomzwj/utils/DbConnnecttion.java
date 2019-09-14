@@ -18,11 +18,17 @@ import java.sql.Statement;
 @Slf4j
 public class DbConnnecttion {
     public static Connection getConn(String jdbcUrl, String userName, String password, String driverClassName) throws Exception {
-        Class.forName(driverClassName);
-        Connection connection = DriverManager.getConnection(jdbcUrl, userName, password);
-        if (connection == null) {
-            throw new DatabaseExportException(MessageCode.DATABASE_LINK_IS_NULL_ERROR.getCode(), MessageCode.DATABASE_LINK_IS_NULL_ERROR.getMsg());
+        Connection connection = null;
+        try{
+            Class.forName(driverClassName);
+            connection = DriverManager.getConnection(jdbcUrl, userName, password);
+            if (connection == null) {
+                throw new DatabaseExportException(MessageCode.DATABASE_LINK_IS_NULL_ERROR.getCode(), MessageCode.DATABASE_LINK_IS_NULL_ERROR.getMsg());
+            }
+        }catch (Exception e){
+            throw new DatabaseExportException(MessageCode.DATABASE_LINK_IS_NULL_ERROR.getCode(),MessageCode.DATABASE_LINK_IS_NULL_ERROR.getMsg());
         }
+
         return connection;
     }
 
