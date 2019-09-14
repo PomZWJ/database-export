@@ -58,7 +58,11 @@ public class DataOperatorServiceImpl implements IDataOperatorService {
                 dbTable.setTabsColumn(tabsColumn);
             }
         } catch (Exception e) {
-            e.printStackTrace();
+            if(e instanceof DatabaseExportException){
+                throw e;
+            }else{
+                throw new RuntimeException();
+            }
         } finally {
             if(resultSet != null){
                 DbConnnecttion.closeRs(resultSet);
