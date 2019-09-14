@@ -60,11 +60,11 @@
 			<artifactId>fastjson</artifactId>
 			<version>${fastjson.version}</version>
 		</dependency>
-		<dependency>
+		<!--<dependency>
 			<groupId>com.oracle</groupId>
 			<artifactId>ojdbc7</artifactId>
 			<version>${oracle.version}</version>
-		</dependency>
+		</dependency>-->
 
 		<dependency>
 			<groupId>com.deepoove</groupId>
@@ -76,11 +76,11 @@
 			<artifactId>mysql-connector-java</artifactId>
 			<version>${mysql.version}</version>
 		</dependency>
-		<dependency>
+		<!--<dependency>
 			<groupId>com.microsoft.sqlserver</groupId>
 			<artifactId>sqljdbc4</artifactId>
 			<version>${sqlserver.version}</version>
-		</dependency>
+		</dependency>-->
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-test</artifactId>
@@ -137,8 +137,8 @@
 							<!-- 剔除配置文件 -->
 							<excludes>
 								<exclude>application.yml</exclude>
-								<exclude>import.docx</exclude>
-								<exclude>sub_model.docx</exclude>
+								<exclude>docx/import.docx</exclude>
+								<exclude>docx/sub_model.docx</exclude>
 							</excludes>
 						</configuration>
 					</execution>
@@ -179,8 +179,15 @@
 									<filtering>true</filtering>
 									<includes>
 										<include>application.yml</include>
-										<include>import.docx</include>
-										<include>sub_model.docx</include>
+									</includes>
+								</resource>
+								<resource>
+									<directory>${basedir}/src/main/resources</directory>
+									<filtering>false</filtering>
+									<includes>
+										<include>application.yml</include>
+										<include>docx/import.docx</include>
+										<include>docx/sub_model.docx</include>
 									</includes>
 								</resource>
 							</resources>
@@ -189,6 +196,8 @@
 				</executions>
 			</plugin>
 		</plugins>
+
+
 	</build>
 
 
