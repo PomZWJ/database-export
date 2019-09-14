@@ -1,5 +1,8 @@
 package com.pomzwj.constant;
 
+import com.pomzwj.exception.DatabaseExportException;
+import com.pomzwj.exception.MessageCode;
+
 /**
  * 类说明:常用字段
  *
@@ -30,6 +33,8 @@ public class DbExportConstants {
         //SQL SERVER数据库
         else if (dbKind.toUpperCase().equals("SQLSERVER")) {
             url = "jdbc:sqlserver://" + ip + ":" + port + ";databaseName=" + dbName;
+        }else{
+            throw new DatabaseExportException(MessageCode.DATABASE_NOT_EXISTS_ERROR.getCode(),MessageCode.DATABASE_NOT_EXISTS_ERROR.getMsg());
         }
         return url;
     }
