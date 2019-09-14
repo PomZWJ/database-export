@@ -16,6 +16,7 @@ import org.springframework.util.ResourceUtils;
 
 import java.io.File;
 import java.io.FileOutputStream;
+import java.io.InputStream;
 import java.util.*;
 
 
@@ -44,7 +45,7 @@ public class PoitlOperatorService {
 
         List<TempData>tempDataList=new ArrayList<>();
         for (DbTable dbTable : tableMessage) {
-            List<Map> data = (List<Map>) dbTable.getTabsColumn();
+            List<Map> data =  dbTable.getTabsColumn();
             TempData tempData = new TempData();
             tempData.setTableComment(dbTable.getTableComments());
             tempData.setTableName(dbTable.getTableName());
@@ -85,11 +86,14 @@ public class PoitlOperatorService {
             segmentData.setTableComments(tempData.getTableComment());
             segmentDataList.add(segmentData);
         }
-        //Resource resource = new ClassPathResource(subModelWord);
-        tempMap.put("seg",new DocxRenderData(ResourceUtils.getFile(subModelWord), segmentDataList));
-        //Resource resource2 = new ClassPathResource(importWord);
+        String path = this.getClass().getResource("/").getPath();
+        File subModelWordFile = new File(path+subModelWord);
+        tempMap.put("seg",new DocxRenderData(subModelWordFile, segmentDataList));
+
+
+        File importWordFile = new File(path+importWord);
         /*1.根据模板生成文档*/
-        XWPFTemplate template = XWPFTemplate.compile(ResourceUtils.getFile(importWord)).render(tempMap);
+        XWPFTemplate template = XWPFTemplate.compile(importWordFile).render(tempMap);
         /*2.生成文档*/
 
         FileOutputStream out = new FileOutputStream(exportWord);
