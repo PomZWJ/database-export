@@ -9,6 +9,7 @@ import com.pomzwj.exception.MessageCode;
 import com.pomzwj.service.IDataOperatorService;
 import com.pomzwj.utils.DbConnnecttion;
 import com.pomzwj.utils.StringUtils;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.sql.Connection;
@@ -25,6 +26,7 @@ import java.util.Map;
  * @author zhaowenjie<1 5 1 3 0 4 1 8 2 0 @ qq.com>
  * @date 2018/10/29/0029.
  */
+@Slf4j
 @Service
 public class DataOperatorServiceImpl implements IDataOperatorService {
 
@@ -58,10 +60,11 @@ public class DataOperatorServiceImpl implements IDataOperatorService {
                 dbTable.setTabsColumn(tabsColumn);
             }
         } catch (Exception e) {
+            log.error("发生错误 = {}",e);
             if(e instanceof DatabaseExportException){
                 throw e;
             }else{
-                throw new RuntimeException();
+                throw new RuntimeException(e);
             }
         } finally {
             if(resultSet != null){
