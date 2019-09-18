@@ -1,5 +1,5 @@
 server:
-  port: 6798
+  port: 9999
   servlet:
     context-path: /dbExport
 spring:
