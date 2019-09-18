@@ -38,8 +38,8 @@ How to use
 
 Discussing
 ----------
+
 - [submit issue](https://github.com/PomZWJ/database-export/issues/new)
-- email: 1513041820@qq.com
+- E-mail: 1513041820@qq.com
+- WX:ZWJ1513041820
 
-
-***有兴趣的可以联系我WX:ZWJ1513041820 or QQ:1513041820***
