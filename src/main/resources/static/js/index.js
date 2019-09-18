@@ -1,24 +1,22 @@
 function o_excute() {
-    postDoc("oracle");
+    postDoc("oracle",$('#o_ip').val(),$('#o_port').val(),$('#o_dbName').val(),$('#o_userName').val(),$('#o_password').val());
 }
 function m_excute() {
-    postDoc("mysql")
+    postDoc("mysql",$('#m_ip').val(),$('#m_port').val(),$('#m_dbName').val(),$('#m_userName').val(),$('#m_password').val());
 }
 function s_excute() {
-    postDoc("sqlserver")
+    postDoc("sqlserver",$('#s_ip').val(),$('#s_port').val(),$('#s_dbName').val(),$('#s_userName').val(),$('#s_password').val());
 }
-function postDoc(dbKind) {
+function postDoc(dbKind,ip,port,dbName,userName,password) {
     $('#messageText').text("正在努力生成中......");
     $('#myModal').modal('show');
     $.ajax({
         url: "/dbExport/makeWord",
         type: "post",
-        data: {dbKind:dbKind,ip: $('#m_ip').val(),port:$('#m_port').val(),dbName:$('#m_dbName').val(), userName:$('#m_userName').val(), password:$('#m_password').val()},
+        data: {dbKind:dbKind,ip: ip,port: port,dbName: dbName, userName: userName, password: password},
         success: function (data) {
-            console.log(data);
             $('#messageText').text(data.resultMsg);
         }, error: function (data) {
-            console.log(data);
             $('#messageText').text("网络错误，请重试错误");
         }
     });
