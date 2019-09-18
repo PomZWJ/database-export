@@ -20,11 +20,11 @@ database-export是一款能生成数据库结构文档的开源springboot工程�
 * Thymeleaf
 * Spring Boot
 * Spring Boot Mail
-* ![POI-TL](http://deepoove.com/poi-tl)
+* [POI-TL](http://deepoove.com/poi-tl)
 
 How to use
 ------------
-1.也可以下载最新的源码启动(推荐)
+1.下载最新的源码启动(推荐)
 
 **注意:生成oracle文档的时候，可能需要先把oracle的jar打包到你本地的maven库，不然会报错，找不到驱动程序**
 
@@ -36,4 +36,10 @@ How to use
 
 **注意:release打包的程序已经包含oracle的jar包，所以在lib下无需再引入oracle的jar**
 
-喜欢的给我个start
+Discussing
+----------
+- [submit issue](https://github.com/PomZWJ/database-export/issues/new)
+- email: 1513041820@qq.com
+
+
+***喜欢的给我个start***
