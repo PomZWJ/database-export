@@ -1,0 +1,25 @@
+server:
+  port: 6798
+  servlet:
+    context-path: /dbExport
+spring:
+  application:
+    name: db-export
+  thymeleaf:
+    cache: false
+    charset: UTF-8
+    template-loader-path: classpath:/templates/
+    prefix: classpath:/templates/thymeleaf/
+    suffix: .html
+    mode: HTML5
+    encoding: UTF-8
+
+word:
+  model:
+    export: D://export.docx
+    #此处为打包后的路径
+    import: package/resources/docx/import.docx
+    sub-model: package/resources/docx/sub_model.docx
+    #此处为从IDE启动的配置
+    #import: docx/import.docx
+    #sub-model: docx/sub_model.docx

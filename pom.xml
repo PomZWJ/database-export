@@ -185,7 +185,6 @@
 									<directory>${basedir}/src/main/resources</directory>
 									<filtering>false</filtering>
 									<includes>
-										<include>application.yml</include>
 										<include>docx/import.docx</include>
 										<include>docx/sub_model.docx</include>
 									</includes>
