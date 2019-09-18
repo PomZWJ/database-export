@@ -26,7 +26,16 @@ public class DbConnnecttion {
                 throw new DatabaseExportException(MessageCode.DATABASE_LINK_IS_NULL_ERROR.getCode(), MessageCode.DATABASE_LINK_IS_NULL_ERROR.getMsg());
             }
         }catch (Exception e){
-            throw new DatabaseExportException(MessageCode.DATABASE_LINK_IS_NULL_ERROR.getCode(),MessageCode.DATABASE_LINK_IS_NULL_ERROR.getMsg());
+            log.error("连接数据库错误={}",e);
+            if(e instanceof ClassNotFoundException){
+                throw new DatabaseExportException(MessageCode.DATABASE_DRIVE_IS_NULL_ERROR.getCode(),MessageCode.DATABASE_DRIVE_IS_NULL_ERROR.getMsg());
+            }else if(e instanceof DatabaseExportException){
+                throw new DatabaseExportException(MessageCode.DATABASE_LINK_IS_NULL_ERROR.getCode(),MessageCode.DATABASE_LINK_IS_NULL_ERROR.getMsg());
+            }else{
+                throw new RuntimeException(e);
+            }
+
+
         }
 
         return connection;
