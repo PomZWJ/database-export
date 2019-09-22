@@ -19,7 +19,6 @@ database-export是一款能生成数据库结构文档的开源springboot工程�
 * jQuery
 * Thymeleaf
 * Spring Boot
-* Spring Boot Mail
 * [POI-TL](http://deepoove.com/poi-tl)
 
 How to use
