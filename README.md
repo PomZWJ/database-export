@@ -23,6 +23,8 @@ database-export是一款能生成数据库结构文档的开源springboot工程�
 
 How to use
 ------------
+访问的地址:http://localhost:9999/dbExport/
+
 1.下载最新的源码启动(推荐)
 
 **注意:生成oracle文档的时候，可能需要先把oracle的jar打包到你本地的maven库，不然会报错，找不到驱动程序**
