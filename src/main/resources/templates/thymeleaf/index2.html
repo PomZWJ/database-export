@@ -1,0 +1,203 @@
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta http-equiv="pragma" content="no-cache" />
+    <meta http-equiv="Cache-Control" content="no-cache" />
+    <meta http-equiv="Cache-Control" content="no-store"/>
+    <meta http-equiv="Expires" content="0" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+    <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport"/>
+    <meta charset="UTF-8">
+    <title>database-export</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="icon" href="../../static/assetss/images/fav.png" th:href="@{/assetss/images/fav.png}">
+    <!-- 引入样式 -->
+    <link rel="stylesheet" href="../../static/element-ui/element-ui.css" th:href="@{/element-ui/element-ui.css}">
+    <link rel="stylesheet" href="../../static/css/index2.css" th:href="@{/css/index2.css}">
+    <script th:inline="javascript">
+        /*<![CDATA[*/
+        var ctx = [[@{/}]];
+    </script>
+    <!-- 引入组件库 -->
+    <script src="../../static/vue/vue.v2.6.10.js" th:src="@{/vue/vue.v2.6.10.js}"></script>
+    <script src="../../static/vue/axios.v0.19.0.min.js" th:src="@{/vue/axios.v0.19.0.min.js}"></script>
+    <script src="../../static/element-ui/element-ui.js" th:src="@{/element-ui/element-ui.js}"></script>
+</head>
+
+<body>
+    <div id="app">
+        <div class="header">
+            <div class="icon-img">
+                <img v-bind:src="iconUrl">
+            </div>
+            <div class="icon-text">
+                <h1 class="icon-title">{{iconTitle}}</h1>
+                <h5 class="icon-notes">{{iconNotes}}</h5>
+            </div>
+        </div>
+        <div class="body">
+            <div class="body_side_bar">
+                <div class="sql-kind-div" v-bind:style="welcomeBarStyle" @click="barClick('welcome')">
+                    <img class="bar-icon" v-bind:src="welcomeIconImg" />
+                </div>
+                <div class="sql-kind-div" v-bind:style="oracleBarStyle" @click="barClick('oracle')">
+                    <img class="bar-icon" v-bind:src="oracleIconImg" />
+                </div>
+                <div class="sql-kind-div" v-bind:style="mysqlBarStyle" @click="barClick('mysql')">
+                    <img class="bar-icon" v-bind:src="mysqlIconImg" />
+                </div>
+                <div class="sql-kind-div" v-bind:style="sqlServerBarStyle" @click="barClick('sqlserver')">
+                    <img class="bar-icon" v-bind:src="sqlserverIconImg" />
+                </div>
+            </div>
+            <div class="body_content" v-loading="loading" element-loading-text="拼命生成中...请勿刷新网页,如果表多,可能需要等待几分钟" element-loading-background="rgba(242,246,252, 0.8)">
+                <div v-bind:style="contentStyle" v-show="welcomeDivShow">
+                    
+                </div>
+                <div v-bind:style="contentStyle" v-show="oracleDivShow" style="display: none;">
+                    <el-image src="oracle-bg.png" th:src="@{/assetss/images/v2/oracle-bg.png}" :fit="fit" style="width: 190px;height:110px;"></el-image>
+                    <el-form label-width="250px" style="width: 90%;padding-left: 10%;padding-top: 20px">
+                        <el-row>
+                            <el-col :span="10">
+                                <el-form-item label="IP" label-width="90px">
+                                    <el-input v-model="o_ip" placeholder="127.0.0.1"></el-input>
+                                </el-form-item>
+                            </el-col>
+                            <el-col :span="5">
+                                <el-form-item label=":" label-width="15px">
+                                    <el-input v-model="o_port"></el-input>
+                                </el-form-item>
+                            </el-col>
+                            <el-col :span="5">
+                                <el-form-item label="/" label-width="15px">
+                                    <el-input v-model="o_dataname"></el-input>
+                                </el-form-item>
+                            </el-col>
+                        </el-row>
+                        <el-row>
+                            <el-col :span="20">
+                                <el-form-item label="用户名" label-width="90px">
+                                    <el-input v-model="o_username"></el-input>
+                                </el-form-item>
+                            </el-col>
+                        </el-row>
+                        <el-row>
+                            <el-col :span="20">
+                                <el-form-item label="密码" label-width="90px">
+                                    <el-input v-model="o_password"></el-input>
+                                </el-form-item>
+                            </el-col>
+                        </el-row>
+                        <el-row>
+                            <el-col :span="20">
+                                <el-form-item label="生成的位置" label-width="90px">
+                                    <el-input v-model="o_filepath" placeholder="生成文件存放的位置"></el-input>
+                                </el-form-item>
+                            </el-col>
+                        </el-row>
+                        <el-row style="margin-left: -30%">
+                            <el-button type="primary" plain @click="generateWord('oracle')">生成文档</el-button>
+                        </el-row>
+                    </el-form>
+                </div>
+
+                <div v-bind:style="contentStyle" v-show="mysqlDivShow" style="display: none;">
+                    <el-image src="mysql-bg.png" th:src="@{/assetss/images/v2/mysql-bg.png}" :fit="fit" style="width: 110px;height:110px;"></el-image>
+                    <el-form label-width="250px" style="width: 90%;padding-left: 10%;padding-top: 20px">
+                        <el-row>
+                            <el-col :span="10">
+                                <el-form-item label="IP" label-width="90px" >
+                                    <el-input v-model="m_ip"  placeholder="127.0.0.1"></el-input>
+                                </el-form-item>
+                            </el-col>
+                            <el-col :span="5">
+                                <el-form-item label=":" label-width="15px">
+                                    <el-input v-model="m_port"></el-input>
+                                </el-form-item>
+                            </el-col>
+                            <el-col :span="5">
+                                <el-form-item label="/" label-width="15px">
+                                    <el-input v-model="m_dataname" placeholder="数据库名称"></el-input>
+                                </el-form-item>
+                            </el-col>
+                        </el-row>
+                        <el-row>
+                            <el-col :span="20">
+                                <el-form-item label="用户名" label-width="90px">
+                                    <el-input v-model="m_username"></el-input>
+                                </el-form-item>
+                            </el-col>
+                        </el-row>
+                        <el-row>
+                            <el-col :span="20">
+                                <el-form-item label="密码" label-width="90px">
+                                    <el-input v-model="m_password"></el-input>
+                                </el-form-item>
+                            </el-col>
+                        </el-row>
+                        <el-row>
+                            <el-col :span="20">
+                                <el-form-item label="生成的位置" label-width="90px">
+                                    <el-input v-model="m_filepath"></el-input>
+                                </el-form-item>
+                            </el-col>
+                        </el-row>
+                        <el-row style="margin-left: -30%">
+                            <el-button type="primary" plain @click="generateWord('mysql')">生成文档</el-button>
+                        </el-row>
+                    </el-form>
+                </div>
+                <div v-bind:style="contentStyle" v-show="sqlserverDivShow" style="display: none;">
+                    <el-image src="sqlserver-bg.png" th:src="@{/assetss/images/v2/sqlserver-bg.png}" :fit="fit" style="width: 306.8px;height:80px;;padding-top: 30px" ></el-image>
+                    <el-form label-width="250px" style="width: 90%;padding-left: 10%;padding-top: 20px">
+                        <el-row>
+                            <el-col :span="10">
+                                <el-form-item label="IP" label-width="90px">
+                                    <el-input v-model="s_ip"  placeholder="127.0.0.1"></el-input>
+                                </el-form-item>
+                            </el-col>
+                            <el-col :span="5">
+                                <el-form-item label=":" label-width="15px">
+                                    <el-input v-model="s_port"></el-input>
+                                </el-form-item>
+                            </el-col>
+                            <el-col :span="5">
+                                <el-form-item label="/" label-width="15px">
+                                    <el-input v-model="s_dataname"></el-input>
+                                </el-form-item>
+                            </el-col>
+                        </el-row>
+                        <el-row>
+                            <el-col :span="20">
+                                <el-form-item label="用户名" label-width="90px">
+                                    <el-input v-model="s_username"></el-input>
+                                </el-form-item>
+                            </el-col>
+                        </el-row>
+                        <el-row>
+                            <el-col :span="20">
+                                <el-form-item label="密码" label-width="90px">
+                                    <el-input v-model="s_password"></el-input>
+                                </el-form-item>
+                            </el-col>
+                        </el-row>
+                        <el-row>
+                            <el-col :span="20">
+                                <el-form-item label="生成的位置" label-width="90px">
+                                    <el-input v-model="s_filepath"></el-input>
+                                </el-form-item>
+                            </el-col>
+                        </el-row>
+                        <el-row style="margin-left: -30%">
+                            <el-button type="primary" plain @click="generateWord('sqlserver')">生成文档</el-button>
+                        </el-row>
+                    </el-form>
+                </div>
+            </div>
+        </div>
+
+    </div>
+    <script src="../../static/js/index2.js" th:src="@{/js/index2.js}"></script>
+</body>
+
+</html>
