@@ -7,6 +7,8 @@ import com.deepoove.poi.data.RowRenderData;
 import com.pomzwj.domain.DbTable;
 import com.pomzwj.domain.SegmentData;
 import com.pomzwj.domain.TempData;
+import com.pomzwj.exception.DatabaseExportException;
+import com.pomzwj.exception.MessageCode;
 import com.pomzwj.utils.StringUtils;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.ClassPathResource;
@@ -34,14 +36,24 @@ public class PoitlOperatorService {
     public String importWord;
     @Value("${word.model.sub-model}")
     public String subModelWord;
+    @Value("${word.model.file-name}")
+    public String fileName;
 
     /**
-     * 生成word
+     * 生成word，带自定义路径
      * @param tableMessage
+     * @param filePath
      * @throws Exception
      */
-    public void makeDoc(List<DbTable> tableMessage) throws Exception {
+    public void makeDoc(List<DbTable> tableMessage,String filePath) throws Exception {
 
+        File directFile = new File(filePath);
+        if(!directFile.exists()){
+            throw new DatabaseExportException(MessageCode.FILE_DIRECT_IS_NOT_EXISTS_ERROR.getCode(),MessageCode.FILE_DIRECT_IS_NOT_EXISTS_ERROR.getMsg());
+        }
+        if(!directFile.isDirectory()){
+            throw new DatabaseExportException(MessageCode.FILE_IS_NOT_DIRECT_ERROR.getCode(),MessageCode.FILE_IS_NOT_DIRECT_ERROR.getMsg());
+        }
 
         List<TempData>tempDataList=new ArrayList<>();
         for (DbTable dbTable : tableMessage) {
@@ -96,10 +108,19 @@ public class PoitlOperatorService {
         XWPFTemplate template = XWPFTemplate.compile(importWordFile).render(tempMap);
         /*2.生成文档*/
 
-        FileOutputStream out = new FileOutputStream(exportWord);
+        FileOutputStream out = new FileOutputStream(filePath+"//"+fileName);
         template.write(out);
         out.flush();
         out.close();
         template.close();
+    }
+
+    /**
+     * 生成word,不带路径，生成默认路径
+     * @param tableMessage
+     * @throws Exception
+     */
+    public void makeDoc(List<DbTable> tableMessage) throws Exception {
+        makeDoc(tableMessage,exportWord);
     }
 }
