@@ -13,7 +13,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 public class HtmlDirectController {
 
     @RequestMapping("/")
-    public String getIndex(){
+    public String getIndex2(){
+        return "index2";
+    }
+
+    @RequestMapping("/indexV1")
+    public String getIndex1(){
         return "index";
     }
 }
