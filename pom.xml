@@ -29,7 +29,6 @@
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 		<java.version>1.8</java.version>
 		<fastjson.version>1.2.49</fastjson.version>
-		<druid.version>1.1.10</druid.version>
 		<oracle.version>12.1.0.2</oracle.version>
 		<mysql.version>5.1.47</mysql.version>
 		<sqlserver.version>7.4.0.jre8</sqlserver.version>
@@ -49,11 +48,6 @@
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-thymeleaf</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>com.alibaba</groupId>
-			<artifactId>druid</artifactId>
-			<version>${druid.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>com.alibaba</groupId>
