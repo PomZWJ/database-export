@@ -11,7 +11,7 @@ function postDoc(dbKind,ip,port,dbName,userName,password) {
     $('#messageText').text("正在努力生成中......");
     $('#myModal').modal('show');
     $.ajax({
-        url: "/dbExport/makeWord",
+        url: "/dbExport/makeWord/v1",
         type: "post",
         data: {dbKind:dbKind,ip: ip,port: port,dbName: dbName, userName: userName, password: password},
         success: function (data) {

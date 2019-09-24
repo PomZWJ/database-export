@@ -32,6 +32,9 @@ var vue = new Vue({
         oracleIconImg: ctx+"/assetss/images/v2/oracle-icon-unclick.png",
         mysqlIconImg: ctx+"/assetss/images/v2/mysql-icon-unclick.png",
         sqlserverIconImg: ctx+"/assetss/images/v2/sqlserver-icon-unclick.png",
+        githubIconImg: ctx+"/assetss/images/v2/GitHub-icon.png",
+        emailIconImg: ctx+"/assetss/images/v2/email-icon.png",
+        weChatIconImg: ctx+"/assetss/images/v2/wechat-icon.png",
         welcomeBarStyle: {
             borderBottom: "1px solid rgb(235, 233, 233)",
             background: "#F2F6FC"
@@ -134,27 +137,23 @@ var vue = new Vue({
                 return;
             }
             this.loading = true;
-            axios.post('/dbExport/makeWord', {
-                ip: ip,
-                port: port,
+            axios.post('/dbExport/makeWord/v2', {
+                ip: ip, port: port,
                 dbName: dataname,
                 userName: username,
                 password: password,
-                dbKind: sqlKind
+                dbKind: sqlKind,
+                filePath: filepath
             }).then((response)=> {
                 this.loading = false;
-                this.$notify.error({
-                    message: response.resultMsg,
-                    duration: 0,
-                    type:success
-                });
+                if(response.data.resultCode == '000000'){
+                    this.$alert(response.data.resultMsg, '错误', {confirmButtonText: '确定',type:'success'});
+                }else{
+                    this.$alert(response.data.resultMsg, '错误', {confirmButtonText: '确定',type:'error'});
+                }
             }).catch((error)=> {
                 this.loading = false;
-                this.$notify.error({
-                    title: '错误',
-                    message: '网络错误请重试',
-                    duration: 0
-                });
+                this.$alert(网络错误请重试, '错误', {confirmButtonText: '确定',type:'error'});
             });
         },
         barClick(sqlKind) {
@@ -219,6 +218,14 @@ var vue = new Vue({
             }
             this.contentStyle.background = "#F2F6FC";
 
+        },
+        openMyWxQr(){
+            let html = "<img style='width:300px;height: 300px;' src='"+ctx+"/assetss/images/v2/mywxqr.png'"+"/>";
+            this.$alert(html, '扫一扫加我微信', {
+                dangerouslyUseHTMLString: true,
+                center: true,
+                type: "success"
+            });
         }
     }
 });
