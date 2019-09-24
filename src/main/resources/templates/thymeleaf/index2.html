@@ -52,7 +52,31 @@
             </div>
             <div class="body_content" v-loading="loading" element-loading-text="拼命生成中...请勿刷新网页,如果表多,可能需要等待几分钟" element-loading-background="rgba(242,246,252, 0.8)">
                 <div v-bind:style="contentStyle" v-show="welcomeDivShow">
-                    
+                    <div style="padding-top: 15%">
+                        <span style="font-size: 25px">database-export是一款能生成数据库结构文档工具</span><br>
+                        <br/>
+                        <br/>
+                        <span style="font-size: 20px">能支持最新的数据库版本，可以导出支持office2007版本以上的docx格式的文档</span>
+                        <br/>
+                        <br/>
+                        <span style="font-size: 20px">如果有问题,可以去GitHub上提交issue，或微信联系我</span>
+
+                    </div>
+                    <div style="padding-top: 10%">
+                        <a title="GitHub" target="_blank" href="https://github.com/PomZWJ/database-export/" >
+                            <img v-bind:src="githubIconImg" style="width: 80px;height: 80px;margin-left: 30px;" />
+                        </a>
+                        <a title="给我发邮件吧" target="_blank" href="mailto:1513041820@qq.com" >
+                            <img v-bind:src="emailIconImg" style="width: 88px;height: 88px;margin-left: 30px;" />
+                        </a>
+                        <a title="微信">
+                            <img v-bind:src="weChatIconImg" @click="openMyWxQr" style="width: 108px;height: 88px;margin-left: 30px;"  />
+                        </a>
+                    </div>
+                    <div style="margin-top: 60px">
+                        <span>Copyright © PomZWJ XM 2018~2019</span>
+                    </div>
+
                 </div>
                 <div v-bind:style="contentStyle" v-show="oracleDivShow" style="display: none;">
                     <el-image src="oracle-bg.png" th:src="@{/assetss/images/v2/oracle-bg.png}" :fit="fit" style="width: 190px;height:110px;"></el-image>
