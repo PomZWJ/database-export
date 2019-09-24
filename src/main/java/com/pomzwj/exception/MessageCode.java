@@ -16,7 +16,10 @@ public enum MessageCode {
     DATABASE_NAME_IS_NULL_ERROR("000005","数据库库名/表空间不能为空"),
     DATABASE_USER_IS_NULL_ERROR("000006","数据库用户ID不能为空"),
     DATABASE_PASSWORD_IS_NULL_ERROR("000007","数据库密码不能为空"),
-    DATABASE_DRIVE_IS_NULL_ERROR("000008","数据库驱动不存在");
+    DATABASE_DRIVE_IS_NULL_ERROR("000008","数据库驱动不存在"),
+    FILE_PATH_IS_NULL_ERROR("000009","生成的文档位置不能为空"),
+    FILE_DIRECT_IS_NOT_EXISTS_ERROR("000010","自定义目录在磁盘上不存在"),
+    FILE_IS_NOT_DIRECT_ERROR("000011","自定义的目录不是一个文件夹");
     String code;
     String msg;
     MessageCode(String code,String msg){
