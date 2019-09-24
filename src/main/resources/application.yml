@@ -16,7 +16,10 @@ spring:
 
 word:
   model:
-    export: D://export.docx
+    #生成的文档的路径
+    export: D://
+    #生成文档的名称
+    file-name: export.docx
     #此处为打包后的路径
     #import: package/resources/docx/import.docx
     #sub-model: package/resources/docx/sub_model.docx
