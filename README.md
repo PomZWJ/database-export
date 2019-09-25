@@ -27,7 +27,21 @@ database-export是一款能生成数据库结构文档的开源springboot工程�
 How to use
 ------------
 
-## 1.下载最新的源码启动(推荐)
+
+
+
+## 1.下载release下的最新打包的压缩包(推荐)
+
+
+启动run.bat(win)即可(打包的暂时只支持windows环境，linux可自行打包)
+
+下载
+
+生成的文件名称是export.docx，如果需要修改，在`package\resources\application.yml`文件中，按照注释修改即可
+
+
+
+## 2.下载最新的源码启动
 
 
 **注意:在运行项目前，可能需要先把oracle的jar打包到你本地的maven库，不然会报错，找不到驱动程序**
@@ -51,14 +65,6 @@ oracle jar的地址在源码的extrajar/ojdbc7-12.1.0.2.jar下
 ------------
 
 
-
-## 2.下载release下的最新打包的压缩包(快速)
-
-
-启动run.bat(win)即可(打包的暂时只支持windows环境，linux可自行打包)
-
-
-生成的文件名称是export.docx，如果需要修改，在`package\resources\application.yml`文件中，按照注释修改即可
 
 
 ## 3.运行访问的地址
