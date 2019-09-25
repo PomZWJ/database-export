@@ -1,41 +1,70 @@
 ![](https://github.com/PomZWJ/database-export/blob/master/screenshot/fav.png?raw=true)
 
-**database-export**
+**database-export V2.0**
 =========================
 
-![Spring Boot 2.0.6](https://img.shields.io/badge/Spring%20Boot-2.0-brightgreen.svg)
+![Spring Boot 2.0.6](https://img.shields.io/badge/Spring%20Boot-2.0.6-brightgreen.svg)
+![Vue 2.0](https://img.shields.io/badge/Vue-2.0-green.svg)
+![Element-UI 2.0](https://img.shields.io/badge/ElementUI-2.0-green.svg)
 ![Thymeleaf 3.0](https://img.shields.io/badge/Thymeleaf-3.0-yellow.svg)
 ![JDK 1.8](https://img.shields.io/badge/JDK-1.8-brightgreen.svg)
 ![Maven](https://img.shields.io/badge/Maven-3.5.0-yellowgreen.svg)
 
 database-export是一款能生成数据库结构文档的开源springboot工程，能支持最新的数据库版本，可以导出支持office2007版本以上的docx格式的文档
 
-[github地址](https://github.com/PomZWJ/database-export)
 
 项目使用技术
 ------------
 
-* Bootstrap
-* jQuery
+* VUE2.0
+* Element-UI
+* Axios
 * Thymeleaf
 * Spring Boot
+* Maven
 * [POI-TL](http://deepoove.com/poi-tl)
 
 How to use
 ------------
-访问的地址:http://localhost:9999/dbExport/
 
-1.下载最新的源码启动(推荐)
+###1.下载最新的源码启动(推荐)
 
-**注意:生成oracle文档的时候，可能需要先把oracle的jar打包到你本地的maven库，不然会报错，找不到驱动程序**
-
-**注:Oracle的jar包在最新的release下的打包文件里面的`package\lib\ojdbc14.jar`**
+**注意:在运行项目前，可能需要先把oracle的jar打包到你本地的maven库，不然会报错，找不到驱动程序**
+生成的文件名称是export.docx，如果需要修改，在`resources\application.yml`文件中，按照注释修改即可
 
 
-2.下载release下的最新打包的压缩包,启动run.bat(win)即可,生成的文档在D盘下，也可以自行修改生成文件的盘符，在`package\resources\application.yml`文件
+------------
+**(如果你不需要使用到oracle数据库，此步骤可忽略，直接注释在pom.xml里面的oracle依赖即可)**
+
+oracle jar的地址在源码的extrajar/ojdbc7-12.1.0.2.jar下
+
+打包到本地仓库的命令是
+>mvn install:install-file -DgroupId=com.oracle -DartifactId=ojdbc7 -Dversion=12.1.0.2 -Dpackaging=jar -Dfile=D:\ojdbc7-12.1.0.2.jar -DgeneratePom=true
+
+>注意
+
+自行使用maven打包的时候，可能会遇到以下BUG
+>[1.SpringBoot分离lib和resources打包后，手动添加oracle驱动到lib后，运行时一直提示无法找到驱动程序的解决办法](https://blog.csdn.net/huanguta1178/article/details/101374286)
+
+
+------------
+
+
+
+###2.下载release下的最新打包的压缩包(快速)
+启动run.bat(win)即可(打包的暂时只支持windows环境，linux可自行打包)
+
+
+生成的文件名称是export.docx，如果需要修改，在`package\resources\application.yml`文件中，按照注释修改即可
+
+
+###3.运行访问的地址
+> http://localhost:9999/dbExport/
+
+
+###4.项目截图
+
 ![](https://github.com/PomZWJ/database-export/blob/master/screenshot/index.png?raw=true)
-
-**注意:release打包的程序已经包含oracle的jar包，所以在lib下无需再引入oracle的jar**
 
 Discussing
 ----------
