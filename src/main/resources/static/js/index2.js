@@ -147,7 +147,7 @@ var vue = new Vue({
             }).then((response)=> {
                 this.loading = false;
                 if(response.data.resultCode == '000000'){
-                    this.$alert(response.data.resultMsg, '错误', {confirmButtonText: '确定',type:'success'});
+                    this.$alert(response.data.resultMsg+",默认文档名称为export.docx", '提示', {confirmButtonText: '确定',type:'success'});
                 }else{
                     this.$alert(response.data.resultMsg, '错误', {confirmButtonText: '确定',type:'error'});
                 }
