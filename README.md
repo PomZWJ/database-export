@@ -40,7 +40,7 @@ How to use
 |            |     WIN_NO_JRE                    |  WIN_WITH_JRE                           |  LINUX_NO_JRE | LINUX_WITH_JRE
 | -------    |     :-----:                       |     :----:                              |    :-----:    |  :-----:      |  
 | V.1.0.0    | [database-export-1.0.0_noJre8.rar](https://github.com/PomZWJ/database-export/releases/download/1.0.0/database-export-1.0.0_noJre8.rar)  |   [database-export-1.0.0_withJre8.rar](https://github.com/PomZWJ/database-export/releases/download/1.0.0/database-export-1.0.0_withJre8.rar)    |
-| V.2.0.0    | $1      |   6    |
+| V.2.0.0    | [database-export-2.0.0_noJre8.rar](https://github.com/PomZWJ/database-export/releases/download/2.0.0/database-export-2.0.0_noJre8.rar)      |   [database-export-2.0.0_withJre8.rar](https://github.com/PomZWJ/database-export/releases/download/2.0.0/database-export-2.0.0_withJre8.rar)    |
 
 生成的文件名称是export.docx，如果需要修改，在`package\resources\application.yml`文件中，按照注释修改即可
 
