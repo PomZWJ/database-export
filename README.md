@@ -69,8 +69,15 @@ oracle jar的地址在源码的extrajar/ojdbc7-12.1.0.2.jar下
 
 ## 4.项目截图
 
+**ORACLE**
+![](https://github.com/PomZWJ/database-export/blob/master/screenshot/v2/indexv2-1.png?raw=true)
 
-![](https://github.com/PomZWJ/database-export/blob/master/screenshot/index.png?raw=true)
+**MYSQL**
+![](https://github.com/PomZWJ/database-export/blob/master/screenshot/v2/indexv2-2.png?raw=true)
+
+**SQL**
+![](https://github.com/PomZWJ/database-export/blob/master/screenshot/v2/indexv2-3.png?raw=true)
+
 
 Discussing
 ----------
