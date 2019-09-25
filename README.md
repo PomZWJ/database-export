@@ -52,6 +52,7 @@ oracle jar的地址在源码的extrajar/ojdbc7-12.1.0.2.jar下
 
 
 ###2.下载release下的最新打包的压缩包(快速)
+
 启动run.bat(win)即可(打包的暂时只支持windows环境，linux可自行打包)
 
 
@@ -59,6 +60,7 @@ oracle jar的地址在源码的extrajar/ojdbc7-12.1.0.2.jar下
 
 
 ###3.运行访问的地址
+
 > http://localhost:9999/dbExport/
 
 
