@@ -221,7 +221,7 @@ var vue = new Vue({
         },
         openMyWxQr(){
             let html = "<img style='width:300px;height: 300px;' src='"+ctx+"/assetss/images/v2/mywxqr.png'"+"/>";
-            this.$alert(html, '扫一扫加我微信', {
+            this.$alert(html, '扫一扫加我微信进技术群', {
                 dangerouslyUseHTMLString: true,
                 center: true,
                 type: "success"

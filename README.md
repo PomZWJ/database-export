@@ -89,6 +89,8 @@ oracle jar的地址在源码的extrajar/ojdbc7-12.1.0.2.jar下
 **SQL**
 ![](https://github.com/PomZWJ/database-export/blob/master/screenshot/v2/indexv2-3.png?raw=true)
 
+## 5.想加入技术开发群的加我，备注加群即可
+<img src="https://raw.githubusercontent.com/PomZWJ/colornote-vue/master/screenshot/wx_icon.jpg" width="300" height="300"/>
 
 
 
