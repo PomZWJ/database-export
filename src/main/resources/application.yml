@@ -20,9 +20,12 @@ word:
     export: D://
     #生成文档的名称
     file-name: export.docx
-    #此处为打包后的路径
+    #此处win为打包后的路径
     #import: package/resources/docx/import.docx
     #sub-model: package/resources/docx/sub_model.docx
+    #此处linux为打包后的路径
+    #import: ../resources/docx/import.docx
+    #sub-model: ../resources/docx/sub_model.docx
     #此处为从IDE启动的配置
     import: docx/import.docx
     sub-model: docx/sub_model.docx
