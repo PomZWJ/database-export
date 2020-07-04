@@ -30,7 +30,7 @@
 		<java.version>1.8</java.version>
 		<fastjson.version>1.2.49</fastjson.version>
 		<oracle.version>19.7.0.0</oracle.version>
-		<mysql.version>5.1.47</mysql.version>
+		<mysql.version>8.0.16</mysql.version>
 		<sqlserver.version>7.4.0.jre8</sqlserver.version>
 		<poitl.version>1.3.1</poitl.version>
 		<lombok.version>1.18.2</lombok.version>
