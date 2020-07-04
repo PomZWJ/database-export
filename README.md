@@ -51,13 +51,13 @@ How to use
 ------------
 
 **windows打包方法**
->mvn clean package -f pom-win.xml 
+>运行mvn clean package -f pom-win.xml  
 然后将target下的lib、resources、database-export-x.x.x-RELEASE.jar提取出来，放到windows服务器上，运行\startup-script\start-dbexport-win.bat(需要自行调整)脚本即可
 
 
 
 **linux打包方法**
->mvn clean package -f pom-linux.xml
+>运行mvn clean package -f pom-linux.xml  
 然后将target下的lib、resources、database-export-x.x.x.jar提取出来，放到linux服务器上，运行\startup-script\start-dbexport-linux.sh(需要自行调整)脚本即可
 
 
