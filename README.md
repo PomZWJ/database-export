@@ -48,23 +48,14 @@ How to use
 
 ## 2.下载最新的源码启动
 
-
-**注意:在运行项目前，可能需要先把oracle的jar打包到你本地的maven库，不然会报错，找不到驱动程序**
-生成的文件名称是export.docx，如果需要修改，在`resources\application.yml`文件中，按照注释修改即可
-
-
 ------------
-**(如果你不需要使用到oracle数据库，此步骤可忽略，直接注释在pom.xml里面的oracle依赖即可)**
 
-oracle jar的地址在源码的extrajar/ojdbc7-12.1.0.2.jar下
+**windows打包方法**
+>mvn clean package -f pom-win.xml 
 
-打包到本地仓库的命令是
->mvn install:install-file -DgroupId=com.oracle -DartifactId=ojdbc7 -Dversion=12.1.0.2 -Dpackaging=jar -Dfile=D:\ojdbc7-12.1.0.2.jar -DgeneratePom=true
+**linux打包方法**
+>mvn clean package -f pom-linux.xml
 
->注意
-
-自行使用maven打包的时候，可能会遇到以下BUG
->[1.SpringBoot分离lib和resources打包后，手动添加oracle驱动到lib后，运行时一直提示无法找到驱动程序的解决办法](https://blog.csdn.net/huanguta1178/article/details/101374286)
 
 
 ------------
