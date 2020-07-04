@@ -8,7 +8,6 @@ spring:
   thymeleaf:
     cache: false
     charset: UTF-8
-    template-loader-path: classpath:/templates/
     prefix: classpath:/templates/thymeleaf/
     suffix: .html
     mode: HTML5
