@@ -93,7 +93,8 @@ How to use
 <img src="https://raw.githubusercontent.com/PomZWJ/colornote-vue/master/screenshot/wx_icon.jpg" width="300" height="300"/>
 
 ## 6.更新日志
-=================================================
+
+
 ###2020-07-15(V2.1)
 
 >1.去除了打包后，application需要重新配置模板文件,使部署更简单，不需要在改动到配置文件
