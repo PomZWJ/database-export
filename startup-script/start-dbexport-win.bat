@@ -1,4 +1,4 @@
 TITLE db port 9999
-java -Xmx512M -Xms512M -classpath ".;lib;resources;;database-export-x.x.x-RELEASE.jar"  com.pomzwj.DatabaseExportApplication
+java -jar database-export-x.x.x-RELEASE.jar
 
 pause

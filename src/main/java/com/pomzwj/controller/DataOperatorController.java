@@ -1,9 +1,8 @@
 package com.pomzwj.controller;
 
-import com.alibaba.fastjson.JSON;
+import com.deepoove.poi.XWPFTemplate;
 import com.pomzwj.domain.DbBaseInfo;
 import com.pomzwj.domain.DbTable;
-import com.pomzwj.domain.ResponseParams;
 import com.pomzwj.exception.DatabaseExportException;
 import com.pomzwj.exception.MessageCode;
 import com.pomzwj.officeframework.poitl.PoitlOperatorService;
@@ -12,10 +11,12 @@ import com.pomzwj.utils.StringUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.util.*;
 
 /**
@@ -35,9 +36,11 @@ public class DataOperatorController {
     private PoitlOperatorService poitlOperatorService;
 
     @RequestMapping(value = "/v1")
-    public @ResponseBody ResponseParams getData(String dbKind, DbBaseInfo info) {
-        String desc = "生成word文档";
-        ResponseParams responseParams = new ResponseParams();
+    @ResponseBody
+    public void getData(String dbKind, DbBaseInfo info, HttpServletResponse response) {
+        String desc = "生成word文档[v1]";
+        XWPFTemplate xwpfTemplate = null;
+        response.setHeader("Content-type", "text/html;charset=UTF-8");
         try {
             //参数校验
             if(StringUtils.isEmpty(info.getIp())){
@@ -55,38 +58,37 @@ public class DataOperatorController {
             //查询表信息
             List<DbTable> tableMessage = dataOperatorService.getTableName(dbKind,info);
             //生成word文档
-            poitlOperatorService.makeDoc(tableMessage);
-            responseParams.setParams(true);
+            xwpfTemplate = poitlOperatorService.makeDoc(tableMessage);
+            response.setContentType("application/octet-stream");
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMddHHmmss");
+            response.setHeader("Content-Disposition", "attachment;fileName="+info.getDbName()+sdf.format(new Date())+".docx");
+            response.flushBuffer();
+            xwpfTemplate.write(response.getOutputStream());
         } catch (Exception e) {
+            try {
+                response.getWriter().println(e.getMessage());
+            } catch (IOException ioException) {
+                log.error("desc={},输出错误信息出错e={}",desc,ioException);
+            }
             log.error("desc={},获取失败, 原因:{}", desc, e.getMessage(), e);
-            responseParams.setParams(null);
-            if (e instanceof DatabaseExportException) {
-                DatabaseExportException ce = (DatabaseExportException) e;
-                responseParams.setResultCode(ce.getErrorCode());
-                responseParams.setResultMsg(ce.getErrorMessage());
-            } else {
-                responseParams.setResultCode(MessageCode.UNKNOWN_ERROR.getCode());
-                responseParams.setResultMsg(MessageCode.UNKNOWN_ERROR.getMsg() + "," + e.getMessage());
+        }finally {
+            if(xwpfTemplate!=null){
+                try {
+                    xwpfTemplate.close();
+                } catch (IOException e) {
+                    log.error("desc={},关闭xwpfTemplate出错e={}",desc,e);
+                }
             }
         }
-        log.info("desc = {},返回的数据={}",desc,JSON.toJSONString(responseParams));
-        return responseParams;
     }
 
     @RequestMapping(value = "/v2")
-    public @ResponseBody ResponseParams makeWordV2(@RequestBody Map map) {
-        String desc = "生成word文档";
-        DbBaseInfo info = new DbBaseInfo();
-        ResponseParams responseParams = new ResponseParams();
+    @ResponseBody
+    public void makeWordV2(String dbKind, DbBaseInfo info, HttpServletResponse response) {
+        String desc = "生成word文档[v2]";
+        XWPFTemplate xwpfTemplate = null;
+        response.setHeader("Content-type", "text/html;charset=UTF-8");
         try {
-            //参数接收
-            String dbKind = StringUtils.getValue(map.get("dbKind"));
-            String filePath = StringUtils.getValue(map.get("filePath"));
-            info.setIp(StringUtils.getValue(map.get("ip")));
-            info.setDbName(StringUtils.getValue(map.get("dbName")));
-            info.setUserName(StringUtils.getValue(map.get("userName")));
-            info.setPassword(StringUtils.getValue(map.get("password")));
-            info.setPort(StringUtils.getValue(map.get("port")));
             //参数校验
             if(StringUtils.isEmpty(info.getIp())){
                 throw new DatabaseExportException(MessageCode.DATABASE_IP_IS_NULL_ERROR.getCode(),MessageCode.DATABASE_IP_IS_NULL_ERROR.getMsg());
@@ -103,34 +105,30 @@ public class DataOperatorController {
             if(StringUtils.isEmpty(info.getDbName())){
                 throw new DatabaseExportException(MessageCode.DATABASE_NAME_IS_NULL_ERROR.getCode(),MessageCode.DATABASE_NAME_IS_NULL_ERROR.getMsg());
             }
-            if(StringUtils.isEmpty(filePath)){
-                throw new DatabaseExportException(MessageCode.FILE_PATH_IS_NULL_ERROR.getCode(),MessageCode.FILE_PATH_IS_NULL_ERROR.getMsg());
-            }
             //查询表信息
             List<DbTable> tableMessage = dataOperatorService.getTableName(dbKind,info);
             //生成word文档
-            poitlOperatorService.makeDoc(tableMessage,filePath);
-            responseParams.setParams(true);
+            xwpfTemplate = poitlOperatorService.makeDoc(tableMessage);
+            response.setContentType("application/octet-stream");
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMddHHmmss");
+            response.setHeader("Content-Disposition", "attachment;fileName="+info.getDbName()+sdf.format(new Date())+".docx");
+            response.flushBuffer();
+            xwpfTemplate.write(response.getOutputStream());
         } catch (Exception e) {
+            try {
+                response.getWriter().println(e.getMessage());
+            } catch (IOException ioException) {
+                log.error("desc={},输出错误信息出错e={}",desc,ioException);
+            }
             log.error("desc={},获取失败, 原因:{}", desc, e.getMessage(), e);
-            responseParams.setParams(null);
-            if (e instanceof DatabaseExportException) {
-                DatabaseExportException ce = (DatabaseExportException) e;
-                responseParams.setResultCode(ce.getErrorCode());
-                responseParams.setResultMsg(ce.getErrorMessage());
-            } else {
-                responseParams.setResultCode(MessageCode.UNKNOWN_ERROR.getCode());
-                responseParams.setResultMsg(MessageCode.UNKNOWN_ERROR.getMsg() + "," + e.getMessage());
+        }finally {
+            if(xwpfTemplate!=null){
+                try {
+                    xwpfTemplate.close();
+                } catch (IOException e) {
+                    log.error("desc={},关闭xwpfTemplate出错e={}",desc,e);
+                }
             }
         }
-        log.info("desc = {},返回的数据={}",desc,JSON.toJSONString(responseParams));
-        return responseParams;
     }
-
-
-
-
-
-
-
 }

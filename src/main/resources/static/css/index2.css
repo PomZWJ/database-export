@@ -39,6 +39,7 @@ h1, h2, h3, h4, h5, h6 {
     width: 100%;
     height: 25%;
     border-right: 1px solid rgb(235, 233, 233);
+    cursor: pointer;
     /* border: 1px solid rgb(128, 54, 54); */
 }
 

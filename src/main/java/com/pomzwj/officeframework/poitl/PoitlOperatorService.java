@@ -4,21 +4,15 @@ import com.deepoove.poi.XWPFTemplate;
 import com.deepoove.poi.data.DocxRenderData;
 import com.deepoove.poi.data.MiniTableRenderData;
 import com.deepoove.poi.data.RowRenderData;
+import com.pomzwj.constant.TemplateFileConstants;
 import com.pomzwj.domain.DbTable;
 import com.pomzwj.domain.SegmentData;
 import com.pomzwj.domain.TempData;
-import com.pomzwj.exception.DatabaseExportException;
-import com.pomzwj.exception.MessageCode;
 import com.pomzwj.utils.StringUtils;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.core.io.ClassPathResource;
-import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Service;
-import org.springframework.util.ResourceUtils;
 
 import java.io.File;
-import java.io.FileOutputStream;
-import java.io.InputStream;
 import java.util.*;
 
 
@@ -30,31 +24,15 @@ import java.util.*;
  */
 @Service
 public class PoitlOperatorService {
-    @Value("${word.model.export}")
-    public String exportWord;
-    @Value("${word.model.import}")
-    public String importWord;
-    @Value("${word.model.sub-model}")
-    public String subModelWord;
-    @Value("${word.model.file-name}")
-    public String fileName;
+    @Value("${export.template-copy-path}")
+    private String templateCopyPath;
 
     /**
      * 生成word，带自定义路径
      * @param tableMessage
-     * @param filePath
      * @throws Exception
      */
-    public void makeDoc(List<DbTable> tableMessage,String filePath) throws Exception {
-
-        File directFile = new File(filePath);
-        if(!directFile.exists()){
-            throw new DatabaseExportException(MessageCode.FILE_DIRECT_IS_NOT_EXISTS_ERROR.getCode(),MessageCode.FILE_DIRECT_IS_NOT_EXISTS_ERROR.getMsg());
-        }
-        if(!directFile.isDirectory()){
-            throw new DatabaseExportException(MessageCode.FILE_IS_NOT_DIRECT_ERROR.getCode(),MessageCode.FILE_IS_NOT_DIRECT_ERROR.getMsg());
-        }
-
+    public XWPFTemplate makeDoc(List<DbTable> tableMessage) throws Exception {
         List<TempData>tempDataList=new ArrayList<>();
         for (DbTable dbTable : tableMessage) {
             List<Map> data =  dbTable.getTabsColumn();
@@ -98,29 +76,13 @@ public class PoitlOperatorService {
             segmentData.setTableComments(tempData.getTableComment());
             segmentDataList.add(segmentData);
         }
-        String path = this.getClass().getResource("/").getPath();
-        File subModelWordFile = new File(path+subModelWord);
+        File subModelWordFile = new File(templateCopyPath+"/"+ TemplateFileConstants.SUB_MODEL_TEMPLATE);
         tempMap.put("seg",new DocxRenderData(subModelWordFile, segmentDataList));
 
 
-        File importWordFile = new File(path+importWord);
+        File importWordFile = new File(templateCopyPath+"/"+ TemplateFileConstants.IMPORT_TEMPLATE);
         /*1.根据模板生成文档*/
         XWPFTemplate template = XWPFTemplate.compile(importWordFile).render(tempMap);
-        /*2.生成文档*/
-
-        FileOutputStream out = new FileOutputStream(filePath+"//"+fileName);
-        template.write(out);
-        out.flush();
-        out.close();
-        template.close();
-    }
-
-    /**
-     * 生成word,不带路径，生成默认路径
-     * @param tableMessage
-     * @throws Exception
-     */
-    public void makeDoc(List<DbTable> tableMessage) throws Exception {
-        makeDoc(tableMessage,exportWord);
+        return template;
     }
 }

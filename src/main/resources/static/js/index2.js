@@ -5,7 +5,7 @@ var vue = new Vue({
         loading: false,
         iconUrl: ctx+"assetss/images/fav.png",
         iconTitle: "database-export",
-        iconNotes: "数据库表结构导出工具V2.0",
+        iconNotes: "数据库表结构导出工具V2.1",
         o_ip: '',
         o_port: "1521",
         o_dataname: "orcl",
@@ -64,28 +64,25 @@ var vue = new Vue({
             let dataname;
             let username;
             let password;
-            let filepath;
             if (sqlKind == 'oracle') {
                 ip = this.o_ip;
                 port = this.o_port;
                 dataname = this.o_dataname;
                 username = this.o_username;
                 password = this.o_password;
-                filepath = this.o_filepath;
+                //filepath = this.o_filepath;
             } else if (sqlKind == 'mysql') {
                 ip = this.m_ip;
                 port = this.m_port;
                 dataname = this.m_dataname;
                 username = this.m_username;
                 password = this.m_password;
-                filepath = this.m_filepath;
             } else if (sqlKind == 'sqlserver') {
                 ip = this.s_ip;
                 port = this.s_port;
                 dataname = this.s_dataname;
                 username = this.s_username;
                 password = this.s_password;
-                filepath = this.s_filepath;
             }
 
             if (ip == '') {
@@ -128,22 +125,14 @@ var vue = new Vue({
                 });
                 return;
             }
-            if (filepath == '') {
-                this.$notify.error({
-                    title: '错误',
-                    message: '保存路径不能为空',
-                    duration: 0
-                });
-                return;
-            }
-            this.loading = true;
+            /*this.loading = true;
             axios.post('/dbExport/makeWord/v2', {
                 ip: ip, port: port,
                 dbName: dataname,
                 userName: username,
                 password: password,
-                dbKind: sqlKind,
-                filePath: filepath
+                dbKind: sqlKind
+                //filePath: filepath
             }).then((response)=> {
                 this.loading = false;
                 if(response.data.resultCode == '000000'){
@@ -154,7 +143,9 @@ var vue = new Vue({
             }).catch((error)=> {
                 this.loading = false;
                 this.$alert(网络错误请重试, '错误', {confirmButtonText: '确定',type:'error'});
-            });
+            });*/
+            window.open("/dbExport/makeWord/v2?dbKind="+sqlKind+"&ip="+ip+"&port="+port+"&dbName="+dataname+"&userName="+username+"&password="+password);
+
         },
         barClick(sqlKind) {
             if (sqlKind == 'welcome') {

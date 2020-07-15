@@ -1,6 +1,6 @@
 ![](https://github.com/PomZWJ/database-export/blob/master/screenshot/fav.png?raw=true)
 
-**database-export V2.0**
+**database-export V3.0**
 =========================
 
 ![Spring Boot 2.0.6](https://img.shields.io/badge/Spring%20Boot-2.0.6-brightgreen.svg)
@@ -42,7 +42,6 @@ How to use
 | V.1.0.0    | [database-export-1.0.0_noJre8.rar](https://github.com/PomZWJ/database-export/releases/download/1.0.0/database-export-1.0.0_noJre8.rar)  |   [database-export-1.0.0_withJre8.rar](https://github.com/PomZWJ/database-export/releases/download/1.0.0/database-export-1.0.0_withJre8.rar)    |
 | V.2.0.0    | [database-export-2.0.0_noJre8.rar](https://github.com/PomZWJ/database-export/releases/download/2.0.0/database-export-2.0.0_noJre8.rar)      |   [database-export-2.0.0_withJre8.rar](https://github.com/PomZWJ/database-export/releases/download/2.0.0/database-export-2.0.0_withJre8.rar)    |
 
-生成的文件名称是export.docx，如果需要修改，在`package\resources\application.yml`文件中，按照注释修改即可
 
 
 
@@ -50,16 +49,21 @@ How to use
 
 ------------
 
-**windows打包方法**
->运行mvn clean package -f pom-win.xml  
-然后将target下的lib、resources、database-export-x.x.x-RELEASE.jar提取出来，放到windows服务器上，运行\startup-script\start-dbexport-win.bat(需要自行调整)脚本即可
+**windows打包运行方法**
+>运行mvn clean package
+运行java -jar database-export-x.x.x-RELEASE.jar即可
 
 
 
 **linux打包方法**
->运行mvn clean package -f pom-linux.xml  
-然后将target下的lib、resources、database-export-x.x.x.jar提取出来，放到linux服务器上，运行\startup-script\start-dbexport-linux.sh(需要自行调整)脚本即可
+>运行mvn clean package
+运行java -jar database-export-x.x.x-RELEASE.jar即可
 
+**linux后台运行方法**
+>请把start-dbexport-linux.sh放到和jar同一个位置,并使用
+>nohup ./start-dbexport-linux.sh & 
+>启动
+(如果遇到提示说start-dbexport-linux.sh is not directoryxxx,需要用到dos2unix转化，可自行百度)
 
 
 ------------
@@ -71,6 +75,7 @@ How to use
 
 
 > http://localhost:9999/dbExport/
+
 
 
 ## 4.项目截图
@@ -87,7 +92,29 @@ How to use
 ## 5.想加入技术开发群的加我，备注加群即可
 <img src="https://raw.githubusercontent.com/PomZWJ/colornote-vue/master/screenshot/wx_icon.jpg" width="300" height="300"/>
 
+## 6.更新日志
+=================================================
+###2020-07-15(V2.1)
 
+>1.去除了打包后，application需要重新配置模板文件,使部署更简单，不需要在改动到配置文件
+
+>2.去除了自定义文件生成目录
+
+>3.让生成的文件能够下载
+
+>4.BUG改进
+
+###2019-09-26(V2.0)
+
+>1.使用了VUE+Element-UI重新修改了界面，抛弃了原本的Bootstrap
+
+>2.BUG改进
+
+###2019-04-20(V1.0)
+
+>1.使用springboot2.x+Bootstrap完成界面
+
+>2.能导出docx类型的文档,支持mysql,oracle,sql server
 
 Discussing
 ----------
