@@ -1,6 +1,6 @@
 ![](https://github.com/PomZWJ/database-export/blob/master/screenshot/fav.png?raw=true)
 
-**database-export V3.0**
+**database-export V2.1.0**
 =========================
 
 ![Spring Boot 2.0.6](https://img.shields.io/badge/Spring%20Boot-2.0.6-brightgreen.svg)
@@ -95,7 +95,7 @@ How to use
 ## 6.更新日志
 
 
-**2020-07-15(V2.1)**
+**2020-07-15(V2.1.0)**
 
 >1.去除了打包后，application需要重新配置模板文件,使部署更简单，不需要在改动到配置文件
 
@@ -105,13 +105,13 @@ How to use
 
 >4.BUG改进
 
-**2019-09-26(V2.0)**
+**2019-09-26(V2.0.0)**
 
 >1.使用了VUE+Element-UI重新修改了界面，抛弃了原本的Bootstrap
 
 >2.BUG改进
 
-**2019-04-20(V1.0)**
+**2019-04-20(V1.0.0)**
 
 >1.使用springboot2.x+Bootstrap完成界面
 
