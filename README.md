@@ -12,6 +12,7 @@
 
 database-export是一款能生成数据库结构文档的开源springboot工程，能支持最新的数据库版本，可以导出支持office2007版本以上的docx格式的文档
 
+[预览地址](https://colorfatty.club/dbExport/)
 
 项目使用技术
 ------------
