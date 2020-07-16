@@ -34,7 +34,7 @@ How to use
 ## 1.下载release下的最新打包的压缩包(推荐)
 
 
-启动run.bat(win)即可(打包的暂时只支持windows环境，linux可自行打包)
+cmd执行jar -jar xxx.jar 即可启动
 
 下载
 
