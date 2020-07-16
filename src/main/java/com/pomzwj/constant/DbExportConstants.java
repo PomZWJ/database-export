@@ -24,7 +24,7 @@ public class DbExportConstants {
         String url = null;
         //MySQL数据库
         if (dbKind.toUpperCase().equals("MYSQL")) {
-            url = "jdbc:mysql://" + ip + ":" + port + "/" + dbName;
+            url = "jdbc:mysql://" + ip + ":" + port + "/" + dbName+"?serverTimezone=UTC";
         }
         //oracle数据库
         else if (dbKind.toUpperCase().equals("ORACLE")) {
