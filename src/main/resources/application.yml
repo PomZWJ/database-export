@@ -10,7 +10,7 @@ spring:
     charset: UTF-8
     prefix: classpath:/templates/thymeleaf/
     suffix: .html
-    mode: HTML5
+    mode: HTML
     encoding: UTF-8
 export:
   template-copy-path: .databaseExport
