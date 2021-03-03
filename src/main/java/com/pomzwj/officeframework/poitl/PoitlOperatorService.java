@@ -57,8 +57,11 @@ public class PoitlOperatorService {
                 //字段注释
                 String comments = StringUtils.getValue(map.get("COMMENTS"));
 
-                RowRenderData labor = RowRenderData.build( column_name, data_type,data_length,null_able,data_default,comments);
+                String auto_increment = (Boolean)map.get("AUTO_INCREMENT")?"是":"";
 
+                String is_primary = (Boolean)map.get("IS_PRIMARY")?"是":"";
+
+                RowRenderData labor = RowRenderData.build( column_name, data_type,null_able,is_primary,auto_increment,data_default,comments);
                 rowRenderDataList.add(labor);
             }
             tempData.setData(rowRenderDataList);
@@ -69,7 +72,7 @@ public class PoitlOperatorService {
         List segmentDataList = new ArrayList();
         for(int i=0;i<tempDataList.size();i++){
             TempData tempData = tempDataList.get(i);
-            RowRenderData header = RowRenderData.build("列名", "数据类型", "数据长度", "是否为空", "默认值", "备注");
+            RowRenderData header = RowRenderData.build("列名", "数据类型","是否为空","主键","是否自增", "默认值", "备注");
             SegmentData segmentData = new SegmentData();
             segmentData.setTable(new MiniTableRenderData(header,tempData.getData()));
             segmentData.setTableName(tempData.getTableName());

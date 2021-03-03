@@ -4,10 +4,7 @@ import com.pomzwj.exception.DatabaseExportException;
 import com.pomzwj.exception.MessageCode;
 import lombok.extern.slf4j.Slf4j;
 
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.ResultSet;
-import java.sql.Statement;
+import java.sql.*;
 
 /**
  * 类说明:JDBC连接
@@ -41,33 +38,55 @@ public class DbConnnecttion {
         return connection;
     }
 
-    public static void closeRs(ResultSet rs) throws Exception {
+    public static void closeRs(ResultSet rs) {
         if (rs != null) {
+            try {
+                Statement statement = rs.getStatement();
+                rs.close();
+                if(statement!=null){
+                    Connection connection = statement.getConnection();
+                    try {
+                        statement.close();
+                    } catch (Exception e1) {
+                        log.info("关闭数据库Statement连接失败,e={}",e1);
+                    }
+                    if(connection != null){
+                        try {
+                            connection.close();
+                        } catch (Exception e2) {
+                            log.info("关闭数据库Connection连接失败,e={}",e2);
+                        }
+                    }
 
-            rs.close();
-
+                }
+            } catch (Exception e3) {
+                log.error("关闭数据库ResultSet连接失败,e={}",e3);
+            }
         }
-        log.info("已关闭数据库ResultSet连接");
+
     }
 
-    public static void closeStat(Statement statement) throws Exception {
+    public static void closeStat(Statement statement){
         if (statement != null) {
-
-            statement.close();
-
-
+            try {
+                statement.close();
+            } catch (Exception e) {
+                log.info("关闭数据库Statement连接失败,e={}",e);
+            }
         }
-        log.info("已关闭数据库Statement连接");
+
 
     }
 
-    public static void closeConn(Connection connection) throws Exception {
-
+    public static void closeConn(Connection connection) {
         if (connection != null) {
-
-            connection.close();
+            try {
+                connection.close();
+            } catch (Exception e) {
+                log.error("关闭数据库Connection连接失败,e={}",e);
+            }
         }
-        log.info("已关闭数据库Connection连接");
+
 
     }
 }

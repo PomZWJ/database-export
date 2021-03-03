@@ -47,7 +47,7 @@ public class DbExportConstants {
     public static String getDriverClassName(String dbKind) {
         String driverClassName = null;
         if (dbKind.toUpperCase().equals("MYSQL")) {
-            driverClassName = "com.mysql.jdbc.Driver";
+            driverClassName = "com.mysql.cj.jdbc.Driver";
         } else if (dbKind.toUpperCase().equals("ORACLE")) {
             driverClassName = "oracle.jdbc.driver.OracleDriver";
         } else if (dbKind.toUpperCase().equals("SQLSERVER")) {
@@ -83,7 +83,7 @@ public class DbExportConstants {
     public static String getColNameInfoSQL(String dbKind,String tableName){
         String sql = null;
         if (dbKind.toUpperCase().equals("MYSQL")) {
-            sql = "select column_name COLUMN_NAME,column_default DATA_DEFAULT,is_nullable NULLABLE,data_type DATA_TYPE,character_maximum_length DATA_LENGTH,column_comment COMMENTS from information_schema.columns where table_name = '"+tableName+"' and table_schema = (select database()) order by ordinal_position";
+            sql = "select column_name COLUMN_NAME,column_default DATA_DEFAULT,is_nullable NULLABLE,data_type DATA_TYPE,character_maximum_length DATA_LENGTH,column_comment COMMENTS, COLUMN_TYPE COLUMN_TYPE,EXTRA EXTRA_INFO,COLUMN_KEY COLUMN_KEY from information_schema.columns where table_name = '"+tableName+"' and table_schema = (select database()) order by ordinal_position";
         } else if (dbKind.toUpperCase().equals("ORACLE")) {
             sql = "select t1.COLUMN_NAME,t1.DATA_TYPE,case when t1.DATA_TYPE = 'NUMBER' then case when t1.DATA_PRECISION is null then t1.DATA_LENGTH else t1.DATA_PRECISION end else t1.CHAR_LENGTH end as \"DATA_LENGTH\",t1.NULLABLE,t1.DATA_DEFAULT,t2.COMMENTS from user_tab_cols t1, user_col_comments t2 where t1.table_name = '"+tableName+"' and t1.TABLE_NAME = t2.table_name and t1.COLUMN_NAME = t2.column_name(+)";
         } else if (dbKind.toUpperCase().equals("SQLSERVER")) {

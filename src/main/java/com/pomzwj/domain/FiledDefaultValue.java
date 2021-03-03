@@ -11,5 +11,5 @@ public class FiledDefaultValue {
     public static final String TABLE_COMMENTS_DEFAULT = "无注释";
 
     /*如果表字段没有注释，泽显示该备注*/
-    public static final String TABLE_FIELD_COMMENTS_DEFAULT = "无注释";
+    public static final String TABLE_FIELD_COMMENTS_DEFAULT = "";
 }

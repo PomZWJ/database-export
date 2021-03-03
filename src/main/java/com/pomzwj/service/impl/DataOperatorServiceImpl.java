@@ -34,12 +34,10 @@ public class DataOperatorServiceImpl implements IDataOperatorService {
     @Override
     public List<DbTable> getTableName(String dbKind, DbBaseInfo info) throws Exception {
         List<DbTable> tableList = new ArrayList<>();
-        Connection connection = null;
-        Statement statement = null;
         ResultSet resultSet = null;
         try {
-            connection = DbConnnecttion.getConn(DbExportConstants.getJdbcUrl(dbKind, info.getIp(), info.getPort(), info.getDbName()), info.getUserName(), info.getPassword(), DbExportConstants.getDriverClassName(dbKind));
-            statement = connection.createStatement();
+            Connection connection = DbConnnecttion.getConn(DbExportConstants.getJdbcUrl(dbKind, info.getIp(), info.getPort(), info.getDbName()), info.getUserName(), info.getPassword(), DbExportConstants.getDriverClassName(dbKind));
+            Statement statement = connection.createStatement();
             resultSet = statement.executeQuery(DbExportConstants.getTableNameSQL(dbKind, info.getDbName()));
             while (resultSet.next()) {
                 DbTable dbTable = new DbTable();
@@ -70,12 +68,6 @@ public class DataOperatorServiceImpl implements IDataOperatorService {
             if(resultSet != null){
                 DbConnnecttion.closeRs(resultSet);
             }
-            if(statement != null){
-                DbConnnecttion.closeStat(statement);
-            }
-            if(connection != null){
-                DbConnnecttion.closeConn(connection);
-            }
 
         }
         return tableList;
@@ -84,37 +76,39 @@ public class DataOperatorServiceImpl implements IDataOperatorService {
     @Override
     public List<Map> getTabsColumn(String dbKind, String tableName, Connection connection) throws Exception {
         List<Map> list = new ArrayList<>();
-        Statement statement = null;
         ResultSet resultSet = null;
         String sql = DbExportConstants.getColNameInfoSQL(dbKind, tableName);
         try {
-            statement = connection.createStatement();
+            Statement statement = connection.createStatement();
             resultSet = statement.executeQuery(sql);
             while (resultSet.next()) {
-                Map<String, String> colDataMap = new HashMap<>();
+                Map<String, Object> colDataMap = new HashMap<>();
                 colDataMap.put("COLUMN_NAME", resultSet.getString("COLUMN_NAME"));
-                colDataMap.put("DATA_TYPE", resultSet.getString("DATA_TYPE"));
+                //colDataMap.put("DATA_TYPE", resultSet.getString("DATA_TYPE"));
+                colDataMap.put("DATA_TYPE", resultSet.getString("COLUMN_TYPE"));
                 colDataMap.put("DATA_LENGTH", resultSet.getString("DATA_LENGTH"));
                 colDataMap.put("NULL_ABLE", resultSet.getString("NULLABLE"));
                 colDataMap.put("DATA_DEFAULT", resultSet.getString("DATA_DEFAULT"));
+                colDataMap.put("AUTO_INCREMENT",false);
+                colDataMap.put("IS_PRIMARY",false);
                 String comments = resultSet.getString("COMMENTS");
                 if (!StringUtils.isEmpty(comments)) {
                     colDataMap.put("COMMENTS", comments);
                 } else {
                     colDataMap.put("COMMENTS", FiledDefaultValue.TABLE_FIELD_COMMENTS_DEFAULT);
                 }
-
+                String extraInfo = resultSet.getString("EXTRA_INFO");
+                if(!StringUtils.isEmpty(extraInfo) && extraInfo.contains("auto_increment")){
+                    colDataMap.put("AUTO_INCREMENT",true);
+                }
+                String columnKey = resultSet.getString("COLUMN_KEY");
+                if(!StringUtils.isEmpty(columnKey) && columnKey.contains("PRI")){
+                    colDataMap.put("IS_PRIMARY",true);
+                }
                 list.add(colDataMap);
             }
         }catch (Exception e){
            throw e;
-        }finally {
-            if(resultSet != null){
-                DbConnnecttion.closeRs(resultSet);
-            }
-            if(statement != null){
-                DbConnnecttion.closeStat(statement);
-            }
         }
         return list;
     }
