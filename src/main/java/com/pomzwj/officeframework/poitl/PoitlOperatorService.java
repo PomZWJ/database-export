@@ -5,6 +5,7 @@ import com.deepoove.poi.data.DocxRenderData;
 import com.deepoove.poi.data.MiniTableRenderData;
 import com.deepoove.poi.data.RowRenderData;
 import com.pomzwj.constant.TemplateFileConstants;
+import com.pomzwj.domain.DbColumnInfo;
 import com.pomzwj.domain.DbTable;
 import com.pomzwj.domain.SegmentData;
 import com.pomzwj.domain.TempData;
@@ -30,12 +31,11 @@ public class PoitlOperatorService {
     /**
      * 生成word，带自定义路径
      * @param tableMessage
-     * @throws Exception
      */
-    public XWPFTemplate makeDoc(List<DbTable> tableMessage) throws Exception {
+    public XWPFTemplate makeDoc(List<DbTable> tableMessage) {
         List<TempData>tempDataList=new ArrayList<>();
         for (DbTable dbTable : tableMessage) {
-            List<Map> data =  dbTable.getTabsColumn();
+            List<DbColumnInfo> data =  dbTable.getTabsColumn();
             TempData tempData = new TempData();
             tempData.setTableComment(dbTable.getTableComments());
             tempData.setTableName(dbTable.getTableName());
@@ -43,23 +43,24 @@ public class PoitlOperatorService {
             List<RowRenderData> rowRenderDataList = new ArrayList<>();
             for (int i = 0; i < data.size(); i++) {
 
-                Map map = data.get(i);
+                DbColumnInfo dbColumnInfo = data.get(i);
                 //列名
-                String column_name = StringUtils.getValue(map.get("COLUMN_NAME"));
+                String column_name = dbColumnInfo.getColumnName();
                 //数据类型
-                String data_type = StringUtils.getValue(map.get("DATA_TYPE"));
+                String data_type = dbColumnInfo.getDataType();
                 //数据长度
-                String data_length = StringUtils.getValue(map.get("DATA_LENGTH"));
+                String data_length = dbColumnInfo.getDataLength();
                 //是否可空
-                String null_able = StringUtils.getValue(map.get("NULL_ABLE"));
+                String null_able = dbColumnInfo.getNullAble();
                 //数据缺省值
-                String data_default = StringUtils.getValue(map.get("DATA_DEFAULT"));
+                String data_default = dbColumnInfo.getDefaultVal();
                 //字段注释
-                String comments = StringUtils.getValue(map.get("COMMENTS"));
+                String comments = dbColumnInfo.getComments();
+                Boolean autoIncrement = dbColumnInfo.getAutoIncrement();
+                String auto_increment = Objects.nonNull(autoIncrement)&&autoIncrement?"是":"";
 
-                String auto_increment = (Boolean)map.get("AUTO_INCREMENT")?"是":"";
-
-                String is_primary = (Boolean)map.get("IS_PRIMARY")?"是":"";
+                Boolean primary = dbColumnInfo.getPrimary();
+                String is_primary = Objects.nonNull(primary)&&primary?"是":"";
 
                 RowRenderData labor = RowRenderData.build( column_name, data_type,null_able,is_primary,auto_increment,data_default,comments);
                 rowRenderDataList.add(labor);

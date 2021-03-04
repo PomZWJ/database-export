@@ -16,7 +16,7 @@ public class DbTable implements Serializable {
     //表注释
     private String tableComments;
     //表字段
-    private List<Map> tabsColumn;
+    private List<DbColumnInfo> tabsColumn;
 
     public String getTableName() {
         return tableName;
@@ -34,11 +34,11 @@ public class DbTable implements Serializable {
         this.tableComments = tableComments;
     }
 
-    public List<Map> getTabsColumn() {
+    public List<DbColumnInfo> getTabsColumn() {
         return tabsColumn;
     }
 
-    public void setTabsColumn(List<Map> tabsColumn) {
+    public void setTabsColumn(List<DbColumnInfo> tabsColumn) {
         this.tabsColumn = tabsColumn;
     }
 }

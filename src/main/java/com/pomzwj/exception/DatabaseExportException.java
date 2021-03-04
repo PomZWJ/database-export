@@ -21,6 +21,12 @@ public class DatabaseExportException extends RuntimeException {
         this.errorMessage = errorMessage;
     }
 
+    public DatabaseExportException(MessageCode messageCode){
+        super(messageCode.getMsg());
+        this.errorCode = messageCode.getCode();
+        this.errorMessage = messageCode.getMsg();
+    }
+
     public DatabaseExportException(Throwable e) {
         super(e);
     }

@@ -2,14 +2,15 @@ package com.pomzwj.service.impl;
 
 import com.pomzwj.constant.DbExportConstants;
 import com.pomzwj.domain.DbBaseInfo;
+import com.pomzwj.domain.DbColumnInfo;
 import com.pomzwj.domain.DbTable;
 import com.pomzwj.domain.FiledDefaultValue;
 import com.pomzwj.exception.DatabaseExportException;
-import com.pomzwj.exception.MessageCode;
 import com.pomzwj.service.IDataOperatorService;
 import com.pomzwj.utils.DbConnnecttion;
 import com.pomzwj.utils.StringUtils;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.sql.Connection;
@@ -30,15 +31,25 @@ import java.util.Map;
 @Service
 public class DataOperatorServiceImpl implements IDataOperatorService {
 
+    @Autowired
+    private DbExportConstants dbExportConstants;
 
     @Override
-    public List<DbTable> getTableName(String dbKind, DbBaseInfo info) throws Exception {
+    public List<DbTable> getTableName(DbBaseInfo info) throws Exception {
+        String dbKind = info.getDbKind();
+        String dbName = info.getDbName();
+        String ip = info.getIp();
+        String port = info.getPort();
+        String userName = info.getUserName();
+        String password = info.getPassword();
+
         List<DbTable> tableList = new ArrayList<>();
         ResultSet resultSet = null;
         try {
-            Connection connection = DbConnnecttion.getConn(DbExportConstants.getJdbcUrl(dbKind, info.getIp(), info.getPort(), info.getDbName()), info.getUserName(), info.getPassword(), DbExportConstants.getDriverClassName(dbKind));
+            String jdbcUrl = dbExportConstants.getJdbcUrl(dbKind, ip, port, dbName);
+            Connection connection = DbConnnecttion.getConn(jdbcUrl, userName, password, dbExportConstants.getDriverClassName(dbKind));
             Statement statement = connection.createStatement();
-            resultSet = statement.executeQuery(DbExportConstants.getTableNameSQL(dbKind, info.getDbName()));
+            resultSet = statement.executeQuery(dbExportConstants.getTableNameSql(dbKind, dbName));
             while (resultSet.next()) {
                 DbTable dbTable = new DbTable();
                 String tableName = resultSet.getString("TABLE_NAME");
@@ -46,7 +57,7 @@ public class DataOperatorServiceImpl implements IDataOperatorService {
                 if(StringUtils.isEmpty(tableComments)){
                     dbTable.setTableComments(FiledDefaultValue.TABLE_COMMENTS_DEFAULT);
                 }else{
-                    dbTable.setTableComments(tableComments);
+                    dbTable.setTableComments("("+tableComments+")");
                 }
                 dbTable.setTableName(tableName);
                 tableList.add(dbTable);
@@ -54,58 +65,50 @@ public class DataOperatorServiceImpl implements IDataOperatorService {
 
             for (int i = 0; i < tableList.size(); i++) {
                 DbTable dbTable = tableList.get(i);
-                List<Map> tabsColumn = this.getTabsColumn(dbKind, dbTable.getTableName(), connection);
+                List<DbColumnInfo> tabsColumn = this.getTabsColumn(dbKind, dbTable.getTableName(), connection);
                 dbTable.setTabsColumn(tabsColumn);
             }
         } catch (Exception e) {
             log.error("发生错误 = {}",e);
-            if(e instanceof DatabaseExportException){
-                throw e;
-            }else{
-                throw new RuntimeException(e);
-            }
+            throw e;
         } finally {
-            if(resultSet != null){
-                DbConnnecttion.closeRs(resultSet);
-            }
-
+            DbConnnecttion.closeRs(resultSet);
         }
         return tableList;
     }
 
     @Override
-    public List<Map> getTabsColumn(String dbKind, String tableName, Connection connection) throws Exception {
-        List<Map> list = new ArrayList<>();
+    public List<DbColumnInfo> getTabsColumn(String dbKind, String tableName, Connection connection) throws Exception {
+        List<DbColumnInfo> list = new ArrayList<>();
         ResultSet resultSet = null;
-        String sql = DbExportConstants.getColNameInfoSQL(dbKind, tableName);
+        String sql = dbExportConstants.getColumnNameInfoSQL(dbKind, tableName);
         try {
             Statement statement = connection.createStatement();
             resultSet = statement.executeQuery(sql);
             while (resultSet.next()) {
-                Map<String, Object> colDataMap = new HashMap<>();
-                colDataMap.put("COLUMN_NAME", resultSet.getString("COLUMN_NAME"));
-                //colDataMap.put("DATA_TYPE", resultSet.getString("DATA_TYPE"));
-                colDataMap.put("DATA_TYPE", resultSet.getString("COLUMN_TYPE"));
-                colDataMap.put("DATA_LENGTH", resultSet.getString("DATA_LENGTH"));
-                colDataMap.put("NULL_ABLE", resultSet.getString("NULLABLE"));
-                colDataMap.put("DATA_DEFAULT", resultSet.getString("DATA_DEFAULT"));
-                colDataMap.put("AUTO_INCREMENT",false);
-                colDataMap.put("IS_PRIMARY",false);
+                DbColumnInfo dbColumnInfo = new DbColumnInfo();
+                dbColumnInfo.setColumnName(resultSet.getString("COLUMN_NAME"));
+                dbColumnInfo.setDataType(resultSet.getString("COLUMN_TYPE"));
+                dbColumnInfo.setDataLength(resultSet.getString("DATA_LENGTH"));
+                dbColumnInfo.setNullAble(resultSet.getString("NULLABLE"));
+                dbColumnInfo.setDefaultVal(resultSet.getString("DATA_DEFAULT"));
+                dbColumnInfo.setAutoIncrement(false);
+                dbColumnInfo.setPrimary(false);
                 String comments = resultSet.getString("COMMENTS");
-                if (!StringUtils.isEmpty(comments)) {
-                    colDataMap.put("COMMENTS", comments);
+                if (StringUtils.isEmpty(comments)) {
+                    dbColumnInfo.setComments(FiledDefaultValue.TABLE_FIELD_COMMENTS_DEFAULT);
                 } else {
-                    colDataMap.put("COMMENTS", FiledDefaultValue.TABLE_FIELD_COMMENTS_DEFAULT);
+                    dbColumnInfo.setComments(comments);
                 }
                 String extraInfo = resultSet.getString("EXTRA_INFO");
                 if(!StringUtils.isEmpty(extraInfo) && extraInfo.contains("auto_increment")){
-                    colDataMap.put("AUTO_INCREMENT",true);
+                    dbColumnInfo.setAutoIncrement(true);
                 }
                 String columnKey = resultSet.getString("COLUMN_KEY");
                 if(!StringUtils.isEmpty(columnKey) && columnKey.contains("PRI")){
-                    colDataMap.put("IS_PRIMARY",true);
+                    dbColumnInfo.setPrimary(true);
                 }
-                list.add(colDataMap);
+                list.add(dbColumnInfo);
             }
         }catch (Exception e){
            throw e;

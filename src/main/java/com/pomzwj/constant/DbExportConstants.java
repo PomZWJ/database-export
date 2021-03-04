@@ -2,6 +2,8 @@ package com.pomzwj.constant;
 
 import com.pomzwj.exception.DatabaseExportException;
 import com.pomzwj.exception.MessageCode;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Component;
 
 /**
  * 类说明:常用字段
@@ -9,8 +11,36 @@ import com.pomzwj.exception.MessageCode;
  * @author zhaowenjie<1513041820@qq.com>
  * @date 2018/10/29/0029.
  */
-
+@Component
 public class DbExportConstants {
+    @Value("${database.jdbc.mysql}")
+    String mysqlJdbc;
+    @Value("${database.jdbc.oracle}")
+    String oracleJdbc;
+    @Value("${database.jdbc.sqlServer}")
+    String sqlServerJdbc;
+
+    @Value("${database.driver.mysql}")
+    String mysqlDriver;
+    @Value("${database.driver.oracle}")
+    String oracleDriver;
+    @Value("${database.driver.sqlServer}")
+    String sqlServerDriver;
+
+    @Value("${database.getTableNameSql.mysql}")
+    String mysqlGetTableNameSql;
+    @Value("${database.getTableNameSql.oracle}")
+    String oracleGetTableNameSql;
+    @Value("${database.getTableNameSql.sqlServer}")
+    String sqlServerGetTableNameSql;
+
+    @Value("${database.getColumnNameInfoSql.mysql}")
+    String mysqlGetColumnNameInfoSql;
+    @Value("${database.getColumnNameInfoSql.oracle}")
+    String oracleGetColumnNameInfoSql;
+    @Value("${database.getColumnNameInfoSql.sqlServer}")
+    String sqlServerGetColumnNameInfoSql;
+
 
     /**
      * 得到连接地址
@@ -20,21 +50,20 @@ public class DbExportConstants {
      * @param dbName
      * @return
      */
-    public static String getJdbcUrl(String dbKind, String ip, String port, String dbName) {
+    public String getJdbcUrl(String dbKind, String ip, String port, String dbName) {
         String url = null;
-        //MySQL数据库
-        if (dbKind.toUpperCase().equals("MYSQL")) {
-            url = "jdbc:mysql://" + ip + ":" + port + "/" + dbName+"?serverTimezone=UTC";
-        }
-        //oracle数据库
-        else if (dbKind.toUpperCase().equals("ORACLE")) {
-            url = "jdbc:oracle:thin:@//" + ip + ":" + port + "/" + dbName;
-        }
-        //SQL SERVER数据库
-        else if (dbKind.toUpperCase().equals("SQLSERVER")) {
-            url = "jdbc:sqlserver://" + ip + ":" + port + ";databaseName=" + dbName;
-        }else{
-            throw new DatabaseExportException(MessageCode.DATABASE_NOT_EXISTS_ERROR.getCode(),MessageCode.DATABASE_NOT_EXISTS_ERROR.getMsg());
+        dbKind = dbKind.toUpperCase();
+        DataBaseType dataBaseType = DataBaseType.matchType(dbKind);
+        switch (dataBaseType){
+            case MYSQL:
+                url = String.format(mysqlJdbc,ip,port,dbName);
+                break;
+            case ORACLE:
+                url = String.format(oracleJdbc,ip,port,dbName);
+                break;
+            case SQLSERVER:
+                url = String.format(sqlServerJdbc,ip,port,dbName);
+                break;
         }
         return url;
     }
@@ -44,14 +73,20 @@ public class DbExportConstants {
      * @param dbKind
      * @return
      */
-    public static String getDriverClassName(String dbKind) {
+    public String getDriverClassName(String dbKind) {
         String driverClassName = null;
-        if (dbKind.toUpperCase().equals("MYSQL")) {
-            driverClassName = "com.mysql.cj.jdbc.Driver";
-        } else if (dbKind.toUpperCase().equals("ORACLE")) {
-            driverClassName = "oracle.jdbc.driver.OracleDriver";
-        } else if (dbKind.toUpperCase().equals("SQLSERVER")) {
-            driverClassName = "com.microsoft.sqlserver.jdbc.SQLServerDriver";
+        dbKind = dbKind.toUpperCase();
+        DataBaseType dataBaseType = DataBaseType.matchType(dbKind);
+        switch (dataBaseType){
+            case MYSQL:
+                driverClassName = mysqlDriver;
+                break;
+            case ORACLE:
+                driverClassName = oracleDriver;
+                break;
+            case SQLSERVER:
+                driverClassName = sqlServerDriver;
+                break;
         }
         return driverClassName;
     }
@@ -62,14 +97,20 @@ public class DbExportConstants {
      * @param dbName--mysql需要数据库名称
      * @return
      */
-    public static String getTableNameSQL(String dbKind ,String dbName){
+    public String getTableNameSql(String dbKind ,String dbName){
         String sql = null;
-        if (dbKind.toUpperCase().equals("MYSQL")) {
-            sql = "select table_name TABLE_NAME, table_comment COMMENTS from information_schema.tables where table_schema='"+dbName+"' and table_type='base table'";
-        } else if (dbKind.toUpperCase().equals("ORACLE")) {
-            sql = "select t1.TABLE_NAME,t2.COMMENTS from user_tables t1 ,user_tab_comments t2 where t1.table_name = t2.table_name(+)";
-        } else if (dbKind.toUpperCase().equals("SQLSERVER")) {
-            sql = "select TABLE_NAME=d.name,COMMENTS=f.value  from sysobjects d left join sys.extended_properties f on d.id=f.major_id and f.minor_id=0 where d.xtype = 'u' and d.name != 'sysdiagrams'";
+        dbKind = dbKind.toUpperCase();
+        DataBaseType dataBaseType = DataBaseType.matchType(dbKind);
+        switch (dataBaseType) {
+            case MYSQL:
+                sql = String.format(mysqlGetTableNameSql, dbName);
+                break;
+            case ORACLE:
+                sql = oracleGetTableNameSql;
+                break;
+            case SQLSERVER:
+                sql = sqlServerGetTableNameSql;
+                break;
         }
         return sql;
     }
@@ -80,14 +121,20 @@ public class DbExportConstants {
      * @param tableName
      * @return
      */
-    public static String getColNameInfoSQL(String dbKind,String tableName){
+    public String getColumnNameInfoSQL(String dbKind, String tableName) {
         String sql = null;
-        if (dbKind.toUpperCase().equals("MYSQL")) {
-            sql = "select column_name COLUMN_NAME,column_default DATA_DEFAULT,is_nullable NULLABLE,data_type DATA_TYPE,character_maximum_length DATA_LENGTH,column_comment COMMENTS, COLUMN_TYPE COLUMN_TYPE,EXTRA EXTRA_INFO,COLUMN_KEY COLUMN_KEY from information_schema.columns where table_name = '"+tableName+"' and table_schema = (select database()) order by ordinal_position";
-        } else if (dbKind.toUpperCase().equals("ORACLE")) {
-            sql = "select t1.COLUMN_NAME,t1.DATA_TYPE,case when t1.DATA_TYPE = 'NUMBER' then case when t1.DATA_PRECISION is null then t1.DATA_LENGTH else t1.DATA_PRECISION end else t1.CHAR_LENGTH end as \"DATA_LENGTH\",t1.NULLABLE,t1.DATA_DEFAULT,t2.COMMENTS from user_tab_cols t1, user_col_comments t2 where t1.table_name = '"+tableName+"' and t1.TABLE_NAME = t2.table_name and t1.COLUMN_NAME = t2.column_name(+)";
-        } else if (dbKind.toUpperCase().equals("SQLSERVER")) {
-            sql = "select  COLUMN_NAME = a.name ,DATA_TYPE = b.name,DATA_LENGTH = columnproperty(a.id, a.name, 'PRECISION') , NULLABLE = case when a.isnullable = 1 then '√' else '' end , DATA_DEFAULT = isnull(e.text, ''),COMMENTS = isnull(g.[value], '') from syscolumns a left join systypes b on a.xusertype = b.xusertype inner join sysobjects d on a.id = d.id and d.xtype = 'U' and d.name <> 'dtproperties' left join syscomments e on a.cdefault = e.id left join sys.extended_properties g on a.id = g.major_id and a.colid = g.minor_id left join sys.extended_properties f on d.id = f.major_id and f.minor_id = 0 where d.name = '"+tableName+"'";
+        dbKind = dbKind.toUpperCase();
+        DataBaseType dataBaseType = DataBaseType.matchType(dbKind);
+        switch (dataBaseType) {
+            case MYSQL:
+                sql = String.format(mysqlGetColumnNameInfoSql, tableName);
+                break;
+            case ORACLE:
+                sql = String.format(oracleGetColumnNameInfoSql, tableName);;
+                break;
+            case SQLSERVER:
+                sql = String.format(sqlServerGetColumnNameInfoSql, tableName);;
+                break;
         }
         return sql;
     }

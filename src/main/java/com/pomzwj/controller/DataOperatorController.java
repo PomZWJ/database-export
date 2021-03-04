@@ -1,12 +1,14 @@
 package com.pomzwj.controller;
 
 import com.deepoove.poi.XWPFTemplate;
+import com.pomzwj.constant.DataBaseType;
 import com.pomzwj.domain.DbBaseInfo;
 import com.pomzwj.domain.DbTable;
 import com.pomzwj.exception.DatabaseExportException;
 import com.pomzwj.exception.MessageCode;
 import com.pomzwj.officeframework.poitl.PoitlOperatorService;
 import com.pomzwj.service.IDataOperatorService;
+import com.pomzwj.utils.AssertUtils;
 import com.pomzwj.utils.StringUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,26 +39,23 @@ public class DataOperatorController {
 
     @RequestMapping(value = "/v1")
     @ResponseBody
-    public void getData(String dbKind, DbBaseInfo info, HttpServletResponse response) {
+    public void getData(DbBaseInfo info, HttpServletResponse response) {
         String desc = "生成word文档[v1]";
         XWPFTemplate xwpfTemplate = null;
         response.setHeader("Content-type", "text/html;charset=UTF-8");
         try {
             //参数校验
-            if(StringUtils.isEmpty(info.getIp())){
-                throw new DatabaseExportException(MessageCode.DATABASE_IP_IS_NULL_ERROR.getCode(),MessageCode.DATABASE_IP_IS_NULL_ERROR.getMsg());
-            }
-            if(StringUtils.isEmpty(info.getPort())){
-                throw new DatabaseExportException(MessageCode.DATABASE_PORT_IS_NULL_ERROR.getCode(),MessageCode.DATABASE_PORT_IS_NULL_ERROR.getMsg());
-            }
-            if(StringUtils.isEmpty(info.getUserName())){
-                throw new DatabaseExportException(MessageCode.DATABASE_USER_IS_NULL_ERROR.getCode(),MessageCode.DATABASE_USER_IS_NULL_ERROR.getMsg());
-            }
-            if(StringUtils.isEmpty(info.getPassword())){
-                throw new DatabaseExportException(MessageCode.DATABASE_PASSWORD_IS_NULL_ERROR.getCode(),MessageCode.DATABASE_PASSWORD_IS_NULL_ERROR.getMsg());
+            AssertUtils.isNull(info.getDbKind(),MessageCode.DATABASE_KIND_IS_NULL_ERROR);
+            AssertUtils.isNull(info.getIp(),MessageCode.DATABASE_IP_IS_NULL_ERROR);
+            AssertUtils.isNull(info.getPort(),MessageCode.DATABASE_PORT_IS_NULL_ERROR);
+            AssertUtils.isNull(info.getUserName(),MessageCode.DATABASE_USER_IS_NULL_ERROR);
+            AssertUtils.isNull(info.getPassword(),MessageCode.DATABASE_PASSWORD_IS_NULL_ERROR);
+            DataBaseType dataBaseType = DataBaseType.matchType(info.getDbKind());
+            if(dataBaseType==null){
+                throw new DatabaseExportException(MessageCode.DATABASE_KIND_IS_NOT_MATCH_ERROR);
             }
             //查询表信息
-            List<DbTable> tableMessage = dataOperatorService.getTableName(dbKind,info);
+            List<DbTable> tableMessage = dataOperatorService.getTableName(info);
             //生成word文档
             xwpfTemplate = poitlOperatorService.makeDoc(tableMessage);
             response.setContentType("application/octet-stream");
@@ -84,29 +83,23 @@ public class DataOperatorController {
 
     @RequestMapping(value = "/v2")
     @ResponseBody
-    public void makeWordV2(String dbKind, DbBaseInfo info, HttpServletResponse response) {
+    public void makeWordV2(DbBaseInfo info, HttpServletResponse response) {
         String desc = "生成word文档[v2]";
         XWPFTemplate xwpfTemplate = null;
         response.setHeader("Content-type", "text/html;charset=UTF-8");
         try {
             //参数校验
-            if(StringUtils.isEmpty(info.getIp())){
-                throw new DatabaseExportException(MessageCode.DATABASE_IP_IS_NULL_ERROR.getCode(),MessageCode.DATABASE_IP_IS_NULL_ERROR.getMsg());
-            }
-            if(StringUtils.isEmpty(info.getPort())){
-                throw new DatabaseExportException(MessageCode.DATABASE_PORT_IS_NULL_ERROR.getCode(),MessageCode.DATABASE_PORT_IS_NULL_ERROR.getMsg());
-            }
-            if(StringUtils.isEmpty(info.getUserName())){
-                throw new DatabaseExportException(MessageCode.DATABASE_USER_IS_NULL_ERROR.getCode(),MessageCode.DATABASE_USER_IS_NULL_ERROR.getMsg());
-            }
-            if(StringUtils.isEmpty(info.getPassword())){
-                throw new DatabaseExportException(MessageCode.DATABASE_PASSWORD_IS_NULL_ERROR.getCode(),MessageCode.DATABASE_PASSWORD_IS_NULL_ERROR.getMsg());
-            }
-            if(StringUtils.isEmpty(info.getDbName())){
-                throw new DatabaseExportException(MessageCode.DATABASE_NAME_IS_NULL_ERROR.getCode(),MessageCode.DATABASE_NAME_IS_NULL_ERROR.getMsg());
+            AssertUtils.isNull(info.getDbKind(),MessageCode.DATABASE_KIND_IS_NULL_ERROR);
+            AssertUtils.isNull(info.getIp(),MessageCode.DATABASE_IP_IS_NULL_ERROR);
+            AssertUtils.isNull(info.getPort(),MessageCode.DATABASE_PORT_IS_NULL_ERROR);
+            AssertUtils.isNull(info.getUserName(),MessageCode.DATABASE_USER_IS_NULL_ERROR);
+            AssertUtils.isNull(info.getPassword(),MessageCode.DATABASE_PASSWORD_IS_NULL_ERROR);
+            DataBaseType dataBaseType = DataBaseType.matchType(info.getDbKind());
+            if(dataBaseType==null){
+                throw new DatabaseExportException(MessageCode.DATABASE_KIND_IS_NOT_MATCH_ERROR);
             }
             //查询表信息
-            List<DbTable> tableMessage = dataOperatorService.getTableName(dbKind,info);
+            List<DbTable> tableMessage = dataOperatorService.getTableName(info);
             //生成word文档
             xwpfTemplate = poitlOperatorService.makeDoc(tableMessage);
             response.setContentType("application/octet-stream");

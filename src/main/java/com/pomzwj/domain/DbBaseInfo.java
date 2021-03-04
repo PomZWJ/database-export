@@ -9,11 +9,20 @@ import java.io.Serializable;
  * @date 2018/10/30/0030.
  */
 public class DbBaseInfo implements Serializable{
+    private String dbKind;
     private String ip;
     private String port;
     private String dbName;
     private String userName;
     private String password;
+
+    public String getDbKind() {
+        return dbKind;
+    }
+
+    public void setDbKind(String dbKind) {
+        this.dbKind = dbKind;
+    }
 
     public String getIp() {
         return ip;
