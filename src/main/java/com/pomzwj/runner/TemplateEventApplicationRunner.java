@@ -30,8 +30,8 @@ public class TemplateEventApplicationRunner implements ApplicationRunner {
         String[] filePath = new String[]{TemplateFileConstants.IMPORT_TEMPLATE,TemplateFileConstants.SUB_MODEL_TEMPLATE};
         for(String s:filePath){
             try{
-                ClassPathResource classPathResource = new ClassPathResource("docx/"+s);
-                File file = new File(templateCopyPath+"/"+s);
+                ClassPathResource classPathResource = new ClassPathResource("docx"+File.separator+s);
+                File file = new File(templateCopyPath+File.separator+s);
                 if(!file.exists()){
                     log.info("生成文件的路径是={}",file.getAbsolutePath());
                     FileUtils.copyInputStreamToFile(classPathResource.getInputStream(),file);
