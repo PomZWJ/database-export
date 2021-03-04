@@ -21,8 +21,12 @@ import java.io.File;
 public class TemplateEventApplicationRunner implements ApplicationRunner {
     @Value("${export.template-copy-path}")
     private String templateCopyPath;
+    @Value("${server.port}")
+    private Integer serverPort;
+    @Value("${server.servlet.context-path}")
+    private String contextPath;
     @Override
-    public void run(ApplicationArguments args) throws Exception {
+    public void run(ApplicationArguments args){
         String[] filePath = new String[]{TemplateFileConstants.IMPORT_TEMPLATE,TemplateFileConstants.SUB_MODEL_TEMPLATE};
         for(String s:filePath){
             try{
@@ -33,9 +37,10 @@ public class TemplateEventApplicationRunner implements ApplicationRunner {
                     FileUtils.copyInputStreamToFile(classPathResource.getInputStream(),file);
                 }
             }catch (Exception e){
-                log.error("创建初始文件失败,e={}",e);
+                log.error("创建初始文件失败,系统自动退出,e={}",e);
                 System.exit(0);
             }
         }
+        log.info("http://localhost:{}{}",serverPort,contextPath);
     }
 }
