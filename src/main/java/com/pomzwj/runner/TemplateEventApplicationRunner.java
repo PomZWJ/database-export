@@ -1,8 +1,10 @@
 package com.pomzwj.runner;
 
 import com.pomzwj.constant.TemplateFileConstants;
-import lombok.extern.slf4j.Slf4j;
+import com.pomzwj.controller.DataOperatorController;
 import org.apache.commons.io.FileUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
@@ -16,9 +18,9 @@ import java.io.File;
  * @github https://github.com/PomZWJ
  * @date 2020-07-15
  */
-@Slf4j
 @Component
 public class TemplateEventApplicationRunner implements ApplicationRunner {
+    static final Logger log = LoggerFactory.getLogger(TemplateEventApplicationRunner.class);
     @Value("${export.template-copy-path}")
     private String templateCopyPath;
     @Value("${server.port}")

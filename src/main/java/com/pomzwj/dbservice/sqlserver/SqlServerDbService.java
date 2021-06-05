@@ -1,55 +1,58 @@
-package com.pomzwj.service.impl;
+package com.pomzwj.dbservice.sqlserver;
 
-import com.pomzwj.constant.DbExportConstants;
-import com.pomzwj.domain.DbBaseInfo;
-import com.pomzwj.domain.DbColumnInfo;
-import com.pomzwj.domain.DbTable;
-import com.pomzwj.domain.FiledDefaultValue;
-import com.pomzwj.exception.DatabaseExportException;
-import com.pomzwj.service.IDataOperatorService;
+import com.pomzwj.dbservice.DbService;
+import com.pomzwj.domain.*;
 import com.pomzwj.utils.DbConnnecttion;
 import com.pomzwj.utils.StringUtils;
-import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Component;
 
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.Statement;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
-/**
- * 类说明:数据操作类
- *
- * @author zhaowenjie<1513041820@ qq.com>
- * @date 2018/10/29/0029.
- */
-@Slf4j
-@Service
-public class DataOperatorServiceImpl implements IDataOperatorService {
+@Component
+public class SqlServerDbService implements DbService {
 
-    @Autowired
-    private DbExportConstants dbExportConstants;
+    static final Logger log = LoggerFactory.getLogger(SqlServerDbService.class);
+
+    @Value("${database.jdbc.sqlServer}")
+    String sqlServerJdbc;
+    @Value("${database.driver.sqlServer}")
+    String sqlServerDriver;
+    @Value("${database.getTableNameSql.sqlServer}")
+    String sqlServerGetTableNameSql;
 
     @Override
-    public List<DbTable> getTableName(DbBaseInfo info) throws Exception {
-        String dbKind = info.getDbKind();
-        String dbName = info.getDbName();
-        String ip = info.getIp();
-        String port = info.getPort();
-        String userName = info.getUserName();
-        String password = info.getPassword();
+    public List<String> initRowName() {
+        return null;
+    }
 
+    @Override
+    public List<TempData> getWordTempData(List<DbTable> tableMessage) {
+        return null;
+    }
+
+    @Override
+    public List<DbTable> getTableName(DbBaseInfo dbBaseInfo) throws Exception {
         List<DbTable> tableList = new ArrayList<>();
+
+        String dbName = dbBaseInfo.getDbName();
+        String ip = dbBaseInfo.getIp();
+        String port = dbBaseInfo.getPort();
+        String userName = dbBaseInfo.getUserName();
+        String password = dbBaseInfo.getPassword();
+
         ResultSet resultSet = null;
         try {
-            String jdbcUrl = dbExportConstants.getJdbcUrl(dbKind, ip, port, dbName);
-            Connection connection = DbConnnecttion.getConn(jdbcUrl, userName, password, dbExportConstants.getDriverClassName(dbKind));
+            String.format(sqlServerJdbc,ip,port,dbName);
+            Connection connection = DbConnnecttion.getConn(sqlServerJdbc, userName, password, sqlServerDriver);
             Statement statement = connection.createStatement();
-            resultSet = statement.executeQuery(dbExportConstants.getTableNameSql(dbKind, dbName));
+            resultSet = statement.executeQuery(sqlServerGetTableNameSql);
             while (resultSet.next()) {
                 DbTable dbTable = new DbTable();
                 String tableName = resultSet.getString("TABLE_NAME");
@@ -62,14 +65,8 @@ public class DataOperatorServiceImpl implements IDataOperatorService {
                 dbTable.setTableName(tableName);
                 tableList.add(dbTable);
             }
-
-            for (int i = 0; i < tableList.size(); i++) {
-                DbTable dbTable = tableList.get(i);
-                List<DbColumnInfo> tabsColumn = this.getTabsColumn(dbKind, dbTable.getTableName(), connection);
-                dbTable.setTabsColumn(tabsColumn);
-            }
         } catch (Exception e) {
-            log.error("发生错误 = {}",e);
+            log.error("获取所有表数据发生错误 = {}",e);
             throw e;
         } finally {
             DbConnnecttion.closeRs(resultSet);
@@ -78,13 +75,20 @@ public class DataOperatorServiceImpl implements IDataOperatorService {
     }
 
     @Override
-    public List<DbColumnInfo> getTabsColumn(String dbKind, String tableName, Connection connection) throws Exception {
+    public void getTabsColumnInfo(DbBaseInfo dbBaseInfo,List<DbTable> dbTableList) throws Exception {
+        String dbName = dbBaseInfo.getDbName();
+        String ip = dbBaseInfo.getIp();
+        String port = dbBaseInfo.getPort();
+        String userName = dbBaseInfo.getUserName();
+        String password = dbBaseInfo.getPassword();
+
         List<DbColumnInfo> list = new ArrayList<>();
         ResultSet resultSet = null;
-        String sql = dbExportConstants.getColumnNameInfoSQL(dbKind, tableName);
         try {
+            String.format(sqlServerJdbc,ip,port,dbName);
+            Connection connection = DbConnnecttion.getConn(sqlServerJdbc, userName, password, sqlServerDriver);
             Statement statement = connection.createStatement();
-            resultSet = statement.executeQuery(sql);
+            resultSet = statement.executeQuery(sqlServerGetTableNameSql);
             while (resultSet.next()) {
                 DbColumnInfo dbColumnInfo = new DbColumnInfo();
                 dbColumnInfo.setColumnName(resultSet.getString("COLUMN_NAME"));
@@ -111,10 +115,10 @@ public class DataOperatorServiceImpl implements IDataOperatorService {
                 list.add(dbColumnInfo);
             }
         }catch (Exception e){
-           throw e;
+            log.error("获取表结构数据发生错误 = {}",e);
+            throw e;
+        } finally {
+            DbConnnecttion.closeRs(resultSet);
         }
-        return list;
     }
-
-
 }

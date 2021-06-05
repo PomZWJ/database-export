@@ -25,7 +25,7 @@ database:
     oracle: oracle.jdbc.driver.OracleDriver
     sqlServer: com.microsoft.sqlserver.jdbc.SQLServerDriver
   getTableNameSql:
-    mysql: select table_name TABLE_NAME, table_comment COMMENTS from information_schema.tables where table_schema='%s' and table_type='base table'
+    mysql: select table_name TABLE_NAME, table_comment COMMENTS from information_schema.tables where table_schema='%s' and table_type='BASE TABLE'
     oracle: select t1.TABLE_NAME,t2.COMMENTS from user_tables t1 ,user_tab_comments t2 where t1.table_name = t2.table_name(+)
     sqlServer: select TABLE_NAME=d.name,COMMENTS=f.value  from sysobjects d left join sys.extended_properties f on d.id=f.major_id and f.minor_id=0 where d.xtype = 'u' and d.name != 'sysdiagrams'
   getColumnNameInfoSql:

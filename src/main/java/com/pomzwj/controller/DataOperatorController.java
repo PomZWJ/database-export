@@ -2,15 +2,18 @@ package com.pomzwj.controller;
 
 import com.deepoove.poi.XWPFTemplate;
 import com.pomzwj.constant.DataBaseType;
+import com.pomzwj.dbservice.DbService;
+import com.pomzwj.dbservice.DbServiceFactory;
 import com.pomzwj.domain.DbBaseInfo;
+import com.pomzwj.domain.DbColumnInfo;
 import com.pomzwj.domain.DbTable;
+import com.pomzwj.domain.TempData;
 import com.pomzwj.exception.DatabaseExportException;
 import com.pomzwj.exception.MessageCode;
 import com.pomzwj.officeframework.poitl.PoitlOperatorService;
-import com.pomzwj.service.IDataOperatorService;
 import com.pomzwj.utils.AssertUtils;
-import com.pomzwj.utils.StringUtils;
-import lombok.extern.slf4j.Slf4j;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -27,15 +30,14 @@ import java.util.*;
  * @author zhaowenjie<1513041820@qq.com>
  * @date 2018/10/29/0029.
  */
-@Slf4j
 @Controller
 @RequestMapping(value = "/makeWord")
 public class DataOperatorController {
-
-    @Autowired
-    private IDataOperatorService dataOperatorService;
+    static final Logger log = LoggerFactory.getLogger(DataOperatorController.class);
     @Autowired
     private PoitlOperatorService poitlOperatorService;
+    @Autowired
+    private DbServiceFactory dbServiceFactory;
 
     @RequestMapping(value = "/v1")
     @ResponseBody
@@ -55,9 +57,9 @@ public class DataOperatorController {
                 throw new DatabaseExportException(MessageCode.DATABASE_KIND_IS_NOT_MATCH_ERROR);
             }
             //查询表信息
-            List<DbTable> tableMessage = dataOperatorService.getTableName(info);
+            List<DbTable> tableMessage = null;
             //生成word文档
-            xwpfTemplate = poitlOperatorService.makeDoc(tableMessage);
+            xwpfTemplate = poitlOperatorService.makeDoc(null,null);
             response.setContentType("application/octet-stream");
             SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMddHHmmss");
             response.setHeader("Content-Disposition", "attachment;fileName="+info.getDbName()+sdf.format(new Date())+".docx");
@@ -98,10 +100,14 @@ public class DataOperatorController {
             if(dataBaseType==null){
                 throw new DatabaseExportException(MessageCode.DATABASE_KIND_IS_NOT_MATCH_ERROR);
             }
+            DbService dbServiceBean = dbServiceFactory.getDbServiceBean(info.getDbKind());
             //查询表信息
-            List<DbTable> tableMessage = dataOperatorService.getTableName(info);
+            List<String> rowNames = dbServiceBean.initRowName();
+            List<DbTable> tableMessage = dbServiceBean.getTableName(info);
+            dbServiceBean.getTabsColumnInfo(info, tableMessage);
+            List<TempData> wordTempData = dbServiceBean.getWordTempData(tableMessage);
             //生成word文档
-            xwpfTemplate = poitlOperatorService.makeDoc(tableMessage);
+            xwpfTemplate = poitlOperatorService.makeDoc(rowNames,wordTempData);
             response.setContentType("application/octet-stream");
             SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMddHHmmss");
             response.setHeader("Content-Disposition", "attachment;fileName="+info.getDbName()+sdf.format(new Date())+".docx");

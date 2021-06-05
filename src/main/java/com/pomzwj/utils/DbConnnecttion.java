@@ -2,7 +2,8 @@ package com.pomzwj.utils;
 
 import com.pomzwj.exception.DatabaseExportException;
 import com.pomzwj.exception.MessageCode;
-import lombok.extern.slf4j.Slf4j;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.sql.*;
 
@@ -12,8 +13,8 @@ import java.sql.*;
  * @author zhaowenjie<1 5 1 3 0 4 1 8 2 0 @ qq.com>
  * @date 2018/10/30/0030.
  */
-@Slf4j
 public class DbConnnecttion {
+    static final Logger log = LoggerFactory.getLogger(DbConnnecttion.class);
     public static Connection getConn(String jdbcUrl, String userName, String password, String driverClassName) throws Exception {
         Connection connection = null;
         try{
