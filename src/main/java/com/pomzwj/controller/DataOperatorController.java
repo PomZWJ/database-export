@@ -56,9 +56,13 @@ public class DataOperatorController {
                 throw new DatabaseExportException(MessageCode.DATABASE_KIND_IS_NOT_MATCH_ERROR);
             }
             //查询表信息
-            List<DbTable> tableMessage = null;
+            DbService dbServiceBean = dbServiceFactory.getDbServiceBean(info.getDbKind());
+            List<String> rowNames = dbServiceBean.initRowName();
+            List<DbTable> tableMessage = dbServiceBean.getTableName(info);
+            dbServiceBean.getTabsColumnInfo(info, tableMessage);
+            List<TempData> wordTempData = dbServiceBean.getWordTempData(tableMessage);
             //生成word文档
-            xwpfTemplate = poitlOperatorService.makeDoc(null,null);
+            xwpfTemplate = poitlOperatorService.makeDoc(rowNames,wordTempData);
             response.setContentType("application/octet-stream");
             SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMddHHmmss");
             response.setHeader("Content-Disposition", "attachment;fileName="+info.getDbName()+sdf.format(new Date())+".docx");
