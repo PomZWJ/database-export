@@ -1,17 +1,23 @@
-select t1.COLUMN_NAME,
-       t1.DATA_TYPE,
-       case
-           when t1.DATA_TYPE = 'NUMBER' then
-            case
-            when t1.DATA_PRECISION is null then t1.DATA_LENGTH
-            else t1.DATA_PRECISION end
-           else t1.CHAR_LENGTH
-       end as "DATA_LENGTH",
-       t1.NULLABLE,
-       t1.DATA_DEFAULT,
-       t2.COMMENTS
-from user_tab_cols t1,
-     user_col_comments t2
-where t1.table_name = ?
-  and t1.TABLE_NAME = t2.table_name
-  and t1.COLUMN_NAME = t2.column_name(+)
+SELECT
+    B.COLUMN_NAME,
+    B.DATA_TYPE,
+    B.DATA_LENGTH,
+    B.DATA_PRECISION,
+    B.DATA_SCALE,
+    B.NULLABLE,
+    B.DATA_DEFAULT,
+    A.COMMENTS
+FROM
+    ALL_COL_COMMENTS A,
+    ALL_TAB_COLUMNS B,
+    ALL_TAB_COMMENTS C
+WHERE 1=1
+  AND A.TABLE_NAME IN (SELECT U.TABLE_NAME FROM USER_ALL_TABLES U)
+  AND A.OWNER = B.OWNER
+  AND A.TABLE_NAME = B.TABLE_NAME
+  AND A.COLUMN_NAME = B.COLUMN_NAME
+  AND C.TABLE_NAME = A.TABLE_NAME
+  AND C.OWNER = A.OWNER
+  AND A.OWNER = UPPER(?) --其中xxx_db_name为DB用户名
+  AND A.TABLE_NAME = ? --xxx_table_name为表名称
+ORDER BY A.TABLE_NAME, B.COLUMN_ID

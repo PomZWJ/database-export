@@ -34,7 +34,7 @@ public class OracleDbService implements DbService {
 
     @Override
     public List<String> initRowName() {
-        List<String>rowNames = Arrays.asList("列名", "数据类型","是否为空","主键","是否自增", "默认值", "备注");
+        List<String>rowNames = Arrays.asList("列名", "数据类型","数据长度","精度","是否为空", "默认值", "备注");
         return rowNames;
     }
 
@@ -52,24 +52,21 @@ public class OracleDbService implements DbService {
 
                 DbColumnInfo dbColumnInfo = data.get(i);
                 //列名
-                String column_name = dbColumnInfo.getColumnName();
+                String columnName = dbColumnInfo.getColumnName();
                 //数据类型
-                String data_type = dbColumnInfo.getDataType();
+                String dataType = dbColumnInfo.getDataType();
                 //数据长度
-                String data_length = dbColumnInfo.getDataLength();
+                String dataLength = dbColumnInfo.getDataLength();
+                //精度
+                String dataScale = dbColumnInfo.getDataScale();
                 //是否可空
                 Boolean nullAble = dbColumnInfo.getNullAble();
                 //数据缺省值
-                String data_default = dbColumnInfo.getDefaultVal();
+                String dataDefault = dbColumnInfo.getDefaultVal();
                 //字段注释
                 String comments = dbColumnInfo.getComments();
-                Boolean autoIncrement = dbColumnInfo.getAutoIncrement();
-                String auto_increment = Objects.nonNull(autoIncrement)&&autoIncrement?"是":"";
 
-                Boolean primary = dbColumnInfo.getPrimary();
-                String is_primary = Objects.nonNull(primary)&&primary?"是":"";
-
-                RowRenderData labor = RowRenderData.build( column_name, data_type,nullAble+"",is_primary,auto_increment,data_default,comments);
+                RowRenderData labor = RowRenderData.build( columnName, dataType,dataLength,dataScale,nullAble?"是":"否",dataDefault,comments);
                 rowRenderDataList.add(labor);
             }
             tempData.setData(rowRenderDataList);
@@ -121,7 +118,7 @@ public class OracleDbService implements DbService {
         String userName = dbBaseInfo.getUserName();
         String password = dbBaseInfo.getPassword();
 
-        List<DbColumnInfo> dbColumnInfos = new ArrayList<>();
+
         ResultSet resultSet = null;
         try {
             ClassPathResource classPathResource = new ClassPathResource("sql/oracle.sql");
@@ -136,32 +133,29 @@ public class OracleDbService implements DbService {
             PreparedStatement preparedStatement = connection.prepareStatement(executeSql);
             for(int i=0;i<dbTableList.size();i++){
                 DbTable dbTable = dbTableList.get(i);
-                preparedStatement.setString(1,dbTable.getTableName());
+                preparedStatement.setString(1,userName);
+                preparedStatement.setString(2,dbTable.getTableName());
                 resultSet = preparedStatement.executeQuery();
+                List<DbColumnInfo> dbColumnInfos = new ArrayList<>();
                 while (resultSet.next()) {
                     DbColumnInfo dbColumnInfo = new DbColumnInfo();
                     dbColumnInfo.setColumnName(resultSet.getString("COLUMN_NAME"));
-                    //dbColumnInfo.setDataType(resultSet.getString("COLUMN_TYPE"));
-                    dbColumnInfo.setDataType("int");
-                    dbColumnInfo.setDataLength(resultSet.getString("DATA_LENGTH"));
-                    //dbColumnInfo.setNullAble(resultSet.getString("NULLABLE"));
+                    dbColumnInfo.setDataType(resultSet.getString("DATA_TYPE"));
+                    String dataLength = resultSet.getString("DATA_LENGTH");
+                    String dataPrecision = resultSet.getString("DATA_PRECISION");
+                    if(StringUtils.isNotEmpty(dataPrecision)){
+                        dataLength = dataPrecision;
+                    }
+                    dbColumnInfo.setDataLength(dataLength);
+                    dbColumnInfo.setDataScale(resultSet.getString("DATA_SCALE"));
+                    dbColumnInfo.setNullAble(getStringToBoolean(resultSet.getString("NULLABLE")));
                     dbColumnInfo.setDefaultVal(resultSet.getString("DATA_DEFAULT"));
-                    dbColumnInfo.setAutoIncrement(false);
-                    dbColumnInfo.setPrimary(false);
                     String comments = resultSet.getString("COMMENTS");
                     if (StringUtils.isEmpty(comments)) {
                         dbColumnInfo.setComments(FiledDefaultValue.TABLE_FIELD_COMMENTS_DEFAULT);
                     } else {
                         dbColumnInfo.setComments(comments);
                     }
-                    //String extraInfo = resultSet.getString("EXTRA_INFO");
-                    //if(!StringUtils.isEmpty(extraInfo) && extraInfo.contains("auto_increment")){
-                        dbColumnInfo.setAutoIncrement(true);
-                    //}
-                    //String columnKey = resultSet.getString("COLUMN_KEY");
-                    //if(!StringUtils.isEmpty(columnKey) && columnKey.contains("PRI")){
-                        dbColumnInfo.setPrimary(true);
-                    //}
                     dbColumnInfos.add(dbColumnInfo);
                 }
                 dbTable.setTabsColumn(dbColumnInfos);
@@ -173,6 +167,16 @@ public class OracleDbService implements DbService {
             DbConnnecttion.closeRs(resultSet);
         }
     }
-
+    private static boolean getStringToBoolean(final String val){
+        if(org.apache.commons.lang3.StringUtils.isEmpty(val)){
+            return false;
+        }else{
+            if("Y".equals(val)){
+                return true;
+            }else{
+                return false;
+            }
+        }
+    }
 
 }

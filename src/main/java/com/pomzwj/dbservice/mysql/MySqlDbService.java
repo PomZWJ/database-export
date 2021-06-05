@@ -132,7 +132,6 @@ public class MySqlDbService implements DbService {
         String userName = dbBaseInfo.getUserName();
         String password = dbBaseInfo.getPassword();
 
-        List<DbColumnInfo> dbColumnInfos = new ArrayList<>();
         ResultSet resultSet = null;
         try {
             ClassPathResource classPathResource = new ClassPathResource("sql/mysql.sql");
@@ -146,6 +145,7 @@ public class MySqlDbService implements DbService {
 
             PreparedStatement preparedStatement = connection.prepareStatement(executeSql);
             for(int i=0;i<dbTableList.size();i++){
+                List<DbColumnInfo> dbColumnInfos = new ArrayList<>();
                 DbTable dbTable = dbTableList.get(i);
                 preparedStatement.setString(1,dbTable.getTableName());
                 resultSet = preparedStatement.executeQuery();
