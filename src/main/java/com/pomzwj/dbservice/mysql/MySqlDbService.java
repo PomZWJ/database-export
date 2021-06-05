@@ -41,7 +41,7 @@ public class MySqlDbService implements DbService {
 
     @Override
     public List<String> initRowName() {
-        List<String>rowNames = Arrays.asList("列名", "数据类型","是否为空","主键","是否自增", "默认值", "备注");
+        List<String>rowNames = Arrays.asList("列名", "数据类型","是否为空","主键","自增", "默认值", "备注");
         return rowNames;
     }
 
@@ -62,19 +62,19 @@ public class MySqlDbService implements DbService {
                 String column_name = dbColumnInfo.getColumnName();
                 //数据类型
                 String data_type = dbColumnInfo.getDataType();
-                //数据长度
-                String data_length = dbColumnInfo.getDataLength();
                 //是否可空
-                String null_able = dbColumnInfo.getNullAble();
+                Boolean nullAble = dbColumnInfo.getNullAble();
                 //数据缺省值
                 String data_default = dbColumnInfo.getDefaultVal();
                 //字段注释
                 String comments = dbColumnInfo.getComments();
                 Boolean autoIncrement = dbColumnInfo.getAutoIncrement();
-                String auto_increment = Objects.nonNull(autoIncrement)&&autoIncrement?"是":"";
+                String auto_increment = autoIncrement?"是":"";
 
                 Boolean primary = dbColumnInfo.getPrimary();
-                String is_primary = Objects.nonNull(primary)&&primary?"是":"";
+                String is_primary = primary?"是":"";
+
+                String null_able = nullAble?"是":"否";
 
                 RowRenderData labor = RowRenderData.build( column_name, data_type,null_able,is_primary,auto_increment,data_default,comments);
                 rowRenderDataList.add(labor);
@@ -110,7 +110,7 @@ public class MySqlDbService implements DbService {
                 if(StringUtils.isEmpty(tableComments)){
                     dbTable.setTableComments(FiledDefaultValue.TABLE_COMMENTS_DEFAULT);
                 }else{
-                    dbTable.setTableComments("("+tableComments+")");
+                    dbTable.setTableComments(tableComments);
                 }
                 dbTable.setTableName(tableName);
                 tableList.add(dbTable);
@@ -153,8 +153,7 @@ public class MySqlDbService implements DbService {
                     DbColumnInfo dbColumnInfo = new DbColumnInfo();
                     dbColumnInfo.setColumnName(resultSet.getString("COLUMN_NAME"));
                     dbColumnInfo.setDataType(resultSet.getString("COLUMN_TYPE"));
-                    dbColumnInfo.setDataLength(resultSet.getString("DATA_LENGTH"));
-                    dbColumnInfo.setNullAble(resultSet.getString("NULLABLE"));
+                    dbColumnInfo.setNullAble(getStringToBoolean(resultSet.getString("NULLABLE")));
                     dbColumnInfo.setDefaultVal(resultSet.getString("DATA_DEFAULT"));
                     dbColumnInfo.setAutoIncrement(false);
                     dbColumnInfo.setPrimary(false);
@@ -181,6 +180,17 @@ public class MySqlDbService implements DbService {
             throw e;
         } finally {
             DbConnnecttion.closeRs(resultSet);
+        }
+    }
+    private static boolean getStringToBoolean(final String val){
+        if(org.apache.commons.lang3.StringUtils.isEmpty(val)){
+            return false;
+        }else{
+            if("YES".equals(val)){
+                return true;
+            }else{
+                return false;
+            }
         }
     }
 }

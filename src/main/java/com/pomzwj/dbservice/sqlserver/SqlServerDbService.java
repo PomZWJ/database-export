@@ -21,7 +21,6 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Objects;
 
 @Component
 public class SqlServerDbService implements DbService {
@@ -37,7 +36,7 @@ public class SqlServerDbService implements DbService {
 
     @Override
     public List<String> initRowName() {
-        List<String>rowNames = Arrays.asList("列名", "数据类型","是否为空","主键","是否自增", "默认值", "备注");
+        List<String>rowNames = Arrays.asList("列名", "数据类型","长度","小数位","是否为空","主键","是否自增", "默认值", "备注");
         return rowNames;
     }
 
@@ -61,18 +60,23 @@ public class SqlServerDbService implements DbService {
                 //数据长度
                 String data_length = dbColumnInfo.getDataLength();
                 //是否可空
-                String null_able = dbColumnInfo.getNullAble();
+                Boolean nullAble = dbColumnInfo.getNullAble();
                 //数据缺省值
                 String data_default = dbColumnInfo.getDefaultVal();
                 //字段注释
                 String comments = dbColumnInfo.getComments();
+
+                String dataScale = dbColumnInfo.getDataScale();
+
                 Boolean autoIncrement = dbColumnInfo.getAutoIncrement();
-                String auto_increment = Objects.nonNull(autoIncrement)&&autoIncrement?"是":"";
+                String auto_increment = autoIncrement?"是":"";
 
                 Boolean primary = dbColumnInfo.getPrimary();
-                String is_primary = Objects.nonNull(primary)&&primary?"是":"";
+                String is_primary = primary?"是":"";
 
-                RowRenderData labor = RowRenderData.build( column_name, data_type,null_able,is_primary,auto_increment,data_default,comments);
+                String null_able = nullAble?"是":"否";
+
+                RowRenderData labor = RowRenderData.build( column_name, data_type,data_length,dataScale,null_able,is_primary,auto_increment,data_default,comments);
                 rowRenderDataList.add(labor);
             }
             tempData.setData(rowRenderDataList);
@@ -102,7 +106,7 @@ public class SqlServerDbService implements DbService {
                 if(StringUtils.isEmpty(tableComments)){
                     dbTable.setTableComments(FiledDefaultValue.TABLE_COMMENTS_DEFAULT);
                 }else{
-                    dbTable.setTableComments("("+tableComments+")");
+                    dbTable.setTableComments(tableComments);
                 }
                 dbTable.setTableName(tableName);
                 tableList.add(dbTable);
@@ -146,23 +150,16 @@ public class SqlServerDbService implements DbService {
                     dbColumnInfo.setColumnName(resultSet.getString("COLUMN_NAME"));
                     dbColumnInfo.setDataType(resultSet.getString("COLUMN_TYPE"));
                     dbColumnInfo.setDataLength(resultSet.getString("DATA_LENGTH"));
-                    dbColumnInfo.setNullAble(resultSet.getString("NULLABLE"));
+                    dbColumnInfo.setNullAble(getStringToBoolean(resultSet.getString("NULLABLE")));
                     dbColumnInfo.setDefaultVal(resultSet.getString("DATA_DEFAULT"));
-                    dbColumnInfo.setAutoIncrement(false);
-                    dbColumnInfo.setPrimary(false);
+                    dbColumnInfo.setDataScale(resultSet.getString("DATA_SCALE"));
                     String comments = resultSet.getString("COMMENTS");
+                    dbColumnInfo.setAutoIncrement(getStringToBoolean(resultSet.getString("AUTOINCREMENT")));
+                    dbColumnInfo.setPrimary(getStringToBoolean(resultSet.getString("PRIMARY_KEY")));
                     if (StringUtils.isEmpty(comments)) {
                         dbColumnInfo.setComments(FiledDefaultValue.TABLE_FIELD_COMMENTS_DEFAULT);
                     } else {
                         dbColumnInfo.setComments(comments);
-                    }
-                    String extraInfo = resultSet.getString("EXTRA_INFO");
-                    if(!StringUtils.isEmpty(extraInfo) && extraInfo.contains("auto_increment")){
-                        dbColumnInfo.setAutoIncrement(true);
-                    }
-                    String columnKey = resultSet.getString("COLUMN_KEY");
-                    if(!StringUtils.isEmpty(columnKey) && columnKey.contains("PRI")){
-                        dbColumnInfo.setPrimary(true);
                     }
                     dbColumnInfos.add(dbColumnInfo);
                 }
@@ -173,6 +170,17 @@ public class SqlServerDbService implements DbService {
             throw e;
         } finally {
             DbConnnecttion.closeRs(resultSet);
+        }
+    }
+    private static boolean getStringToBoolean(final String val){
+        if(StringUtils.isEmpty(val)){
+            return false;
+        }else{
+            if("TRUE".equals(val)){
+                return true;
+            }else{
+                return false;
+            }
         }
     }
 }

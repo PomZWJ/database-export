@@ -12,11 +12,12 @@ public class DbColumnInfo implements Serializable {
     public String columnName;
     public String dataType;
     public String dataLength;
-    public String nullAble;
+    public Boolean nullAble;
     public String defaultVal;
     public Boolean autoIncrement;
     public Boolean primary;
     public String comments;
+    public String dataScale;
 
     public String getColumnName() {
         if(StringUtils.isEmpty(columnName)){
@@ -51,14 +52,14 @@ public class DbColumnInfo implements Serializable {
         this.dataLength = dataLength;
     }
 
-    public String getNullAble() {
-        if(StringUtils.isEmpty(nullAble)){
-            return "";
+    public Boolean getNullAble() {
+        if(nullAble == null){
+            return false;
         }
         return nullAble;
     }
 
-    public void setNullAble(String nullAble) {
+    public void setNullAble(Boolean nullAble) {
         this.nullAble = nullAble;
     }
 
@@ -74,7 +75,9 @@ public class DbColumnInfo implements Serializable {
     }
 
     public Boolean getAutoIncrement() {
-
+        if(autoIncrement == null){
+            return false;
+        }
         return autoIncrement;
     }
 
@@ -83,6 +86,9 @@ public class DbColumnInfo implements Serializable {
     }
 
     public Boolean getPrimary() {
+        if(primary == null){
+            return false;
+        }
         return primary;
     }
 
@@ -99,5 +105,16 @@ public class DbColumnInfo implements Serializable {
 
     public void setComments(String comments) {
         this.comments = comments;
+    }
+
+    public String getDataScale() {
+        if(StringUtils.isEmpty(dataScale)){
+            return "";
+        }
+        return dataScale;
+    }
+
+    public void setDataScale(String dataScale) {
+        this.dataScale = dataScale;
     }
 }

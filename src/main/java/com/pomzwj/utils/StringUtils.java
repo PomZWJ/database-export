@@ -6,7 +6,7 @@ package com.pomzwj.utils;
  * @author zhaowenjie<1513041820@qq.com>
  * @date 2018/10/29/0029.
  */
-public class StringUtils {
+public class StringUtils extends org.apache.commons.lang3.StringUtils {
     /**
      * 得到object值
      * @param value
@@ -19,17 +19,5 @@ public class StringUtils {
         }
         return value.toString();
 
-    }
-
-    /**
-     * 判断字符串是不是为空
-     * @param input
-     * @return
-     */
-    public static boolean isEmpty(String input) {
-        if (input == null || "".equals(input.trim())) {
-            return true;
-        }
-        return false;
     }
 }

@@ -58,7 +58,7 @@ public class OracleDbService implements DbService {
                 //数据长度
                 String data_length = dbColumnInfo.getDataLength();
                 //是否可空
-                String null_able = dbColumnInfo.getNullAble();
+                Boolean nullAble = dbColumnInfo.getNullAble();
                 //数据缺省值
                 String data_default = dbColumnInfo.getDefaultVal();
                 //字段注释
@@ -69,7 +69,7 @@ public class OracleDbService implements DbService {
                 Boolean primary = dbColumnInfo.getPrimary();
                 String is_primary = Objects.nonNull(primary)&&primary?"是":"";
 
-                RowRenderData labor = RowRenderData.build( column_name, data_type,null_able,is_primary,auto_increment,data_default,comments);
+                RowRenderData labor = RowRenderData.build( column_name, data_type,nullAble+"",is_primary,auto_increment,data_default,comments);
                 rowRenderDataList.add(labor);
             }
             tempData.setData(rowRenderDataList);
@@ -99,7 +99,7 @@ public class OracleDbService implements DbService {
                 if(StringUtils.isEmpty(tableComments)){
                     dbTable.setTableComments(FiledDefaultValue.TABLE_COMMENTS_DEFAULT);
                 }else{
-                    dbTable.setTableComments("("+tableComments+")");
+                    dbTable.setTableComments(tableComments);
                 }
                 dbTable.setTableName(tableName);
                 tableList.add(dbTable);
@@ -144,7 +144,7 @@ public class OracleDbService implements DbService {
                     //dbColumnInfo.setDataType(resultSet.getString("COLUMN_TYPE"));
                     dbColumnInfo.setDataType("int");
                     dbColumnInfo.setDataLength(resultSet.getString("DATA_LENGTH"));
-                    dbColumnInfo.setNullAble(resultSet.getString("NULLABLE"));
+                    //dbColumnInfo.setNullAble(resultSet.getString("NULLABLE"));
                     dbColumnInfo.setDefaultVal(resultSet.getString("DATA_DEFAULT"));
                     dbColumnInfo.setAutoIncrement(false);
                     dbColumnInfo.setPrimary(false);

@@ -1,13 +1,39 @@
-select COLUMN_NAME = a.name,
-       DATA_TYPE = b.name,
-       DATA_LENGTH = columnproperty(a.id, a.name, 'PRECISION'),
-       NULLABLE = case when a.isnullable = 1 then '√' else '' end,
-       DATA_DEFAULT = isnull(e.text, ''),
-       COMMENTS = isnull(g.[value], '')
-from syscolumns a
-         left join systypes b on a.xusertype = b.xusertype
-         inner join sysobjects d on a.id = d.id and d.xtype = 'U' and d.name <> 'dtproperties'
-         left join syscomments e on a.cdefault = e.id
-         left join sys.extended_properties g on a.id = g.major_id and a.colid = g.minor_id
-         left join sys.extended_properties f on d.id = f.major_id and f.minor_id = 0
-where d.name = ?
+SELECT
+    B.NAME COLUMN_NAME,
+    C.NAME COLUMN_TYPE,
+    B.PREC DATA_LENGTH,
+    B.SCALE DATA_SCALE,
+    H.text DATA_DEFAULT,
+    CASE
+
+        WHEN NOT B.isnullable = 0 THEN
+            'TRUE' ELSE 'FALSE'
+        END NULLABLE,
+    CASE
+
+        WHEN NOT F.ID IS NULL THEN
+            'TRUE' ELSE 'FALSE'
+        END PRIMARY_KEY,
+    CASE
+
+        WHEN COLUMNPROPERTY( B.ID, B.NAME, 'ISIDENTITY' ) = 1 THEN
+            'TRUE' ELSE 'FALSE'
+        END AS AUTOINCREMENT,
+    CONVERT ( VARCHAR ( 1000 ), ISNULL( G.VALUE, '' ) ) COMMENTS
+FROM
+    SYSOBJECTS A
+        INNER JOIN SYSCOLUMNS B ON A.ID= B.ID
+        INNER JOIN SYSTYPES C ON B.XTYPE= C.XUSERTYPE
+        LEFT JOIN SYSOBJECTS D ON B.ID= D.PARENT_OBJ
+        AND D.XTYPE= 'PK'
+        LEFT JOIN SYSINDEXES E ON B.ID= E.ID
+        AND D.NAME= E.NAME
+        LEFT JOIN SYSINDEXKEYS F ON B.ID= F.ID
+        AND B.COLID= F.COLID
+        AND E.INDID= F.INDID
+        LEFT JOIN SYS.EXTENDED_PROPERTIES G ON B.ID= G.MAJOR_ID
+        AND B.COLID= G.MINOR_ID
+        left join SYSCOMMENTS H on B.CDEFAULT = H.id
+WHERE
+        A.XTYPE= 'U'
+  AND OBJECT_NAME( B.ID ) = ?
