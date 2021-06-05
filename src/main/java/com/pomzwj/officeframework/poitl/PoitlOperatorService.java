@@ -41,12 +41,11 @@ public class PoitlOperatorService {
             SegmentData segmentData = new SegmentData();
             segmentData.setTable(new MiniTableRenderData(header,tempData.getData()));
             segmentData.setTableName(tempData.getTableName());
-            segmentData.setTableComments(tempData.getTableComment());
+            segmentData.setTableComments("("+tempData.getTableComment()+")");
             segmentDataList.add(segmentData);
         }
         File subModelWordFile = new File(templateCopyPath+"/"+ TemplateFileConstants.SUB_MODEL_TEMPLATE);
         tempMap.put("seg",new DocxRenderData(subModelWordFile, segmentDataList));
-
 
         File importWordFile = new File(templateCopyPath+"/"+ TemplateFileConstants.IMPORT_TEMPLATE);
         /*1.根据模板生成文档*/

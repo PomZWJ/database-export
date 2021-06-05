@@ -26,22 +26,23 @@ public class TemplateEventApplicationRunner implements ApplicationRunner {
     private Integer serverPort;
     @Value("${server.servlet.context-path}")
     private String contextPath;
+
     @Override
-    public void run(ApplicationArguments args){
-        String[] filePath = new String[]{TemplateFileConstants.IMPORT_TEMPLATE,TemplateFileConstants.SUB_MODEL_TEMPLATE};
-        for(String s:filePath){
-            try{
-                ClassPathResource classPathResource = new ClassPathResource("docx"+File.separator+s);
-                File file = new File(templateCopyPath+File.separator+s);
-                if(!file.exists()){
-                    log.info("生成文件的路径是={}",file.getAbsolutePath());
-                    FileUtils.copyInputStreamToFile(classPathResource.getInputStream(),file);
-                }
-            }catch (Exception e){
-                log.error("创建初始文件失败,系统自动退出,e={}",e);
+    public void run(ApplicationArguments args) {
+        String[] filePath = new String[]{TemplateFileConstants.IMPORT_TEMPLATE, TemplateFileConstants.SUB_MODEL_TEMPLATE};
+        for (String s : filePath) {
+            try {
+                ClassPathResource classPathResource = new ClassPathResource("docx" + File.separator + s);
+                File file = new File(templateCopyPath + File.separator + s);
+
+                log.info("生成文件的路径是={}", file.getAbsolutePath());
+                FileUtils.copyInputStreamToFile(classPathResource.getInputStream(), file);
+
+            } catch (Exception e) {
+                log.error("创建初始文件失败,系统自动退出,e={}", e);
                 System.exit(0);
             }
         }
-        log.info("http://localhost:{}{}",serverPort,contextPath);
+        log.info("http://localhost:{}{}", serverPort, contextPath);
     }
 }

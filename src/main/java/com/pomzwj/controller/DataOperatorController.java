@@ -5,7 +5,6 @@ import com.pomzwj.constant.DataBaseType;
 import com.pomzwj.dbservice.DbService;
 import com.pomzwj.dbservice.DbServiceFactory;
 import com.pomzwj.domain.DbBaseInfo;
-import com.pomzwj.domain.DbColumnInfo;
 import com.pomzwj.domain.DbTable;
 import com.pomzwj.domain.TempData;
 import com.pomzwj.exception.DatabaseExportException;

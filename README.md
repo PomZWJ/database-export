@@ -1,6 +1,6 @@
 ![](https://github.com/PomZWJ/database-export/blob/master/screenshot/fav.png?raw=true)
 
-**database-export V2.1.0**
+**database-export V2.2.0**
 =========================
 
 ![Spring Boot 2.0.6](https://img.shields.io/badge/Spring%20Boot-2.0.6-brightgreen.svg)
@@ -11,8 +11,6 @@
 ![Maven](https://img.shields.io/badge/Maven-3.5.0-yellowgreen.svg)
 
 database-export是一款能生成数据库结构文档的开源springboot工程，能支持最新的数据库版本，可以导出支持office2007版本以上的docx格式的文档
-
-[预览地址](https://colorfatty.club/dbExport/)
 
 项目使用技术
 ------------
@@ -44,6 +42,7 @@ cmd执行jar -jar xxx.jar 即可启动
 | V.1.0.0    | [database-export-1.0.0_noJre8.rar](https://github.com/PomZWJ/database-export/releases/download/1.0.0/database-export-1.0.0_noJre8.rar)  |   [database-export-1.0.0_withJre8.rar](https://github.com/PomZWJ/database-export/releases/download/1.0.0/database-export-1.0.0_withJre8.rar)    |
 | V.2.0.0    | [database-export-2.0.0_noJre8.rar](https://github.com/PomZWJ/database-export/releases/download/2.0.0/database-export-2.0.0_noJre8.rar)      |   [database-export-2.0.0_withJre8.rar](https://github.com/PomZWJ/database-export/releases/download/2.0.0/database-export-2.0.0_withJre8.rar)    |
 | V.2.1.0    | (后续版本都不含jre1.8,win和linux都是同一个包,不再区分)  https://pan.baidu.com/s/1A7EttMBIdVy3oAkFd0zo-w  提取码6gdr |
+| V.2.2.0    | https://pan.baidu.com/s/1A7EttMBIdVy3oAkFd0zo-w  提取码6gdr |
 
 
 
@@ -96,6 +95,13 @@ cmd执行jar -jar xxx.jar 即可启动
 
 ## 6.更新日志
 
+**2021-06-05(V2.2.0)**
+
+>1.改变java设计模式为工厂模式，方便用户自己扩展
+
+>2.优化了后台代码,尽量把代码实现高度配置化
+
+>3.BUG改进
 
 **2020-07-15(V2.1.0)**
 

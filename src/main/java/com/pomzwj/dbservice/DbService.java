@@ -1,12 +1,9 @@
 package com.pomzwj.dbservice;
 
 import com.pomzwj.domain.DbBaseInfo;
-import com.pomzwj.domain.DbColumnInfo;
 import com.pomzwj.domain.DbTable;
 import com.pomzwj.domain.TempData;
 
-import java.sql.Connection;
-import java.util.ArrayList;
 import java.util.List;
 
 /**
