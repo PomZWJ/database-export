@@ -1,7 +1,6 @@
 package com.pomzwj.runner;
 
 import com.pomzwj.constant.TemplateFileConstants;
-import com.pomzwj.controller.DataOperatorController;
 import org.apache.commons.io.FileUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

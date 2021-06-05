@@ -1,19 +1,27 @@
 package com.pomzwj.dbservice.sqlserver;
 
+import com.deepoove.poi.data.RowRenderData;
 import com.pomzwj.dbservice.DbService;
 import com.pomzwj.domain.*;
 import com.pomzwj.utils.DbConnnecttion;
 import com.pomzwj.utils.StringUtils;
+import org.apache.commons.io.IOUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.io.ClassPathResource;
 import org.springframework.stereotype.Component;
 
+import java.io.FileNotFoundException;
+import java.io.InputStream;
 import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import java.util.Objects;
 
 @Component
 public class SqlServerDbService implements DbService {
@@ -29,14 +37,49 @@ public class SqlServerDbService implements DbService {
 
     @Override
     public List<String> initRowName() {
-        return null;
+        List<String>rowNames = Arrays.asList("列名", "数据类型","是否为空","主键","是否自增", "默认值", "备注");
+        return rowNames;
     }
 
     @Override
     public List<TempData> getWordTempData(List<DbTable> tableMessage) {
-        return null;
-    }
+        List<TempData>tempDataList=new ArrayList<>();
+        for (DbTable dbTable : tableMessage) {
+            List<DbColumnInfo> data =  dbTable.getTabsColumn();
+            TempData tempData = new TempData();
+            tempData.setTableComment(dbTable.getTableComments());
+            tempData.setTableName(dbTable.getTableName());
 
+            List<RowRenderData> rowRenderDataList = new ArrayList<>();
+            for (int i = 0; i < data.size(); i++) {
+
+                DbColumnInfo dbColumnInfo = data.get(i);
+                //列名
+                String column_name = dbColumnInfo.getColumnName();
+                //数据类型
+                String data_type = dbColumnInfo.getDataType();
+                //数据长度
+                String data_length = dbColumnInfo.getDataLength();
+                //是否可空
+                String null_able = dbColumnInfo.getNullAble();
+                //数据缺省值
+                String data_default = dbColumnInfo.getDefaultVal();
+                //字段注释
+                String comments = dbColumnInfo.getComments();
+                Boolean autoIncrement = dbColumnInfo.getAutoIncrement();
+                String auto_increment = Objects.nonNull(autoIncrement)&&autoIncrement?"是":"";
+
+                Boolean primary = dbColumnInfo.getPrimary();
+                String is_primary = Objects.nonNull(primary)&&primary?"是":"";
+
+                RowRenderData labor = RowRenderData.build( column_name, data_type,null_able,is_primary,auto_increment,data_default,comments);
+                rowRenderDataList.add(labor);
+            }
+            tempData.setData(rowRenderDataList);
+            tempDataList.add(tempData);
+        }
+        return tempDataList;
+    }
     @Override
     public List<DbTable> getTableName(DbBaseInfo dbBaseInfo) throws Exception {
         List<DbTable> tableList = new ArrayList<>();
@@ -49,8 +92,7 @@ public class SqlServerDbService implements DbService {
 
         ResultSet resultSet = null;
         try {
-            String.format(sqlServerJdbc,ip,port,dbName);
-            Connection connection = DbConnnecttion.getConn(sqlServerJdbc, userName, password, sqlServerDriver);
+            Connection connection = DbConnnecttion.getConn(String.format(sqlServerJdbc,ip,port,dbName), userName, password, sqlServerDriver);
             Statement statement = connection.createStatement();
             resultSet = statement.executeQuery(sqlServerGetTableNameSql);
             while (resultSet.next()) {
@@ -75,47 +117,59 @@ public class SqlServerDbService implements DbService {
     }
 
     @Override
-    public void getTabsColumnInfo(DbBaseInfo dbBaseInfo,List<DbTable> dbTableList) throws Exception {
+    public void getTabsColumnInfo(DbBaseInfo dbBaseInfo,List<DbTable> dbTableList)throws Exception {
         String dbName = dbBaseInfo.getDbName();
         String ip = dbBaseInfo.getIp();
         String port = dbBaseInfo.getPort();
         String userName = dbBaseInfo.getUserName();
         String password = dbBaseInfo.getPassword();
 
-        List<DbColumnInfo> list = new ArrayList<>();
+        List<DbColumnInfo> dbColumnInfos = new ArrayList<>();
         ResultSet resultSet = null;
         try {
-            String.format(sqlServerJdbc,ip,port,dbName);
-            Connection connection = DbConnnecttion.getConn(sqlServerJdbc, userName, password, sqlServerDriver);
-            Statement statement = connection.createStatement();
-            resultSet = statement.executeQuery(sqlServerGetTableNameSql);
-            while (resultSet.next()) {
-                DbColumnInfo dbColumnInfo = new DbColumnInfo();
-                dbColumnInfo.setColumnName(resultSet.getString("COLUMN_NAME"));
-                dbColumnInfo.setDataType(resultSet.getString("COLUMN_TYPE"));
-                dbColumnInfo.setDataLength(resultSet.getString("DATA_LENGTH"));
-                dbColumnInfo.setNullAble(resultSet.getString("NULLABLE"));
-                dbColumnInfo.setDefaultVal(resultSet.getString("DATA_DEFAULT"));
-                dbColumnInfo.setAutoIncrement(false);
-                dbColumnInfo.setPrimary(false);
-                String comments = resultSet.getString("COMMENTS");
-                if (StringUtils.isEmpty(comments)) {
-                    dbColumnInfo.setComments(FiledDefaultValue.TABLE_FIELD_COMMENTS_DEFAULT);
-                } else {
-                    dbColumnInfo.setComments(comments);
-                }
-                String extraInfo = resultSet.getString("EXTRA_INFO");
-                if(!StringUtils.isEmpty(extraInfo) && extraInfo.contains("auto_increment")){
-                    dbColumnInfo.setAutoIncrement(true);
-                }
-                String columnKey = resultSet.getString("COLUMN_KEY");
-                if(!StringUtils.isEmpty(columnKey) && columnKey.contains("PRI")){
-                    dbColumnInfo.setPrimary(true);
-                }
-                list.add(dbColumnInfo);
+            ClassPathResource classPathResource = new ClassPathResource("sql/sqlserver.sql");
+            InputStream inputStream =classPathResource.getInputStream();
+            if(inputStream == null){
+                throw new FileNotFoundException("没有找到查询详细字段的SQL文件");
             }
-        }catch (Exception e){
-            log.error("获取表结构数据发生错误 = {}",e);
+            String executeSql = IOUtils.toString(inputStream,DbService.DefaultCharsetName);
+            String jdbcStr = String.format(sqlServerJdbc,ip,port,dbName);
+            Connection connection = DbConnnecttion.getConn(jdbcStr, userName, password, sqlServerDriver);
+
+            PreparedStatement preparedStatement = connection.prepareStatement(executeSql);
+            for(int i=0;i<dbTableList.size();i++){
+                DbTable dbTable = dbTableList.get(i);
+                preparedStatement.setString(1,dbTable.getTableName());
+                resultSet = preparedStatement.executeQuery();
+                while (resultSet.next()) {
+                    DbColumnInfo dbColumnInfo = new DbColumnInfo();
+                    dbColumnInfo.setColumnName(resultSet.getString("COLUMN_NAME"));
+                    dbColumnInfo.setDataType(resultSet.getString("COLUMN_TYPE"));
+                    dbColumnInfo.setDataLength(resultSet.getString("DATA_LENGTH"));
+                    dbColumnInfo.setNullAble(resultSet.getString("NULLABLE"));
+                    dbColumnInfo.setDefaultVal(resultSet.getString("DATA_DEFAULT"));
+                    dbColumnInfo.setAutoIncrement(false);
+                    dbColumnInfo.setPrimary(false);
+                    String comments = resultSet.getString("COMMENTS");
+                    if (StringUtils.isEmpty(comments)) {
+                        dbColumnInfo.setComments(FiledDefaultValue.TABLE_FIELD_COMMENTS_DEFAULT);
+                    } else {
+                        dbColumnInfo.setComments(comments);
+                    }
+                    String extraInfo = resultSet.getString("EXTRA_INFO");
+                    if(!StringUtils.isEmpty(extraInfo) && extraInfo.contains("auto_increment")){
+                        dbColumnInfo.setAutoIncrement(true);
+                    }
+                    String columnKey = resultSet.getString("COLUMN_KEY");
+                    if(!StringUtils.isEmpty(columnKey) && columnKey.contains("PRI")){
+                        dbColumnInfo.setPrimary(true);
+                    }
+                    dbColumnInfos.add(dbColumnInfo);
+                }
+                dbTable.setTabsColumn(dbColumnInfos);
+            }
+        } catch (Exception e) {
+            log.error("发生错误 = {}",e);
             throw e;
         } finally {
             DbConnnecttion.closeRs(resultSet);
