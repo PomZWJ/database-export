@@ -10,7 +10,10 @@ import org.springframework.boot.ApplicationRunner;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.stereotype.Component;
 
+import java.awt.*;
 import java.io.File;
+import java.net.InetAddress;
+import java.net.URI;
 
 /**
  * @author PomZWJ
@@ -43,6 +46,19 @@ public class TemplateEventApplicationRunner implements ApplicationRunner {
                 System.exit(0);
             }
         }
-        log.info("http://localhost:{}{}", serverPort, contextPath);
+        try {
+            InetAddress addr = InetAddress.getLocalHost();
+            String url = String.format("http://%s:%s%s", addr.getHostAddress(), serverPort, contextPath);
+            String property = System.getProperty("os.name");
+            if(property.startsWith("Windows")){
+                Runtime.getRuntime().exec(String.format("rundll32 url.dll,FileProtocolHandler %s",url));
+                log.info("检测到系统为windows，将自动打开主页");
+            }else{
+                log.info("检测到系统不是windows，请手动打开主页,{}",url);
+            }
+        } catch (Exception e) {
+            log.error("获取主机IP错误,e={}", e);
+        }
+
     }
 }
