@@ -10,10 +10,8 @@ import org.springframework.boot.ApplicationRunner;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.stereotype.Component;
 
-import java.awt.*;
 import java.io.File;
 import java.net.InetAddress;
-import java.net.URI;
 
 /**
  * @author PomZWJ
