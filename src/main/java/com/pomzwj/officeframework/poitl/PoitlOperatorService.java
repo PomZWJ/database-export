@@ -1,10 +1,7 @@
 package com.pomzwj.officeframework.poitl;
 
 import com.deepoove.poi.XWPFTemplate;
-import com.deepoove.poi.data.DocxRenderData;
-import com.deepoove.poi.data.RowRenderData;
-import com.deepoove.poi.data.Rows;
-import com.deepoove.poi.data.Tables;
+import com.deepoove.poi.data.*;
 import com.pomzwj.anno.DataColumnName;
 import com.pomzwj.constant.DataBaseType;
 import com.pomzwj.constant.TemplateFileConstants;
@@ -69,8 +66,7 @@ public class PoitlOperatorService {
 		}
 
 		Map<String, Object> tempMap = new HashMap<>();
-		File subModelWordFile = new File(templateCopyPath + "/" + TemplateFileConstants.SUB_MODEL_TEMPLATE);
-		tempMap.put("seg", new DocxRenderData(subModelWordFile, segmentDataList));
+		tempMap.put("seg", Includes.ofLocal(templateCopyPath + "/" + TemplateFileConstants.SUB_MODEL_TEMPLATE).setRenderModel(segmentDataList).create());
 
 		File importWordFile = new File(templateCopyPath + "/" + TemplateFileConstants.IMPORT_TEMPLATE);
 		/*1.根据模板生成文档*/
