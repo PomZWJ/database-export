@@ -217,6 +217,76 @@ var vue = new Vue({
                 center: true,
                 type: "success"
             });
+        },
+        generateDocHtml(sqlKind) {
+            let ip;
+            let port;
+            let dataname;
+            let username;
+            let password;
+            if (sqlKind == 'oracle') {
+                ip = this.o_ip;
+                port = this.o_port;
+                dataname = this.o_dataname;
+                username = this.o_username;
+                password = this.o_password;
+                //filepath = this.o_filepath;
+            } else if (sqlKind == 'mysql') {
+                ip = this.m_ip;
+                port = this.m_port;
+                dataname = this.m_dataname;
+                username = this.m_username;
+                password = this.m_password;
+            } else if (sqlKind == 'sqlserver') {
+                ip = this.s_ip;
+                port = this.s_port;
+                dataname = this.s_dataname;
+                username = this.s_username;
+                password = this.s_password;
+            }
+
+            if (ip == '') {
+                this.$notify.error({
+                    title: '错误',
+                    message: 'IP不能为空',
+                    duration: 0
+                });
+                return;
+            }
+            if (port == '') {
+                this.$notify.error({
+                    title: '错误',
+                    message: '端口不能为空',
+                    duration: 0
+                });
+                return;
+            }
+            if (dataname == '') {
+                this.$notify.error({
+                    title: '错误',
+                    message: '实例/数据库名称不能为空',
+                    duration: 0
+                });
+                return;
+            }
+            if (username == '') {
+                this.$notify.error({
+                    title: '错误',
+                    message: '用户名不能为空',
+                    duration: 0
+                });
+                return;
+            }
+            if (password == '') {
+                this.$notify.error({
+                    title: '错误',
+                    message: '密码不能为空',
+                    duration: 0
+                });
+                return;
+            }
+            window.open("/dbExport/docHtml?dbKind="+sqlKind+"&ip="+ip+"&port="+port+"&dbName="+dataname+"&userName="+username+"&password="+password);
+
         }
     }
 });

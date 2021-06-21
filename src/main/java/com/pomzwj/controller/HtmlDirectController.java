@@ -1,6 +1,8 @@
 package com.pomzwj.controller;
 
+import com.pomzwj.domain.DbBaseInfo;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 /**
@@ -20,5 +22,16 @@ public class HtmlDirectController {
     @RequestMapping("/indexV1")
     public String getIndex1(){
         return "index";
+    }
+
+    @RequestMapping("/docHtml")
+    public String docHtml(DbBaseInfo info, ModelMap modelMap){
+        modelMap.put("ip",info.getIp());
+        modelMap.put("port",info.getPort());
+        modelMap.put("dbName",info.getDbName());
+        modelMap.put("userName",info.getUserName());
+        modelMap.put("password",info.getPassword());
+        modelMap.put("dbKind",info.getDbKind());
+        return "docHtml";
     }
 }

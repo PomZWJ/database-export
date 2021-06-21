@@ -6,6 +6,7 @@ import com.pomzwj.dbservice.DbService;
 import com.pomzwj.dbservice.DbServiceFactory;
 import com.pomzwj.domain.DbBaseInfo;
 import com.pomzwj.domain.DbTable;
+import com.pomzwj.domain.ResponseParams;
 import com.pomzwj.exception.DatabaseExportException;
 import com.pomzwj.exception.MessageCode;
 import com.pomzwj.officeframework.poitl.PoitlOperatorService;
@@ -125,5 +126,35 @@ public class DataOperatorController {
                 }
             }
         }
+    }
+    @RequestMapping(value = "/getDocData")
+    @ResponseBody
+    public ResponseParams<Map> getDocData(DbBaseInfo info){
+        String desc = "生成word文档[v2]";
+        ResponseParams<Map> responseParams = new ResponseParams();
+        try {
+            //参数校验
+            AssertUtils.isNull(info.getDbKind(),MessageCode.DATABASE_KIND_IS_NULL_ERROR);
+            AssertUtils.isNull(info.getIp(),MessageCode.DATABASE_IP_IS_NULL_ERROR);
+            AssertUtils.isNull(info.getPort(),MessageCode.DATABASE_PORT_IS_NULL_ERROR);
+            AssertUtils.isNull(info.getUserName(),MessageCode.DATABASE_USER_IS_NULL_ERROR);
+            AssertUtils.isNull(info.getPassword(),MessageCode.DATABASE_PASSWORD_IS_NULL_ERROR);
+            DataBaseType dataBaseType = DataBaseType.matchType(info.getDbKind());
+            if(dataBaseType==null){
+                throw new DatabaseExportException(MessageCode.DATABASE_KIND_IS_NOT_MATCH_ERROR);
+            }
+            List<String> columnName = dataBaseType.getColumnName();
+            DbService dbServiceBean = dbServiceFactory.getDbServiceBean(info.getDbKind());
+            //查询表信息
+            List<DbTable> tableDetailInfo = dbServiceBean.getTableDetailInfo(info);
+            Map<String,Object>resultMap = new HashMap<>();
+            resultMap.put("headerList",columnName);
+            resultMap.put("tableDetailInfo",tableDetailInfo);
+            responseParams.setParams(resultMap);
+        } catch (Exception e) {
+            responseParams.setParams(null);
+            log.error("desc={},获取失败, 原因:{}", desc, e.getMessage(), e);
+        }
+        return responseParams;
     }
 }
