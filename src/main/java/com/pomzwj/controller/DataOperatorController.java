@@ -6,7 +6,6 @@ import com.pomzwj.dbservice.DbService;
 import com.pomzwj.dbservice.DbServiceFactory;
 import com.pomzwj.domain.DbBaseInfo;
 import com.pomzwj.domain.DbTable;
-import com.pomzwj.domain.TempData;
 import com.pomzwj.exception.DatabaseExportException;
 import com.pomzwj.exception.MessageCode;
 import com.pomzwj.officeframework.poitl.PoitlOperatorService;
@@ -57,12 +56,9 @@ public class DataOperatorController {
             }
             //查询表信息
             DbService dbServiceBean = dbServiceFactory.getDbServiceBean(info.getDbKind());
-            List<String> rowNames = dbServiceBean.initRowName();
-            List<DbTable> tableMessage = dbServiceBean.getTableName(info);
-            dbServiceBean.getTabsColumnInfo(info, tableMessage);
-            List<TempData> wordTempData = dbServiceBean.getWordTempData(tableMessage);
+            List<DbTable> tableDetailInfo = dbServiceBean.getTableDetailInfo(info);
             //生成word文档
-            xwpfTemplate = poitlOperatorService.makeDoc(rowNames,wordTempData);
+            xwpfTemplate = poitlOperatorService.makeDoc(info.getDbKind(),tableDetailInfo);
             response.setContentType("application/octet-stream");
             SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMddHHmmss");
             response.setHeader("Content-Disposition", "attachment;fileName="+info.getDbName()+sdf.format(new Date())+".docx");
@@ -105,12 +101,9 @@ public class DataOperatorController {
             }
             DbService dbServiceBean = dbServiceFactory.getDbServiceBean(info.getDbKind());
             //查询表信息
-            List<String> rowNames = dbServiceBean.initRowName();
-            List<DbTable> tableMessage = dbServiceBean.getTableName(info);
-            dbServiceBean.getTabsColumnInfo(info, tableMessage);
-            List<TempData> wordTempData = dbServiceBean.getWordTempData(tableMessage);
+            List<DbTable> tableDetailInfo = dbServiceBean.getTableDetailInfo(info);
             //生成word文档
-            xwpfTemplate = poitlOperatorService.makeDoc(rowNames,wordTempData);
+            xwpfTemplate = poitlOperatorService.makeDoc(info.getDbKind(),tableDetailInfo);
             response.setContentType("application/octet-stream");
             SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMddHHmmss");
             response.setHeader("Content-Disposition", "attachment;fileName="+info.getDbName()+sdf.format(new Date())+".docx");

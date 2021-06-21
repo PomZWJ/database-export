@@ -32,62 +32,15 @@ public class OracleDbService implements DbService {
     String oracleGetTableNameSql;
 
 
-    @Override
-    public List<String> initRowName() {
-        List<String>rowNames = Arrays.asList("列名", "数据类型","数据长度","精度","是否为空", "默认值", "备注");
-        return rowNames;
-    }
-
-    @Override
-    public List<TempData> getWordTempData(List<DbTable> tableMessage) {
-        List<TempData>tempDataList=new ArrayList<>();
-        for (DbTable dbTable : tableMessage) {
-            List<DbColumnInfo> data =  dbTable.getTabsColumn();
-            TempData tempData = new TempData();
-            tempData.setTableComment(dbTable.getTableComments());
-            tempData.setTableName(dbTable.getTableName());
-
-            List<RowRenderData> rowRenderDataList = new ArrayList<>();
-            for (int i = 0; i < data.size(); i++) {
-
-                DbColumnInfo dbColumnInfo = data.get(i);
-                //列名
-                String columnName = dbColumnInfo.getColumnName();
-                //数据类型
-                String dataType = dbColumnInfo.getDataType();
-                //数据长度
-                String dataLength = dbColumnInfo.getDataLength();
-                //精度
-                String dataScale = dbColumnInfo.getDataScale();
-                //是否可空
-                Boolean nullAble = dbColumnInfo.getNullAble();
-                //数据缺省值
-                String dataDefault = dbColumnInfo.getDefaultVal();
-                //字段注释
-                String comments = dbColumnInfo.getComments();
-
-                RowRenderData labor = RowRenderData.build( columnName, dataType,dataLength,dataScale,nullAble?"是":"否",dataDefault,comments);
-                rowRenderDataList.add(labor);
-            }
-            tempData.setData(rowRenderDataList);
-            tempDataList.add(tempData);
-        }
-        return tempDataList;
-    }
-    @Override
-    public List<DbTable> getTableName(DbBaseInfo dbBaseInfo) throws Exception {
+    public List<DbTable> getTableName(Connection connection) throws Exception {
         List<DbTable> tableList = new ArrayList<>();
 
-        String dbName = dbBaseInfo.getDbName();
-        String ip = dbBaseInfo.getIp();
-        String port = dbBaseInfo.getPort();
-        String userName = dbBaseInfo.getUserName();
-        String password = dbBaseInfo.getPassword();
+
 
         ResultSet resultSet = null;
+        Statement statement = null;
         try {
-            Connection connection = DbConnnecttion.getConn(String.format(oracleJdbc,ip,port,dbName), userName, password, oracleDriver);
-            Statement statement = connection.createStatement();
+            statement = connection.createStatement();
             resultSet = statement.executeQuery(oracleGetTableNameSql);
             while (resultSet.next()) {
                 DbTable dbTable = new DbTable();
@@ -105,21 +58,15 @@ public class OracleDbService implements DbService {
             log.error("发生错误 = {}",e);
             throw e;
         } finally {
-            DbConnnecttion.closeRs(resultSet);
+            DbConnnecttion.closeResultSet(resultSet);
+            DbConnnecttion.closeStat(statement);
         }
         return tableList;
     }
 
-    @Override
-    public void getTabsColumnInfo(DbBaseInfo dbBaseInfo,List<DbTable> dbTableList) throws Exception {
-        String dbName = dbBaseInfo.getDbName();
-        String ip = dbBaseInfo.getIp();
-        String port = dbBaseInfo.getPort();
-        String userName = dbBaseInfo.getUserName();
-        String password = dbBaseInfo.getPassword();
-
-
+    public void getTabsColumnInfo(Connection connection,String userName,List<DbTable> dbTableList) throws Exception {
         ResultSet resultSet = null;
+        PreparedStatement preparedStatement = null;
         try {
             ClassPathResource classPathResource = new ClassPathResource("sql/oracle.sql");
             InputStream inputStream =classPathResource.getInputStream();
@@ -127,10 +74,8 @@ public class OracleDbService implements DbService {
                 throw new FileNotFoundException("没有找到查询详细字段的SQL文件");
             }
             String executeSql = IOUtils.toString(inputStream,DbService.DefaultCharsetName);
-            String jdbcStr = String.format(oracleJdbc,ip,port,dbName);
-            Connection connection = DbConnnecttion.getConn(jdbcStr, userName, password, oracleDriver);
 
-            PreparedStatement preparedStatement = connection.prepareStatement(executeSql);
+            preparedStatement = connection.prepareStatement(executeSql);
             for(int i=0;i<dbTableList.size();i++){
                 DbTable dbTable = dbTableList.get(i);
                 preparedStatement.setString(1,userName);
@@ -164,7 +109,8 @@ public class OracleDbService implements DbService {
             log.error("发生错误 = {}",e);
             throw e;
         } finally {
-            DbConnnecttion.closeRs(resultSet);
+            DbConnnecttion.closeResultSet(resultSet);
+            DbConnnecttion.closeStat(preparedStatement);
         }
     }
     private static boolean getStringToBoolean(final String val){
@@ -179,4 +125,25 @@ public class OracleDbService implements DbService {
         }
     }
 
+    @Override
+    public List<DbTable> getTableDetailInfo(DbBaseInfo dbBaseInfo) throws Exception {
+        String dbName = dbBaseInfo.getDbName();
+        String ip = dbBaseInfo.getIp();
+        String port = dbBaseInfo.getPort();
+        String userName = dbBaseInfo.getUserName();
+        String password = dbBaseInfo.getPassword();
+        String jdbcStr = String.format(oracleJdbc,ip,port,dbName);
+        Connection connection = null;
+        try {
+            connection = DbConnnecttion.getConn(jdbcStr, userName, password, oracleDriver);
+            List<DbTable> tableName = this.getTableName(connection);
+            this.getTabsColumnInfo(connection,userName,tableName);
+            return tableName;
+        }catch (Exception e){
+            log.error("发生错误 = {}",e);
+            throw e;
+        }finally {
+            DbConnnecttion.closeConn(connection);
+        }
+    }
 }

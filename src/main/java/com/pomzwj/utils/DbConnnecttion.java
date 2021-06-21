@@ -64,7 +64,16 @@ public class DbConnnecttion {
                 log.error("关闭数据库ResultSet连接失败,e={}",e3);
             }
         }
+    }
 
+    public static void closeResultSet(ResultSet rs){
+        if (rs != null) {
+            try {
+                rs.close();
+            } catch (Exception e) {
+                log.info("关闭数据库rs连接失败,e={}",e);
+            }
+        }
     }
 
     public static void closeStat(Statement statement){
@@ -75,8 +84,6 @@ public class DbConnnecttion {
                 log.info("关闭数据库Statement连接失败,e={}",e);
             }
         }
-
-
     }
 
     public static void closeConn(Connection connection) {

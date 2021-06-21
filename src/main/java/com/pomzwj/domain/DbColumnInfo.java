@@ -1,5 +1,6 @@
 package com.pomzwj.domain;
 
+import com.pomzwj.anno.DataColumnName;
 import org.apache.commons.lang3.StringUtils;
 
 import java.io.Serializable;
@@ -9,14 +10,23 @@ import java.io.Serializable;
  * @date 2021-03-04
  */
 public class DbColumnInfo implements Serializable {
+    @DataColumnName(name = "列名")
     public String columnName;
+    @DataColumnName(name = "数据类型")
     public String dataType;
+    @DataColumnName(name = "数据长度")
     public String dataLength;
+    @DataColumnName(name = "是否为空")
     public Boolean nullAble;
+    @DataColumnName(name = "默认值")
     public String defaultVal;
+    @DataColumnName(name = "自增")
     public Boolean autoIncrement;
+    @DataColumnName(name = "主键")
     public Boolean primary;
+    @DataColumnName(name = "备注")
     public String comments;
+    @DataColumnName(name = "精度")
     public String dataScale;
 
     public String getColumnName() {
@@ -52,11 +62,12 @@ public class DbColumnInfo implements Serializable {
         this.dataLength = dataLength;
     }
 
-    public Boolean getNullAble() {
-        if(nullAble == null){
-            return false;
+    public String getNullAble() {
+        if(nullAble == null || nullAble == false){
+            return "否";
+        }else{
+            return "是";
         }
-        return nullAble;
     }
 
     public void setNullAble(Boolean nullAble) {
@@ -74,22 +85,25 @@ public class DbColumnInfo implements Serializable {
         this.defaultVal = defaultVal;
     }
 
-    public Boolean getAutoIncrement() {
-        if(autoIncrement == null){
-            return false;
+    public String getAutoIncrement() {
+        if(autoIncrement == null || autoIncrement == false){
+            return "否";
+        }else{
+            return "是";
         }
-        return autoIncrement;
     }
 
     public void setAutoIncrement(Boolean autoIncrement) {
         this.autoIncrement = autoIncrement;
     }
 
-    public Boolean getPrimary() {
-        if(primary == null){
-            return false;
+    public String getPrimary() {
+        if(primary == null || primary == false){
+            return "否";
+        }else{
+            return "是";
         }
-        return primary;
+
     }
 
     public void setPrimary(Boolean primary) {

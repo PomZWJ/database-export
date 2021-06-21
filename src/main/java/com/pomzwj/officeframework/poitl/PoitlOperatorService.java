@@ -2,15 +2,21 @@ package com.pomzwj.officeframework.poitl;
 
 import com.deepoove.poi.XWPFTemplate;
 import com.deepoove.poi.data.DocxRenderData;
-import com.deepoove.poi.data.MiniTableRenderData;
 import com.deepoove.poi.data.RowRenderData;
+import com.deepoove.poi.data.Rows;
+import com.deepoove.poi.data.Tables;
+import com.pomzwj.anno.DataColumnName;
+import com.pomzwj.constant.DataBaseType;
 import com.pomzwj.constant.TemplateFileConstants;
+import com.pomzwj.domain.DbColumnInfo;
+import com.pomzwj.domain.DbTable;
 import com.pomzwj.domain.SegmentData;
-import com.pomzwj.domain.TempData;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.io.File;
+import java.lang.reflect.Field;
+import java.lang.reflect.Method;
 import java.util.*;
 
 
@@ -22,34 +28,72 @@ import java.util.*;
  */
 @Service
 public class PoitlOperatorService {
-    @Value("${export.template-copy-path}")
-    private String templateCopyPath;
+	@Value("${export.template-copy-path}")
+	private String templateCopyPath;
 
-    /**
-     * 生成word，带自定义路径
-     * @param rowNames
-     * @param tempDataList
-     * @return
-     */
-    public XWPFTemplate makeDoc(List<String>rowNames,List<TempData>tempDataList) {
+	/**
+	 * 生成word，带自定义路径
+	 *
+	 * @param dbKind
+	 * @param tableList
+	 * @return
+	 */
+	public XWPFTemplate makeDoc(String dbKind, List<DbTable> tableList) throws Exception {
+		DataBaseType dataBaseKind = DataBaseType.matchType(dbKind);
+		List<String> columnNames = dataBaseKind.getColumnName();
 
-        Map<String,Object>tempMap = new HashMap<>();
-        List segmentDataList = new ArrayList();
-        for(int i=0;i<tempDataList.size();i++){
-            TempData tempData = tempDataList.get(i);
-            RowRenderData header = RowRenderData.build(rowNames.toArray(new String[rowNames.size()]));
-            SegmentData segmentData = new SegmentData();
-            segmentData.setTable(new MiniTableRenderData(header,tempData.getData()));
-            segmentData.setTableName(tempData.getTableName());
-            segmentData.setTableComments("("+tempData.getTableComment()+")");
-            segmentDataList.add(segmentData);
-        }
-        File subModelWordFile = new File(templateCopyPath+"/"+ TemplateFileConstants.SUB_MODEL_TEMPLATE);
-        tempMap.put("seg",new DocxRenderData(subModelWordFile, segmentDataList));
+		Class<DbColumnInfo> dbColumnInfoClass = DbColumnInfo.class;
+		List segmentDataList = new ArrayList();
 
-        File importWordFile = new File(templateCopyPath+"/"+ TemplateFileConstants.IMPORT_TEMPLATE);
-        /*1.根据模板生成文档*/
-        XWPFTemplate template = XWPFTemplate.compile(importWordFile).render(tempMap);
-        return template;
-    }
+
+		//获取表头
+		List<String> headerList = new ArrayList<>();
+		for (int i = 0; i < columnNames.size(); i++) {
+			String filed = columnNames.get(i);
+			Field declaredField = dbColumnInfoClass.getDeclaredField(filed);
+			DataColumnName annotation = declaredField.getAnnotation(DataColumnName.class);
+			String annoName = annotation.name();
+			headerList.add(annoName);
+		}
+
+		RowRenderData headerRow = Rows.of(headerList.toArray(new String[headerList.size()])).textColor("FFFFFF").bgColor("4472C4").create();
+
+		for (int i = 0; i < tableList.size(); i++) {
+			DbTable dbTable = tableList.get(i);
+			List<RowRenderData> rowList = this.getRow(dbTable, columnNames, headerRow);
+			SegmentData segmentData = new SegmentData();
+			segmentData.setTable(Tables.create(rowList.toArray(new RowRenderData[rowList.size()])));
+			segmentData.setTableName(dbTable.getTableName());
+			segmentData.setTableComments("(" + dbTable.getTableComments() + ")");
+			segmentDataList.add(segmentData);
+		}
+
+		Map<String, Object> tempMap = new HashMap<>();
+		File subModelWordFile = new File(templateCopyPath + "/" + TemplateFileConstants.SUB_MODEL_TEMPLATE);
+		tempMap.put("seg", new DocxRenderData(subModelWordFile, segmentDataList));
+
+		File importWordFile = new File(templateCopyPath + "/" + TemplateFileConstants.IMPORT_TEMPLATE);
+		/*1.根据模板生成文档*/
+		XWPFTemplate template = XWPFTemplate.compile(importWordFile).render(tempMap);
+		return template;
+	}
+
+	public List<RowRenderData> getRow(DbTable dbTable, List<String> columnNames, RowRenderData headerRow) throws Exception {
+		List<DbColumnInfo> tabsColumn = dbTable.getTabsColumn();
+		Class<DbColumnInfo> dbColumnInfoClass = DbColumnInfo.class;
+		List<RowRenderData> rows = new ArrayList<>();
+		rows.add(headerRow);
+		for (int k = 0; k < tabsColumn.size(); k++) {
+			DbColumnInfo dbColumnInfo = tabsColumn.get(k);
+			List<String> dataBody = new ArrayList<>();
+			for (int j = 0; j < columnNames.size(); j++) {
+				String fieldName = columnNames.get(j);
+				fieldName = fieldName.substring(0, 1).toUpperCase() + fieldName.substring(1);
+				Method method = dbColumnInfoClass.getMethod("get" + fieldName, null);
+				dataBody.add(method.invoke(dbColumnInfo, null).toString());
+			}
+			rows.add(Rows.create(dataBody.toArray(new String[dataBody.size()])));
+		}
+		return rows;
+	}
 }

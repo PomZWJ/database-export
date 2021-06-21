@@ -1,6 +1,7 @@
 package com.pomzwj.domain;
 
-import com.deepoove.poi.data.MiniTableRenderData;
+
+import com.deepoove.poi.data.TableRenderData;
 
 import java.io.Serializable;
 
@@ -14,7 +15,7 @@ public class SegmentData implements Serializable {
     /**
      * 表结构
      */
-    MiniTableRenderData table;
+    TableRenderData table;
     /**
      * 表名
      */
@@ -25,11 +26,11 @@ public class SegmentData implements Serializable {
      */
     String tableComments;
 
-    public MiniTableRenderData getTable() {
+    public TableRenderData getTable() {
         return table;
     }
 
-    public void setTable(MiniTableRenderData table) {
+    public void setTable(TableRenderData table) {
         this.table = table;
     }
 

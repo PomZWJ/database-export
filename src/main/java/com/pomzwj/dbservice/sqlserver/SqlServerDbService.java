@@ -34,70 +34,12 @@ public class SqlServerDbService implements DbService {
     @Value("${database.getTableNameSql.sqlServer}")
     String sqlServerGetTableNameSql;
 
-    @Override
-    public List<String> initRowName() {
-        List<String>rowNames = Arrays.asList("列名", "数据类型","长度","小数位","是否为空","主键","是否自增", "默认值", "备注");
-        return rowNames;
-    }
-
-    @Override
-    public List<TempData> getWordTempData(List<DbTable> tableMessage) {
-        List<TempData>tempDataList=new ArrayList<>();
-        for (DbTable dbTable : tableMessage) {
-            List<DbColumnInfo> data =  dbTable.getTabsColumn();
-            TempData tempData = new TempData();
-            tempData.setTableComment(dbTable.getTableComments());
-            tempData.setTableName(dbTable.getTableName());
-
-            List<RowRenderData> rowRenderDataList = new ArrayList<>();
-            for (int i = 0; i < data.size(); i++) {
-
-                DbColumnInfo dbColumnInfo = data.get(i);
-                //列名
-                String column_name = dbColumnInfo.getColumnName();
-                //数据类型
-                String data_type = dbColumnInfo.getDataType();
-                //数据长度
-                String data_length = dbColumnInfo.getDataLength();
-                //是否可空
-                Boolean nullAble = dbColumnInfo.getNullAble();
-                //数据缺省值
-                String data_default = dbColumnInfo.getDefaultVal();
-                //字段注释
-                String comments = dbColumnInfo.getComments();
-
-                String dataScale = dbColumnInfo.getDataScale();
-
-                Boolean autoIncrement = dbColumnInfo.getAutoIncrement();
-                String auto_increment = autoIncrement?"是":"";
-
-                Boolean primary = dbColumnInfo.getPrimary();
-                String is_primary = primary?"是":"";
-
-                String null_able = nullAble?"是":"否";
-
-                RowRenderData labor = RowRenderData.build( column_name, data_type,data_length,dataScale,null_able,is_primary,auto_increment,data_default,comments);
-                rowRenderDataList.add(labor);
-            }
-            tempData.setData(rowRenderDataList);
-            tempDataList.add(tempData);
-        }
-        return tempDataList;
-    }
-    @Override
-    public List<DbTable> getTableName(DbBaseInfo dbBaseInfo) throws Exception {
+    public List<DbTable> getTableName(Connection connection) throws Exception {
         List<DbTable> tableList = new ArrayList<>();
-
-        String dbName = dbBaseInfo.getDbName();
-        String ip = dbBaseInfo.getIp();
-        String port = dbBaseInfo.getPort();
-        String userName = dbBaseInfo.getUserName();
-        String password = dbBaseInfo.getPassword();
-
         ResultSet resultSet = null;
+        Statement statement = null;
         try {
-            Connection connection = DbConnnecttion.getConn(String.format(sqlServerJdbc,ip,port,dbName), userName, password, sqlServerDriver);
-            Statement statement = connection.createStatement();
+            statement = connection.createStatement();
             resultSet = statement.executeQuery(sqlServerGetTableNameSql);
             while (resultSet.next()) {
                 DbTable dbTable = new DbTable();
@@ -115,20 +57,16 @@ public class SqlServerDbService implements DbService {
             log.error("获取所有表数据发生错误 = {}",e);
             throw e;
         } finally {
-            DbConnnecttion.closeRs(resultSet);
+            DbConnnecttion.closeResultSet(resultSet);
+            DbConnnecttion.closeStat(statement);
         }
         return tableList;
     }
 
-    @Override
-    public void getTabsColumnInfo(DbBaseInfo dbBaseInfo,List<DbTable> dbTableList)throws Exception {
-        String dbName = dbBaseInfo.getDbName();
-        String ip = dbBaseInfo.getIp();
-        String port = dbBaseInfo.getPort();
-        String userName = dbBaseInfo.getUserName();
-        String password = dbBaseInfo.getPassword();
+    public void getTabsColumnInfo(Connection connection,List<DbTable> dbTableList)throws Exception {
 
         ResultSet resultSet = null;
+        PreparedStatement preparedStatement = null;
         try {
             ClassPathResource classPathResource = new ClassPathResource("sql/sqlserver.sql");
             InputStream inputStream =classPathResource.getInputStream();
@@ -136,10 +74,8 @@ public class SqlServerDbService implements DbService {
                 throw new FileNotFoundException("没有找到查询详细字段的SQL文件");
             }
             String executeSql = IOUtils.toString(inputStream,DbService.DefaultCharsetName);
-            String jdbcStr = String.format(sqlServerJdbc,ip,port,dbName);
-            Connection connection = DbConnnecttion.getConn(jdbcStr, userName, password, sqlServerDriver);
 
-            PreparedStatement preparedStatement = connection.prepareStatement(executeSql);
+            preparedStatement = connection.prepareStatement(executeSql);
             for(int i=0;i<dbTableList.size();i++){
                 List<DbColumnInfo> dbColumnInfos = new ArrayList<>();
                 DbTable dbTable = dbTableList.get(i);
@@ -169,7 +105,8 @@ public class SqlServerDbService implements DbService {
             log.error("发生错误 = {}",e);
             throw e;
         } finally {
-            DbConnnecttion.closeRs(resultSet);
+            DbConnnecttion.closeResultSet(resultSet);
+            DbConnnecttion.closeStat(preparedStatement);
         }
     }
     private static boolean getStringToBoolean(final String val){
@@ -181,6 +118,28 @@ public class SqlServerDbService implements DbService {
             }else{
                 return false;
             }
+        }
+    }
+
+    @Override
+    public List<DbTable> getTableDetailInfo(DbBaseInfo dbBaseInfo) throws Exception {
+        String dbName = dbBaseInfo.getDbName();
+        String ip = dbBaseInfo.getIp();
+        String port = dbBaseInfo.getPort();
+        String userName = dbBaseInfo.getUserName();
+        String password = dbBaseInfo.getPassword();
+        String jdbcStr = String.format(sqlServerJdbc,ip,port,dbName);
+        Connection connection = null;
+        try {
+            connection = DbConnnecttion.getConn(jdbcStr, userName, password, sqlServerDriver);
+            List<DbTable> tableName = this.getTableName(connection);
+            this.getTabsColumnInfo(connection,tableName);
+            return tableName;
+        }catch (Exception e){
+            log.error("发生错误 = {}",e);
+            throw e;
+        }finally {
+            DbConnnecttion.closeConn(connection);
         }
     }
 }
