@@ -1,6 +1,5 @@
 package com.pomzwj.dbservice.mysql;
 
-import com.deepoove.poi.data.RowRenderData;
 import com.pomzwj.dbservice.DbService;
 import com.pomzwj.domain.*;
 import com.pomzwj.utils.DbConnnecttion;
@@ -19,7 +18,6 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.Statement;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -48,7 +46,9 @@ public class MySqlDbService implements DbService {
         Connection connection = null;
         try {
             connection = DbConnnecttion.getConn(jdbcStr, userName, password, mysqlDriver);
+            //1.获取所有表基本信息
             List<DbTable> tableName = this.getTableName(connection, dbName);
+            //2.获取每张表的每一列信息
             this.getTabsColumnInfo(connection,tableName);
             return tableName;
         }catch (Exception e){
@@ -60,13 +60,10 @@ public class MySqlDbService implements DbService {
     }
 
 
-    public List<DbTable> getTableName(Connection connection, String dbName) throws Exception {
+    private List<DbTable> getTableName(Connection connection, String dbName) throws Exception {
         List<DbTable> tableList = new ArrayList<>();
-
         ResultSet resultSet = null;
-
         Statement statement = null;
-
         try{
             statement = connection.createStatement();
             resultSet = statement.executeQuery(String.format(mysqlGetTableNameSql, dbName));
@@ -83,7 +80,7 @@ public class MySqlDbService implements DbService {
                 tableList.add(dbTable);
             }
         }catch (Exception e){
-            log.error("发生错误 = {}",e);
+            log.error("获取所有表发生错误 = {}",e);
             throw e;
         }finally {
             DbConnnecttion.closeResultSet(resultSet);
@@ -92,7 +89,7 @@ public class MySqlDbService implements DbService {
         return tableList;
     }
 
-    public void getTabsColumnInfo(Connection connection, List<DbTable> dbTableList) throws Exception {
+    private void getTabsColumnInfo(Connection connection, List<DbTable> dbTableList) throws Exception {
         ResultSet resultSet = null;
         PreparedStatement preparedStatement = null;
         ClassPathResource classPathResource = new ClassPathResource("sql/mysql.sql");

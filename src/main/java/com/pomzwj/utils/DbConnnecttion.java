@@ -10,7 +10,7 @@ import java.sql.*;
 /**
  * 类说明:JDBC连接
  *
- * @author zhaowenjie<1 5 1 3 0 4 1 8 2 0 @ qq.com>
+ * @author zhaowenjie<1513041820@qq.com>
  * @date 2018/10/30/0030.
  */
 public class DbConnnecttion {

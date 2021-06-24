@@ -34,7 +34,30 @@ public class SqlServerDbService implements DbService {
     @Value("${database.getTableNameSql.sqlServer}")
     String sqlServerGetTableNameSql;
 
-    public List<DbTable> getTableName(Connection connection) throws Exception {
+
+    @Override
+    public List<DbTable> getTableDetailInfo(DbBaseInfo dbBaseInfo) throws Exception {
+        String dbName = dbBaseInfo.getDbName();
+        String ip = dbBaseInfo.getIp();
+        String port = dbBaseInfo.getPort();
+        String userName = dbBaseInfo.getUserName();
+        String password = dbBaseInfo.getPassword();
+        String jdbcStr = String.format(sqlServerJdbc,ip,port,dbName);
+        Connection connection = null;
+        try {
+            connection = DbConnnecttion.getConn(jdbcStr, userName, password, sqlServerDriver);
+            List<DbTable> tableName = this.getTableName(connection);
+            this.getTabsColumnInfo(connection,tableName);
+            return tableName;
+        }catch (Exception e){
+            log.error("发生错误 = {}",e);
+            throw e;
+        }finally {
+            DbConnnecttion.closeConn(connection);
+        }
+    }
+
+    private List<DbTable> getTableName(Connection connection) throws Exception {
         List<DbTable> tableList = new ArrayList<>();
         ResultSet resultSet = null;
         Statement statement = null;
@@ -63,7 +86,7 @@ public class SqlServerDbService implements DbService {
         return tableList;
     }
 
-    public void getTabsColumnInfo(Connection connection,List<DbTable> dbTableList)throws Exception {
+    private void getTabsColumnInfo(Connection connection,List<DbTable> dbTableList)throws Exception {
 
         ResultSet resultSet = null;
         PreparedStatement preparedStatement = null;
@@ -118,28 +141,6 @@ public class SqlServerDbService implements DbService {
             }else{
                 return false;
             }
-        }
-    }
-
-    @Override
-    public List<DbTable> getTableDetailInfo(DbBaseInfo dbBaseInfo) throws Exception {
-        String dbName = dbBaseInfo.getDbName();
-        String ip = dbBaseInfo.getIp();
-        String port = dbBaseInfo.getPort();
-        String userName = dbBaseInfo.getUserName();
-        String password = dbBaseInfo.getPassword();
-        String jdbcStr = String.format(sqlServerJdbc,ip,port,dbName);
-        Connection connection = null;
-        try {
-            connection = DbConnnecttion.getConn(jdbcStr, userName, password, sqlServerDriver);
-            List<DbTable> tableName = this.getTableName(connection);
-            this.getTabsColumnInfo(connection,tableName);
-            return tableName;
-        }catch (Exception e){
-            log.error("发生错误 = {}",e);
-            throw e;
-        }finally {
-            DbConnnecttion.closeConn(connection);
         }
     }
 }

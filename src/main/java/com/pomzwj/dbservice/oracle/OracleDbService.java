@@ -31,12 +31,31 @@ public class OracleDbService implements DbService {
     @Value("${database.getTableNameSql.oracle}")
     String oracleGetTableNameSql;
 
+    @Override
+    public List<DbTable> getTableDetailInfo(DbBaseInfo dbBaseInfo) throws Exception {
+        String dbName = dbBaseInfo.getDbName();
+        String ip = dbBaseInfo.getIp();
+        String port = dbBaseInfo.getPort();
+        String userName = dbBaseInfo.getUserName();
+        String password = dbBaseInfo.getPassword();
+        String jdbcStr = String.format(oracleJdbc,ip,port,dbName);
+        Connection connection = null;
+        try {
+            connection = DbConnnecttion.getConn(jdbcStr, userName, password, oracleDriver);
+            List<DbTable> tableName = this.getTableName(connection);
+            this.getTabsColumnInfo(connection,userName,tableName);
+            return tableName;
+        }catch (Exception e){
+            log.error("生成oracle数据发生错误 = {}",e);
+            throw e;
+        }finally {
+            DbConnnecttion.closeConn(connection);
+        }
+    }
 
-    public List<DbTable> getTableName(Connection connection) throws Exception {
+
+    private List<DbTable> getTableName(Connection connection) throws Exception {
         List<DbTable> tableList = new ArrayList<>();
-
-
-
         ResultSet resultSet = null;
         Statement statement = null;
         try {
@@ -64,7 +83,7 @@ public class OracleDbService implements DbService {
         return tableList;
     }
 
-    public void getTabsColumnInfo(Connection connection,String userName,List<DbTable> dbTableList) throws Exception {
+    private void getTabsColumnInfo(Connection connection,String userName,List<DbTable> dbTableList) throws Exception {
         ResultSet resultSet = null;
         PreparedStatement preparedStatement = null;
         try {
@@ -122,28 +141,6 @@ public class OracleDbService implements DbService {
             }else{
                 return false;
             }
-        }
-    }
-
-    @Override
-    public List<DbTable> getTableDetailInfo(DbBaseInfo dbBaseInfo) throws Exception {
-        String dbName = dbBaseInfo.getDbName();
-        String ip = dbBaseInfo.getIp();
-        String port = dbBaseInfo.getPort();
-        String userName = dbBaseInfo.getUserName();
-        String password = dbBaseInfo.getPassword();
-        String jdbcStr = String.format(oracleJdbc,ip,port,dbName);
-        Connection connection = null;
-        try {
-            connection = DbConnnecttion.getConn(jdbcStr, userName, password, oracleDriver);
-            List<DbTable> tableName = this.getTableName(connection);
-            this.getTabsColumnInfo(connection,userName,tableName);
-            return tableName;
-        }catch (Exception e){
-            log.error("发生错误 = {}",e);
-            throw e;
-        }finally {
-            DbConnnecttion.closeConn(connection);
         }
     }
 }
