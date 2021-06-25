@@ -2,8 +2,12 @@ package com.pomzwj;
 
 import com.alibaba.fastjson.JSON;
 import com.pomzwj.domain.DbTable;
+import com.pomzwj.utils.DbConnnecttion;
 import org.junit.Test;
 
+import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -99,5 +103,30 @@ public class TestMy {
             e.printStackTrace();
         }
     }
+    @Test
+    public void fun5()throws Exception{
+        Connection connection = DbConnnecttion.getConn("jdbc:mysql://localhost:3306/shujuku?serverTimezone=UTC", "root", "safedog@yz2020", "com.mysql.cj.jdbc.Driver");
+        Statement statement = null;
+        try {
+            StringBuffer sb = new StringBuffer();
+            sb.append("CREATE TABLE `%s`  (");
+            sb.append("`user_id` int(11) NOT NULL AUTO_INCREMENT COMMENT '用户ID',");
+            sb.append("`dept_id` int(11) NULL DEFAULT NULL COMMENT '部门ID',");
+            sb.append("`login_name` varchar(30) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '登录账号',");
+            sb.append("PRIMARY KEY (`user_id`) USING BTREE,INDEX `sys_user_login_name_index`(`login_name`) USING BTREE)");
+            sb.append(" ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '用户信息表' ROW_FORMAT = Dynamic;");
+            String sql = sb.toString();
+            for(int i=0;i<10*100;i++){
+                statement = connection.createStatement();
+                boolean execute = statement.execute(String.format(sql, "sys_user_" + i));
+            }
+        }catch (Exception e){
+            e.printStackTrace();
+        }finally {
+            DbConnnecttion.closeStat(statement);
+            System.out.println("运行结束");
+        }
 
+
+    }
 }

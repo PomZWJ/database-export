@@ -1,5 +1,8 @@
 package com.pomzwj.dbservice.mysql;
 
+import com.alibaba.druid.pool.DruidDataSource;
+import com.alibaba.druid.pool.DruidPooledConnection;
+import com.pomzwj.dbpool.druid.DruidPoolUtils;
 import com.pomzwj.dbservice.DbService;
 import com.pomzwj.domain.*;
 import com.pomzwj.exception.DatabaseExportException;
@@ -8,6 +11,7 @@ import com.pomzwj.utils.StringUtils;
 import org.apache.commons.io.IOUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.stereotype.Component;
@@ -34,34 +38,25 @@ public class MySqlDbService implements DbService {
 
 	static final Logger log = LoggerFactory.getLogger(MySqlDbService.class);
 
-	@Value("${database.jdbc.mysql}")
-	String mysqlJdbc;
-	@Value("${database.driver.mysql}")
-	String mysqlDriver;
+	@Autowired
+	private DruidPoolUtils druidPoolUtils;
 	@Value("${database.getTableNameSql.mysql}")
 	String mysqlGetTableNameSql;
 
 	@Override
 	public List<DbTable> getTableDetailInfo(DbBaseInfo dbBaseInfo) throws Exception {
-		String dbName = dbBaseInfo.getDbName();
-		String ip = dbBaseInfo.getIp();
-		String port = dbBaseInfo.getPort();
-		String userName = dbBaseInfo.getUserName();
-		String password = dbBaseInfo.getPassword();
-		String jdbcStr = String.format(mysqlJdbc, ip, port, dbName);
-		Connection connection = null;
+		DruidDataSource dbPool = druidPoolUtils.createDbPool(dbBaseInfo);
 		try {
-			connection = DbConnnecttion.getConn(jdbcStr, userName, password, mysqlDriver);
 			//1.获取所有表基本信息
-			List<DbTable> tableName = this.getTableName(connection, dbName);
+			List<DbTable> tableName = this.getTableName(dbPool.getConnection(), dbBaseInfo.getDbName());
 			//2.获取每张表的每一列信息
-			this.getColDetail(connection, tableName);
+			this.getColDetail(dbPool, tableName);
 			return tableName;
 		} catch (Exception e) {
 			log.error("发生错误 = {}", e);
 			throw e;
 		} finally {
-			DbConnnecttion.closeConn(connection);
+			druidPoolUtils.closeDbPool(dbPool);
 		}
 	}
 
@@ -95,11 +90,11 @@ public class MySqlDbService implements DbService {
 		return tableList;
 	}
 
-	private void getColDetail(Connection connection, List<DbTable> dbTableList) throws Exception {
+	private void getColDetail(DruidDataSource dbPool, List<DbTable> dbTableList) throws Exception {
 		int pageNum = dbTableList.size();
 		//如果表数量大于100则启用多线程
 		if(pageNum < 100){
-			getTabsColumnInfo(connection,dbTableList);
+			this.getTabsColumnInfo(dbPool.getConnection(),dbTableList);
 		}else{
 			int pageSize = 10;
 			int totalPage = (pageNum + pageSize - 1) / pageSize;
@@ -120,11 +115,11 @@ public class MySqlDbService implements DbService {
 					break;
 				}
 			}
-			this.getTabsColumnInfoByMultiThread(connection, listArray);
+			this.getTabsColumnInfoByMultiThread(dbPool, listArray);
 		}
 	}
 
-	private void getTabsColumnInfoByMultiThread(Connection connection, List[] listArray) throws Exception {
+	private void getTabsColumnInfoByMultiThread(DruidDataSource dbPool, List[] listArray) throws Exception {
 		ClassPathResource classPathResource = new ClassPathResource("sql/mysql.sql");
 		InputStream inputStream = classPathResource.getInputStream();
 		if (inputStream == null) {
@@ -140,23 +135,30 @@ public class MySqlDbService implements DbService {
 				int finalI = i;
 				Future<Boolean> submit = es.submit(new Callable<Boolean>() {
 					@Override
-					public Boolean call() throws Exception {
+					public Boolean call() {
 						ResultSet resultSet = null;
 						PreparedStatement preparedStatement = null;
 						try {
-							preparedStatement = connection.prepareStatement(executeSql);
+							System.out.println(finalI);
 							List<DbTable> list = (List<DbTable>) listArray[finalI];
 							for (int j = 0; j < list.size(); j++) {
+								DruidPooledConnection connection = dbPool.getConnection();
+								preparedStatement = connection.prepareStatement(executeSql);
 								List<DbColumnInfo> dbColumnInfos = new ArrayList<>();
 								DbTable dbTable = list.get(j);
-								getColumnDetail(preparedStatement,resultSet,dbTable,dbColumnInfos);
+								try{
+									getColumnDetail(preparedStatement,resultSet,dbTable,dbColumnInfos);
+								}finally {
+									DbConnnecttion.closeResultSet(resultSet);
+									DbConnnecttion.closeStat(preparedStatement);
+									connection.close();
+								}
+
 							}
+							System.out.println(finalI);
 							return true;
 						} catch (Exception e) {
 							e.printStackTrace();
-						} finally {
-							DbConnnecttion.closeResultSet(resultSet);
-							DbConnnecttion.closeStat(preparedStatement);
 						}
 						return false;
 					}
