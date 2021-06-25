@@ -33,6 +33,7 @@
 		<sqlserver.version>7.4.0.jre8</sqlserver.version>
 		<poitl.version>1.10.0</poitl.version>
 		<common-io.version>2.7</common-io.version>
+		<common-lang3.version>3.12.0</common-lang3.version>
 		<orai18n.version>12.1.0.2.0</orai18n.version>
 		<fastjson.version>1.2.75</fastjson.version>
 		<druid.version>1.2.6</druid.version>
@@ -51,7 +52,10 @@
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-thymeleaf</artifactId>
 		</dependency>
-
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-jdbc</artifactId>
+		</dependency>
 		<dependency>
 			<groupId>com.oracle.database.jdbc</groupId>
 			<artifactId>ojdbc8</artifactId>
@@ -84,7 +88,11 @@
 			<artifactId>commons-io</artifactId>
 			<version>${common-io.version}</version>
 		</dependency>
-
+		<dependency>
+			<groupId>org.apache.commons</groupId>
+			<artifactId>commons-lang3</artifactId>
+			<version>${common-lang3.version}</version>
+		</dependency>
 		<dependency>
 			<groupId>cn.easyproject</groupId>
 			<artifactId>orai18n</artifactId>

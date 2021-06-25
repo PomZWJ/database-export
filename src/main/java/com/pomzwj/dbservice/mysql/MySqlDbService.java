@@ -8,12 +8,15 @@ import com.pomzwj.domain.*;
 import com.pomzwj.exception.DatabaseExportException;
 import com.pomzwj.utils.DbConnnecttion;
 import com.pomzwj.utils.StringUtils;
+import org.apache.commons.collections4.CollectionUtils;
+import org.apache.commons.collections4.MapUtils;
 import org.apache.commons.io.IOUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.ClassPathResource;
+import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Component;
 
 import java.io.FileNotFoundException;
@@ -24,6 +27,7 @@ import java.sql.ResultSet;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutorService;
@@ -46,11 +50,12 @@ public class MySqlDbService implements DbService {
 	@Override
 	public List<DbTable> getTableDetailInfo(DbBaseInfo dbBaseInfo) throws Exception {
 		DruidDataSource dbPool = druidPoolUtils.createDbPool(dbBaseInfo);
+		JdbcTemplate jdbcTemplate = new JdbcTemplate(dbPool);
 		try {
 			//1.获取所有表基本信息
-			List<DbTable> tableName = this.getTableName(dbPool.getConnection(), dbBaseInfo.getDbName());
+			List<DbTable> tableName = this.getTableName(jdbcTemplate, dbBaseInfo.getDbName());
 			//2.获取每张表的每一列信息
-			this.getColDetail(dbPool, tableName);
+			this.getColDetail(jdbcTemplate, tableName);
 			return tableName;
 		} catch (Exception e) {
 			log.error("发生错误 = {}", e);
@@ -61,17 +66,16 @@ public class MySqlDbService implements DbService {
 	}
 
 
-	private List<DbTable> getTableName(Connection connection, String dbName) throws Exception {
+	private List<DbTable> getTableName(JdbcTemplate jdbcTemplate, String dbName) throws Exception {
 		List<DbTable> tableList = new ArrayList<>();
-		ResultSet resultSet = null;
-		Statement statement = null;
-		try {
-			statement = connection.createStatement();
-			resultSet = statement.executeQuery(String.format(mysqlGetTableNameSql, dbName));
-			while (resultSet.next()) {
+
+		List<Map<String, Object>> resultList = jdbcTemplate.queryForList(String.format(mysqlGetTableNameSql, dbName));
+		if (CollectionUtils.isNotEmpty(resultList)) {
+			for (int i = 0; i < resultList.size(); i++) {
+				Map<String, Object> resultMap = resultList.get(i);
 				DbTable dbTable = new DbTable();
-				String tableName = resultSet.getString("TABLE_NAME");
-				String tableComments = resultSet.getString("COMMENTS");
+				String tableName = MapUtils.getString(resultMap, "TABLE_NAME");
+				String tableComments = MapUtils.getString(resultMap, "COMMENTS");
 				if (StringUtils.isEmpty(tableComments)) {
 					dbTable.setTableComments(FiledDefaultValue.TABLE_COMMENTS_DEFAULT);
 				} else {
@@ -80,21 +84,15 @@ public class MySqlDbService implements DbService {
 				dbTable.setTableName(tableName);
 				tableList.add(dbTable);
 			}
-		} catch (Exception e) {
-			log.error("获取所有表发生错误 = {}", e);
-			throw e;
-		} finally {
-			DbConnnecttion.closeResultSet(resultSet);
-			DbConnnecttion.closeStat(statement);
 		}
 		return tableList;
 	}
 
-	private void getColDetail(DruidDataSource dbPool, List<DbTable> dbTableList) throws Exception {
+	private void getColDetail(JdbcTemplate jdbcTemplate, List<DbTable> dbTableList) throws Exception {
 		int pageNum = dbTableList.size();
 		//如果表数量大于100则启用多线程
 		if(pageNum < 100){
-			this.getTabsColumnInfo(dbPool.getConnection(),dbTableList);
+			//this.getTabsColumnInfo(dbPool.getConnection(),dbTableList);
 		}else{
 			int pageSize = 10;
 			int totalPage = (pageNum + pageSize - 1) / pageSize;
@@ -115,11 +113,11 @@ public class MySqlDbService implements DbService {
 					break;
 				}
 			}
-			this.getTabsColumnInfoByMultiThread(dbPool, listArray);
+			this.getTabsColumnInfoByMultiThread(jdbcTemplate, listArray);
 		}
 	}
 
-	private void getTabsColumnInfoByMultiThread(DruidDataSource dbPool, List[] listArray) throws Exception {
+	private void getTabsColumnInfoByMultiThread(JdbcTemplate jdbcTemplate, List[] listArray) throws Exception {
 		ClassPathResource classPathResource = new ClassPathResource("sql/mysql.sql");
 		InputStream inputStream = classPathResource.getInputStream();
 		if (inputStream == null) {
@@ -142,18 +140,9 @@ public class MySqlDbService implements DbService {
 							System.out.println(finalI);
 							List<DbTable> list = (List<DbTable>) listArray[finalI];
 							for (int j = 0; j < list.size(); j++) {
-								DruidPooledConnection connection = dbPool.getConnection();
-								preparedStatement = connection.prepareStatement(executeSql);
-								List<DbColumnInfo> dbColumnInfos = new ArrayList<>();
 								DbTable dbTable = list.get(j);
-								try{
-									getColumnDetail(preparedStatement,resultSet,dbTable,dbColumnInfos);
-								}finally {
-									DbConnnecttion.closeResultSet(resultSet);
-									DbConnnecttion.closeStat(preparedStatement);
-									connection.close();
-								}
-
+								List<Map> maps = jdbcTemplate.queryForList(executeSql, Map.class, dbTable.getTableName());
+								List<DbColumnInfo> dbColumnInfos = new ArrayList<>();
 							}
 							System.out.println(finalI);
 							return true;
