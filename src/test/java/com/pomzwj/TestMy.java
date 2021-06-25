@@ -3,7 +3,7 @@ package com.pomzwj;
 import com.alibaba.fastjson.JSON;
 import com.pomzwj.domain.DbTable;
 import com.pomzwj.utils.DbConnnecttion;
-import org.junit.jupiter.api.Test;
+import org.junit.Test;
 
 import java.sql.Connection;
 import java.sql.Statement;

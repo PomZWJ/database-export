@@ -59,7 +59,7 @@ public class DruidPoolUtils {
 		dataSource.setMaxWait(60*1000);
 		dataSource.setMaxActive(20);
 		dataSource.setTestWhileIdle(true);
-		dataSource.setValidationQuery("SELECT 'x'");
+		//dataSource.setValidationQuery("SELECT 'x'");
 		dataSource.setTestOnBorrow(false);
 		dataSource.setTestOnReturn(false);
 		dataSource.setMaxPoolPreparedStatementPerConnectionSize(10);
