@@ -1,11 +1,13 @@
 package com.pomzwj.controller;
 
 import com.deepoove.poi.XWPFTemplate;
+import com.pomzwj.anno.DataColumnName;
 import com.pomzwj.constant.DataBaseType;
 import com.pomzwj.constant.ExportFileType;
 import com.pomzwj.dbservice.DbService;
 import com.pomzwj.dbservice.DbServiceFactory;
 import com.pomzwj.domain.DbBaseInfo;
+import com.pomzwj.domain.DbColumnInfo;
 import com.pomzwj.domain.DbTable;
 import com.pomzwj.domain.ResponseParams;
 import com.pomzwj.exception.DatabaseExportException;
@@ -23,11 +25,9 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.lang.reflect.Field;
 import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * @author PomZWJ
@@ -119,12 +119,28 @@ public class DataExportV2Controller {
             if (dataBaseType == null) {
                 throw new DatabaseExportException(MessageCode.DATABASE_KIND_IS_NOT_MATCH_ERROR);
             }
-            List<String> columnName = dataBaseType.getColumnName();
+            List<String> columnNames = dataBaseType.getColumnName();
+            List<String> columnNameStrLists = new ArrayList<>();
             DbService dbServiceBean = dbServiceFactory.getDbServiceBean(info.getDbKind());
             //查询表信息
             List<DbTable> tableDetailInfo = dbServiceBean.getTableDetailInfo(info);
+
+            for(int i=0;i<columnNames.size();i++){
+                String columnNameStr = null;
+                String columnName = columnNames.get(i);
+                Field declaredField = DbColumnInfo.class.getDeclaredField(columnName);
+                DataColumnName annotation = declaredField.getAnnotation(DataColumnName.class);
+                if(annotation == null){
+                    columnNameStr = "";
+                }
+                columnNameStr = annotation.name();
+                columnNameStrLists.add(columnNameStr);
+            }
+
+
             Map<String, Object> resultMap = new HashMap<>();
-            resultMap.put("headerList", columnName);
+            resultMap.put("headerList", columnNameStrLists);
+            resultMap.put("fieldList", columnNames);
             resultMap.put("tableDetailInfo", tableDetailInfo);
             responseParams.setParams(resultMap);
         } catch (Exception e) {

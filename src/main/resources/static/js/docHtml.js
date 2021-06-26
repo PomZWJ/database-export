@@ -22,6 +22,7 @@ function loadInfo() {
 }
 function f(params) {
     let headerList = params.headerList;
+    let fieldList = params.fieldList;
     let tableDetailInfo = params.tableDetailInfo;
     let tableHtml = '';
     let headerHtml = '';
@@ -34,9 +35,9 @@ function f(params) {
         let tbodyHtml = "";
         for (let j = 0; j < tabsColumn.length; j++) {
             tbodyHtml += '<tr>';
-            for (let k = 0; k < headerList.length; k++) {
+            for (let k = 0; k < fieldList.length; k++) {
                 let column = tabsColumn[j];
-                let columnElement = column[headerList[k]];
+                let columnElement = column[fieldList[k]];
                 if(columnElement == undefined || columnElement == '' ){
                     columnElement = "无";
                 }
@@ -48,8 +49,8 @@ function f(params) {
 
 
         tableHtml +=
-            '<table class="table table-bordered">'+
-            '<caption style="font-weight: bolder;font-size: 40px">'+table.tableName+'('+table.tableComments+')'+'</caption>'+
+            '<table class="table table-bordered table-hover">'+
+            '<caption style="font-weight: bolder;font-size: 30px">'+table.tableName+'('+table.tableComments+')'+'</caption>'+
             '<thead>'+
             '<tr>'+headerHtml+'</tr>'+
             '</thead>'+
