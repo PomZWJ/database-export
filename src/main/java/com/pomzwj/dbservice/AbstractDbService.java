@@ -14,6 +14,8 @@ import java.util.Map;
 /**
  * dbService中间类
  * @author PomZWJ
+ * @email 1513041820@qq.com
+ * @github https://github.com/PomZWJ
  */
 public abstract class AbstractDbService {
 

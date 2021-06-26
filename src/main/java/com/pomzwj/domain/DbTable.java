@@ -6,7 +6,9 @@ import java.util.List;
 /**
  * 类说明:
  *
- * @author zhaowenjie<1513041820@qq.com>
+ * @author PomZWJ
+ * @email 1513041820@qq.com
+ * @github https://github.com/PomZWJ
  * @date 2018/10/29/0029.
  */
 public class DbTable implements Serializable {

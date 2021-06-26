@@ -26,8 +26,9 @@ import java.util.concurrent.*;
 
 /**
  * oracle数据库操作
- *
  * @author PomZWJ
+ * @email 1513041820@qq.com
+ * @github https://github.com/PomZWJ
  */
 @Component
 public class OracleDbService extends AbstractDbService implements DbService {

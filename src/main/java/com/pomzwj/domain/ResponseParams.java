@@ -10,7 +10,9 @@ import java.util.Map;
 /**
  * Description:Service返回说明
  *
- * @author zhaowenjie<email>1513041820@qq.com</email>
+ * @author PomZWJ
+ * @email 1513041820@qq.com
+ * @github https://github.com/PomZWJ
  * @date 2019-07-16 15:04
  */
 public class ResponseParams<T> implements Serializable {

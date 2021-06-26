@@ -6,7 +6,9 @@ import org.apache.commons.lang3.StringUtils;
 import java.io.Serializable;
 
 /**
- * @author zhaowj
+ * @author PomZWJ
+ * @email 1513041820@qq.com
+ * @github https://github.com/PomZWJ
  * @date 2021-03-04
  */
 public class DbColumnInfo implements Serializable {

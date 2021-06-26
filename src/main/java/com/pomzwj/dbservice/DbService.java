@@ -7,6 +7,9 @@ import java.util.List;
 
 /**
  * 数据库服务接口
+ * @author PomZWJ
+ * @email 1513041820@qq.com
+ * @github https://github.com/PomZWJ
  */
 public interface DbService {
 	String DefaultCharsetName = "UTF-8";

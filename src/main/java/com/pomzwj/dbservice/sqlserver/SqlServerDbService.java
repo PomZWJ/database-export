@@ -27,8 +27,10 @@ import java.util.Map;
 import java.util.concurrent.*;
 
 /**
- * sqlservice数据库
+ * sqlserver数据库
  * @author PomZWJ
+ * @email 1513041820@qq.com
+ * @github https://github.com/PomZWJ
  */
 @Component
 public class SqlServerDbService extends AbstractDbService implements DbService {

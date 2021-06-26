@@ -5,6 +5,8 @@ import org.apache.commons.lang3.StringUtils;
 /**
  * 导出文件类型
  * @author PomZWJ
+ * @email 1513041820@qq.com
+ * @github https://github.com/PomZWJ
  */
 public enum ExportFileType {
     WORD(true),

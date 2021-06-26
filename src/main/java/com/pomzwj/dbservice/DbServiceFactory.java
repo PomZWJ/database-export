@@ -10,6 +10,11 @@ import com.pomzwj.utils.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+/**
+ * @author PomZWJ
+ * @email 1513041820@qq.com
+ * @github https://github.com/PomZWJ
+ */
 @Component
 public class DbServiceFactory {
     @Autowired

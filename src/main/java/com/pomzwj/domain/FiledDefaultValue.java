@@ -3,7 +3,9 @@ package com.pomzwj.domain;
 /**
  * 类说明:常用字段说明
  *
- * @author zhaowenjie<1513041820@qq.com>
+ * @author PomZWJ
+ * @email 1513041820@qq.com
+ * @github https://github.com/PomZWJ
  * @date 2019/09/12/0029.
  */
 public class FiledDefaultValue {

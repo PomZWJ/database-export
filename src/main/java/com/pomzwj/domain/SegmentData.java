@@ -8,7 +8,9 @@ import java.io.Serializable;
 /**
  * 类说明:子文档的数据结构
  *
- * @author zhaowenjie<1513041820@qq.com>
+ * @author PomZWJ
+ * @email 1513041820@qq.com
+ * @github https://github.com/PomZWJ
  * @date 2018/10/29/0029.
  */
 public class SegmentData implements Serializable {

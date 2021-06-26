@@ -3,7 +3,9 @@ package com.pomzwj.exception;
 /**
  * 类说明:异常类
  *
- * @author zhaowenjie<1513041820@qq.com>
+ * @author PomZWJ
+ * @email 1513041820@qq.com
+ * @github https://github.com/PomZWJ
  * @date 2019/09/12
  */
 public class DatabaseExportException extends RuntimeException {
