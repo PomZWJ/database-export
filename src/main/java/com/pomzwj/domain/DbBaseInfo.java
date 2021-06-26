@@ -15,6 +15,7 @@ public class DbBaseInfo implements Serializable{
     private String dbName;
     private String userName;
     private String password;
+    private String exportFileType;
 
     public String getDbKind() {
         return dbKind;
@@ -62,5 +63,13 @@ public class DbBaseInfo implements Serializable{
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public String getExportFileType() {
+        return exportFileType;
+    }
+
+    public void setExportFileType(String exportFileType) {
+        this.exportFileType = exportFileType;
     }
 }

@@ -2,6 +2,7 @@ server:
   port: 9999
   servlet:
     context-path: /dbExport
+  index: v2/index2
 spring:
   application:
     name: db-export

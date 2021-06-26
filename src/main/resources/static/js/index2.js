@@ -28,6 +28,9 @@ var vue = new Vue({
         oracleDivShow: false,
         mysqlDivShow: false,
         sqlserverDivShow: false,
+        oraclePopoverVisible: false,
+        mysqlPopoverVisible: false,
+        sqlserverPopoverVisible: false,
         welcomeIconImg: ctx+"/assetss/images/v2/welcome-icon-click.png",
         oracleIconImg: ctx+"/assetss/images/v2/oracle-icon-unclick.png",
         mysqlIconImg: ctx+"/assetss/images/v2/mysql-icon-unclick.png",
@@ -58,13 +61,25 @@ var vue = new Vue({
         }
     },
     methods: {
-        generateWord(sqlKind) {
+        generateWord(sqlKind,exportFileType) {
             let ip;
             let port;
             let dataname;
             let username;
             let password;
+            if(exportFileType==undefined || exportFileType == ''){
+                this.$message.error('导出文件类型不能为空');
+                return;
+            }
+            if(exportFileType == 'excel'){
+                this.$message({
+                    message: '暂不支持导出Excel',
+                    type: 'warning'
+                });
+                return;
+            }
             if (sqlKind == 'oracle') {
+                this.oraclePopoverVisible = false;
                 ip = this.o_ip;
                 port = this.o_port;
                 dataname = this.o_dataname;
@@ -72,12 +87,14 @@ var vue = new Vue({
                 password = this.o_password;
                 //filepath = this.o_filepath;
             } else if (sqlKind == 'mysql') {
+                this.mysqlPopoverVisible = false;
                 ip = this.m_ip;
                 port = this.m_port;
                 dataname = this.m_dataname;
                 username = this.m_username;
                 password = this.m_password;
             } else if (sqlKind == 'sqlserver') {
+                this.sqlserverPopoverVisible = false;
                 ip = this.s_ip;
                 port = this.s_port;
                 dataname = this.s_dataname;
@@ -86,65 +103,26 @@ var vue = new Vue({
             }
 
             if (ip == '') {
-                this.$notify.error({
-                    title: '错误',
-                    message: 'IP不能为空',
-                    duration: 0
-                });
+                this.$message.error('IP不能为空');
                 return;
             }
             if (port == '') {
-                this.$notify.error({
-                    title: '错误',
-                    message: '端口不能为空',
-                    duration: 0
-                });
+                this.$message.error('端口不能为空');
                 return;
             }
             if (dataname == '') {
-                this.$notify.error({
-                    title: '错误',
-                    message: '实例/数据库名称不能为空',
-                    duration: 0
-                });
+                this.$message.error('实例/数据库名称不能为空');
                 return;
             }
             if (username == '') {
-                this.$notify.error({
-                    title: '错误',
-                    message: '用户名不能为空',
-                    duration: 0
-                });
+                this.$message.error('用户名不能为空');
                 return;
             }
             if (password == '') {
-                this.$notify.error({
-                    title: '错误',
-                    message: '密码不能为空',
-                    duration: 0
-                });
+                this.$message.error('密码不能为空');
                 return;
             }
-            /*this.loading = true;
-            axios.post('/dbExport/makeWord/v2', {
-                ip: ip, port: port,
-                dbName: dataname,
-                userName: username,
-                password: password,
-                dbKind: sqlKind
-                //filePath: filepath
-            }).then((response)=> {
-                this.loading = false;
-                if(response.data.resultCode == '000000'){
-                    this.$alert(response.data.resultMsg+",默认文档名称为export.docx", '提示', {confirmButtonText: '确定',type:'success'});
-                }else{
-                    this.$alert(response.data.resultMsg, '错误', {confirmButtonText: '确定',type:'error'});
-                }
-            }).catch((error)=> {
-                this.loading = false;
-                this.$alert(网络错误请重试, '错误', {confirmButtonText: '确定',type:'error'});
-            });*/
-            window.open("/dbExport/makeWord/v2?dbKind="+sqlKind+"&ip="+ip+"&port="+port+"&dbName="+dataname+"&userName="+username+"&password="+password);
+            window.open("/dbExport/v2/makeWord?dbKind="+sqlKind+"&ip="+ip+"&port="+port+"&dbName="+dataname+"&userName="+username+"&password="+password+"&exportFileType="+exportFileType);
 
         },
         barClick(sqlKind) {
@@ -232,6 +210,7 @@ var vue = new Vue({
                 password = this.o_password;
                 //filepath = this.o_filepath;
             } else if (sqlKind == 'mysql') {
+                console.log(this.m_ip);
                 ip = this.m_ip;
                 port = this.m_port;
                 dataname = this.m_dataname;
@@ -246,47 +225,26 @@ var vue = new Vue({
             }
 
             if (ip == '') {
-                this.$notify.error({
-                    title: '错误',
-                    message: 'IP不能为空',
-                    duration: 0
-                });
+                this.$message.error('IP不能为空');
                 return;
             }
             if (port == '') {
-                this.$notify.error({
-                    title: '错误',
-                    message: '端口不能为空',
-                    duration: 0
-                });
+                this.$message.error('端口不能为空');
                 return;
             }
             if (dataname == '') {
-                this.$notify.error({
-                    title: '错误',
-                    message: '实例/数据库名称不能为空',
-                    duration: 0
-                });
+                this.$message.error('实例/数据库名称不能为空');
                 return;
             }
             if (username == '') {
-                this.$notify.error({
-                    title: '错误',
-                    message: '用户名不能为空',
-                    duration: 0
-                });
+                this.$message.error('用户名不能为空');
                 return;
             }
             if (password == '') {
-                this.$notify.error({
-                    title: '错误',
-                    message: '密码不能为空',
-                    duration: 0
-                });
+                this.$message.error('密码不能为空');
                 return;
             }
-            window.open("/dbExport/docHtml?dbKind="+sqlKind+"&ip="+ip+"&port="+port+"&dbName="+dataname+"&userName="+username+"&password="+password);
-
+            window.open("/dbExport/v2/viewDocHtml?dbKind="+sqlKind+"&ip="+ip+"&port="+port+"&dbName="+dataname+"&userName="+username+"&password="+password);
         }
     }
 });

@@ -3,7 +3,7 @@ $(function () {
 });
 function loadInfo() {
     $.ajax({
-        url: ctx+"makeWord/getDocData",
+        url: ctx+"v2/getTableData",
         data: {
             ip :ip,
             port :port,

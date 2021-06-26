@@ -21,7 +21,8 @@ public enum MessageCode {
     FILE_DIRECT_IS_NOT_EXISTS_ERROR("000010","自定义目录在磁盘上不存在"),
     FILE_IS_NOT_DIRECT_ERROR("000011","自定义的目录不是一个文件夹"),
     DATABASE_KIND_IS_NULL_ERROR("000012","数据库类型不能为空"),
-    DATABASE_KIND_IS_NOT_MATCH_ERROR("000013","数据库类型不支持");
+    DATABASE_KIND_IS_NOT_MATCH_ERROR("000013","数据库类型不支持"),
+    EXPORT_FILE_TYPE_IS_NOT_MATCH_ERROR("000014","导出文件类型类型不支持");
     String code;
     String msg;
     MessageCode(String code,String msg){
