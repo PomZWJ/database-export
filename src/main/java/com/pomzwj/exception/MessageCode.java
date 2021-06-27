@@ -24,7 +24,8 @@ public enum MessageCode {
     FILE_IS_NOT_DIRECT_ERROR("000011","自定义的目录不是一个文件夹"),
     DATABASE_KIND_IS_NULL_ERROR("000012","数据库类型不能为空"),
     DATABASE_KIND_IS_NOT_MATCH_ERROR("000013","数据库类型不支持"),
-    EXPORT_FILE_TYPE_IS_NOT_MATCH_ERROR("000014","导出文件类型类型不支持");
+    EXPORT_FILE_TYPE_IS_NOT_MATCH_ERROR("000014","导出文件类型类型不支持"),
+    EXPORT_FILE_TYPE_IS_NOT_DEVELOP_ERROR("000015","导出文件类型类型暂时还未开发");
     String code;
     String msg;
     MessageCode(String code,String msg){

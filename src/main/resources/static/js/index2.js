@@ -71,13 +71,6 @@ var vue = new Vue({
                 this.$message.error('导出文件类型不能为空');
                 return;
             }
-            if(exportFileType == 'excel'){
-                this.$message({
-                    message: '暂不支持导出Excel',
-                    type: 'warning'
-                });
-                return;
-            }
             if (sqlKind == 'oracle') {
                 this.oraclePopoverVisible = false;
                 ip = this.o_ip;
@@ -85,7 +78,6 @@ var vue = new Vue({
                 dataname = this.o_dataname;
                 username = this.o_username;
                 password = this.o_password;
-                //filepath = this.o_filepath;
             } else if (sqlKind == 'mysql') {
                 this.mysqlPopoverVisible = false;
                 ip = this.m_ip;
@@ -122,7 +114,11 @@ var vue = new Vue({
                 this.$message.error('密码不能为空');
                 return;
             }
-            window.open("/dbExport/v2/makeWord?dbKind="+sqlKind+"&ip="+ip+"&port="+port+"&dbName="+dataname+"&userName="+username+"&password="+password+"&exportFileType="+exportFileType);
+            if(exportFileType == 'excel'){
+                window.open("/dbExport/v2/makeExcel?dbKind="+sqlKind+"&ip="+ip+"&port="+port+"&dbName="+dataname+"&userName="+username+"&password="+password+"&exportFileType="+exportFileType);
+            }else if(exportFileType == 'word'){
+                window.open("/dbExport/v2/makeWord?dbKind="+sqlKind+"&ip="+ip+"&port="+port+"&dbName="+dataname+"&userName="+username+"&password="+password+"&exportFileType="+exportFileType);
+            }
 
         },
         barClick(sqlKind) {
