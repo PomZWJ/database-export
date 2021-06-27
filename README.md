@@ -99,7 +99,7 @@ cmd执行jar -jar xxx.jar 即可启动
 
 
 ## 5.想加入技术开发群的加我，备注加群即可
-<img src="https://raw.githubusercontent.com/PomZWJ/colornote-vue/master/screenshot/wx_icon.jpg" width="300" height="300"/>
+<img src="https://img-blog.csdnimg.cn/2021062719334713.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L2h1YW5ndXRhMTE3OA==,size_16,color_FFFFFF,t_70#pic_center" width="300" height="300"/>
 
 ## 6.更新日志
 
