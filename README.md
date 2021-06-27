@@ -1,6 +1,6 @@
 ![](https://github.com/PomZWJ/database-export/blob/master/screenshot/fav.png?raw=true)
 
-**database-export V2.2.0**
+**database-export V3.0.0**
 =========================
 
 ![Spring Boot 2.0.6](https://img.shields.io/badge/Spring%20Boot-2.0.6-brightgreen.svg)
@@ -10,7 +10,7 @@
 ![JDK 1.8](https://img.shields.io/badge/JDK-1.8-brightgreen.svg)
 ![Maven](https://img.shields.io/badge/Maven-3.5.0-yellowgreen.svg)
 
-database-export是一款能生成数据库结构文档的开源springboot工程，能支持最新的数据库版本，可以导出支持office2007版本以上的docx格式的文档
+database-export是一款多线程生成数据库结构文档的开源springboot工程，能支持最新的数据库版本，可以导出docx格式和xlsx的文档，也能直接在网页上预览
 
 项目使用技术
 ------------
@@ -43,29 +43,15 @@ cmd执行jar -jar xxx.jar 即可启动
 | V.2.0.0    | [database-export-2.0.0_noJre8.rar](https://github.com/PomZWJ/database-export/releases/download/2.0.0/database-export-2.0.0_noJre8.rar)      |   [database-export-2.0.0_withJre8.rar](https://github.com/PomZWJ/database-export/releases/download/2.0.0/database-export-2.0.0_withJre8.rar)    |
 | V.2.1.0    | (后续版本都不含jre1.8,win和linux都是同一个包,不再区分)  https://pan.baidu.com/s/1A7EttMBIdVy3oAkFd0zo-w  提取码6gdr |
 | V.2.2.0    | https://pan.baidu.com/s/1geYr9ksIXvf1R_xWiw_KDg  提取码kzmg |
-
+| V.3.0.0    | https://pan.baidu.com/s/1geYr9ksIXvf1R_xWiw_KDg  提取码kzmg |
 
 
 ## 2.下载最新的源码启动
 
 ------------
 
-**windows打包运行方法**
->运行mvn clean package
-运行java -jar database-export-x.x.x-RELEASE.jar即可
-
-
-
-**linux打包方法**
->运行mvn clean package
-运行java -jar database-export-x.x.x-RELEASE.jar即可
-
-**linux后台运行方法**
->请把start-dbexport-linux.sh放到和jar同一个位置,并使用
->nohup ./start-dbexport-linux.sh & 
->启动
-(如果遇到提示说start-dbexport-linux.sh is not directoryxxx,需要用到dos2unix转化，可自行百度)
-
+**Jar运行方法**
+>执行DatabaseExportApplication.java即可
 
 ------------
 
@@ -77,7 +63,8 @@ cmd执行jar -jar xxx.jar 即可启动
 
 > http://localhost:9999/dbExport/
 
-> 旧的界面访问 http://localhost:9999/dbExport/indexV1
+> 旧的界面访问 http://localhost:9999/dbExport/v1
+> (支持IE)
 
 
 
@@ -96,6 +83,16 @@ cmd执行jar -jar xxx.jar 即可启动
 <img src="https://raw.githubusercontent.com/PomZWJ/colornote-vue/master/screenshot/wx_icon.jpg" width="300" height="300"/>
 
 ## 6.更新日志
+
+**2021-06-05(V3.0.0)**
+
+>1.查询数据库的时候加入了多线程查询,使得导出速度更快
+
+>2.抛弃了之前使用的原生JDBC连接,引入了druid和JdbcTemplate
+
+>3.支持导出excel
+
+>4.支持前端html预览
 
 **2021-06-05(V2.2.0)**
 

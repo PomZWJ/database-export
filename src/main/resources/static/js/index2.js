@@ -5,7 +5,7 @@ var vue = new Vue({
         loading: false,
         iconUrl: ctx+"assetss/images/fav.png",
         iconTitle: "database-export",
-        iconNotes: "数据库表结构导出工具V2.2.0",
+        iconNotes: "数据库表结构导出工具V3.0.0",
         o_ip: '',
         o_port: "1521",
         o_dataname: "orcl",
