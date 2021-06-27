@@ -31,7 +31,7 @@ database-export是一款多线程生成数据库结构文档的开源springboot�
 * 导出sql支持多线程查询，导出速度更快
 * 使用element-ui，界面更美观
 * 支持导出word和excel，更支持网页预览
-* 支持MySQL8.0版本
+* 支持MySQL8.0版本,Oracle 11g以上以及sqlserver
 * 导出速度高于现在的所有导出工具
 
 
