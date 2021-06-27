@@ -61,7 +61,7 @@ cmd执行jar -jar xxx.jar 即可启动
 
 ------------
 
-**Jar运行方法**
+**源码运行方法**
 >执行DatabaseExportApplication.java即可
 
 ------------
