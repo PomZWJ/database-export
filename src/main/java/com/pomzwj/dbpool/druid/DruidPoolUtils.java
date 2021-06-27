@@ -46,7 +46,7 @@ public class DruidPoolUtils {
 		}else if(dataBaseType.equals(DataBaseType.ORACLE)){
 			sqlConnectionStr = oracleJdbc;
 			driverClassName = oracleDriver;
-		}else if(dataBaseType.equals(DataBaseType.MYSQL)){
+		}else if(dataBaseType.equals(DataBaseType.SQLSERVER)){
 			sqlConnectionStr = sqlServerJdbc;
 			driverClassName = sqlServerDriver;
 		}

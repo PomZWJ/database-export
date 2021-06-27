@@ -36,7 +36,7 @@
 		<common-lang3.version>3.12.0</common-lang3.version>
 		<orai18n.version>12.1.0.2.0</orai18n.version>
 		<fastjson.version>1.2.75</fastjson.version>
-		<druid.version>1.2.6</druid.version>
+		<druid.version>1.1.24</druid.version>
 		<guava.version>30.1-jre</guava.version>
 	</properties>
 

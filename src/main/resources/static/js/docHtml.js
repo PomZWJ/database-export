@@ -15,12 +15,14 @@ function loadInfo() {
         success:function (data) {
             let resultCode = data.resultCode;
             if(resultCode == '000000'){
-                f(data.params);
+                loadTable(data.params);
+            }else{
+                alert(data.resultMsg);
             }
         }
     });
 }
-function f(params) {
+function loadTable(params) {
     let headerList = params.headerList;
     let fieldList = params.fieldList;
     let tableDetailInfo = params.tableDetailInfo;
