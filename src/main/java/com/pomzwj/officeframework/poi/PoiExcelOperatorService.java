@@ -59,7 +59,7 @@ public class PoiExcelOperatorService {
                 rowNum = this.createDataRow(sheet, rowNum, tableColumnData);
             }
         } catch (Exception e) {
-            e.printStackTrace();
+            log.error("创建excel文档失败，原因是={}",e);
         }
         return xssfWorkbook;
     }
