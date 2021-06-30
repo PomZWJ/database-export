@@ -80,29 +80,34 @@ public class MySqlDbService extends AbstractDbService implements DbService {
         }
         ThreadFactory namedThreadFactory = new ThreadFactoryBuilder().setNameFormat("thread-call-runner-%d").build();
         ExecutorService es = new ThreadPoolExecutor(5,10,200L, TimeUnit.SECONDS,new LinkedBlockingQueue<Runnable>(),namedThreadFactory);
-        String executeSql = IOUtils.toString(inputStream, DbService.DefaultCharsetName);
-        List<Future> resultFuture = new ArrayList<>();
-        for (int i = 0; i < listArray.length; i++) {
-            int finalI = i;
-            Future<Boolean> submit = es.submit(() -> {
-                try {
-                    List<DbTable> list = (List<DbTable>) listArray[finalI];
-                    setColumnDataInfo(jdbcTemplate,list,executeSql);
-                    return true;
-                } catch (Exception e) {
-                    log.error("多线程查询表的列信息失败,e={}", e);
+        try{
+            String executeSql = IOUtils.toString(inputStream, DbService.DefaultCharsetName);
+            List<Future> resultFuture = new ArrayList<>();
+            for (int i = 0; i < listArray.length; i++) {
+                int finalI = i;
+                Future<Boolean> submit = es.submit(() -> {
+                    try {
+                        List<DbTable> list = (List<DbTable>) listArray[finalI];
+                        setColumnDataInfo(jdbcTemplate,list,executeSql);
+                        return true;
+                    } catch (Exception e) {
+                        log.error("多线程查询表的列信息失败,e={}", e);
+                    }
+                    return false;
+                });
+                resultFuture.add(submit);
+            }
+            for (int i = 0; i < resultFuture.size(); i++) {
+                Boolean o = (Boolean) resultFuture.get(i).get();
+                if (!o) {
+                    throw new DatabaseExportException("导出word失败");
                 }
-                return false;
-            });
-            resultFuture.add(submit);
-        }
-        for (int i = 0; i < resultFuture.size(); i++) {
-            Boolean o = (Boolean) resultFuture.get(i).get();
-            if (!o) {
-                throw new DatabaseExportException("导出word失败");
+            }
+        }finally {
+            if(es != null){
+                es.shutdown();
             }
         }
-        es.shutdown();
     }
 
     public void setColumnDataInfo(JdbcTemplate jdbcTemplate,List<DbTable> list,String executeSql){

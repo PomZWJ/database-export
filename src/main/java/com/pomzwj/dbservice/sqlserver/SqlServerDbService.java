@@ -28,6 +28,7 @@ import java.util.concurrent.*;
 
 /**
  * sqlserver数据库
+ *
  * @author PomZWJ
  * @email 1513041820@qq.com
  * @github https://github.com/PomZWJ
@@ -35,109 +36,117 @@ import java.util.concurrent.*;
 @Component
 public class SqlServerDbService extends AbstractDbService implements DbService {
 
-    static final Logger log = LoggerFactory.getLogger(SqlServerDbService.class);
+	static final Logger log = LoggerFactory.getLogger(SqlServerDbService.class);
 
-    @Autowired
-    private DruidPoolUtils druidPoolUtils;
-    @Value("${database.getTableNameSql.sqlServer}")
-    String sqlServerGetTableNameSql;
+	@Autowired
+	private DruidPoolUtils druidPoolUtils;
+	@Value("${database.getTableNameSql.sqlServer}")
+	String sqlServerGetTableNameSql;
 
 
-    @Override
-    public List<DbTable> getTableDetailInfo(DbBaseInfo dbBaseInfo) throws Exception {
-        //获取数据库线程池
-        DruidDataSource dbPool = druidPoolUtils.createDbPool(dbBaseInfo);
-        try {
-            JdbcTemplate jdbcTemplate = new JdbcTemplate(dbPool);
-            List<DbTable> tableName = this.getTableName(jdbcTemplate);
-            //2.1 把List进行分页
-            List[] listArray = this.listToPageArray(tableName);
-            //2.2进行表列的数据获取
-            this.getTableColumnInfoByMultiThread(jdbcTemplate, listArray);
-            return tableName;
-        }catch (Exception e){
-            log.error("发生错误 = {}",e);
-            throw e;
-        }finally {
-            druidPoolUtils.closeDbPool(dbPool);
-        }
-    }
+	@Override
+	public List<DbTable> getTableDetailInfo(DbBaseInfo dbBaseInfo) throws Exception {
+		//获取数据库线程池
+		DruidDataSource dbPool = druidPoolUtils.createDbPool(dbBaseInfo);
+		try {
+			JdbcTemplate jdbcTemplate = new JdbcTemplate(dbPool);
+			List<DbTable> tableName = this.getTableName(jdbcTemplate);
+			//2.1 把List进行分页
+			List[] listArray = this.listToPageArray(tableName);
+			//2.2进行表列的数据获取
+			this.getTableColumnInfoByMultiThread(jdbcTemplate, listArray);
+			return tableName;
+		} catch (Exception e) {
+			log.error("发生错误 = {}", e);
+			throw e;
+		} finally {
+			druidPoolUtils.closeDbPool(dbPool);
+		}
+	}
 
-    private List<DbTable> getTableName(JdbcTemplate jdbcTemplate){
-        List<Map<String, Object>> resultList = jdbcTemplate.queryForList(sqlServerGetTableNameSql);
-        List<DbTable> tableList = this.getTableNameAndComments(resultList);
-        return tableList;
-    }
+	private List<DbTable> getTableName(JdbcTemplate jdbcTemplate) {
+		List<Map<String, Object>> resultList = jdbcTemplate.queryForList(sqlServerGetTableNameSql);
+		List<DbTable> tableList = this.getTableNameAndComments(resultList);
+		return tableList;
+	}
 
-    public void getTableColumnInfoByMultiThread(JdbcTemplate jdbcTemplate, List[] listArray)throws Exception{
-        ClassPathResource classPathResource = new ClassPathResource("sql/sqlserver.sql");
-        InputStream inputStream =classPathResource.getInputStream();
-        if(inputStream == null){
-            throw new FileNotFoundException("没有找到查询详细字段的SQL文件");
-        }
-        String executeSql = IOUtils.toString(inputStream,DbService.DefaultCharsetName);
-        ThreadFactory namedThreadFactory = new ThreadFactoryBuilder().setNameFormat("thread-call-runner-%d").build();
-        ExecutorService es = new ThreadPoolExecutor(5,10,200L, TimeUnit.SECONDS,new LinkedBlockingQueue<Runnable>(),namedThreadFactory);
-        List<Future> resultFuture = new ArrayList<>();
-        for (int i = 0; i < listArray.length; i++) {
-            int finalI = i;
-            Future<Boolean> submit = es.submit(() -> {
-                try {
-                    List<DbTable> list = (List<DbTable>) listArray[finalI];
-                    setColumnDataInfo(jdbcTemplate,list,executeSql);
-                    return true;
-                } catch (Exception e) {
-                    log.error("多线程查询表的列信息失败,e={}", e);
-                }
-                return false;
-            });
-            resultFuture.add(submit);
-        }
-        for (int i = 0; i < resultFuture.size(); i++) {
-            Boolean o = (Boolean) resultFuture.get(i).get();
-            if (!o) {
-                throw new DatabaseExportException("导出word失败");
-            }
-        }
-        es.shutdown();
-    }
-    public void setColumnDataInfo(JdbcTemplate jdbcTemplate,List<DbTable> list,String executeSql){
-        for (int j = 0; j < list.size(); j++) {
-            DbTable dbTable = list.get(j);
-            List<Map<String, Object>> resultList = jdbcTemplate.queryForList(executeSql, dbTable.getTableName());
-            List<DbColumnInfo> dbColumnInfos = new ArrayList<>();
-            if (CollectionUtils.isNotEmpty(resultList)) {
-                for (Map<String, Object> resultSet : resultList) {
-                    DbColumnInfo dbColumnInfo = new DbColumnInfo();
-                    dbColumnInfo.setColumnName(MapUtils.getString(resultSet,"COLUMN_NAME"));
-                    dbColumnInfo.setDataType(MapUtils.getString(resultSet,"COLUMN_TYPE"));
-                    dbColumnInfo.setDataLength(MapUtils.getString(resultSet,"DATA_LENGTH"));
-                    dbColumnInfo.setNullAble(getStringToBoolean(MapUtils.getString(resultSet,"NULLABLE")));
-                    dbColumnInfo.setDefaultVal(MapUtils.getString(resultSet,"DATA_DEFAULT"));
-                    dbColumnInfo.setDataScale(MapUtils.getString(resultSet,"DATA_SCALE"));
-                    String comments = MapUtils.getString(resultSet,"COMMENTS");
-                    dbColumnInfo.setAutoIncrement(getStringToBoolean(MapUtils.getString(resultSet,"AUTOINCREMENT")));
-                    dbColumnInfo.setPrimary(getStringToBoolean(MapUtils.getString(resultSet,"PRIMARY_KEY")));
-                    if (StringUtils.isEmpty(comments)) {
-                        dbColumnInfo.setComments(FiledDefaultValue.TABLE_FIELD_COMMENTS_DEFAULT);
-                    } else {
-                        dbColumnInfo.setComments(comments);
-                    }
-                    dbColumnInfos.add(dbColumnInfo);
-                }
-                dbTable.setTabsColumn(dbColumnInfos);
-            }
-        }
-    }
-    private static boolean getStringToBoolean(final String val){
-        if(StringUtils.isEmpty(val)){
-            return false;
-        }else{
-            if("TRUE".equals(val)){
-                return true;
-            }else{
-                return false;
-            }
-        }
-    }
+	public void getTableColumnInfoByMultiThread(JdbcTemplate jdbcTemplate, List[] listArray) throws Exception {
+		ClassPathResource classPathResource = new ClassPathResource("sql/sqlserver.sql");
+		InputStream inputStream = classPathResource.getInputStream();
+		if (inputStream == null) {
+			throw new FileNotFoundException("没有找到查询详细字段的SQL文件");
+		}
+		String executeSql = IOUtils.toString(inputStream, DbService.DefaultCharsetName);
+		ThreadFactory namedThreadFactory = new ThreadFactoryBuilder().setNameFormat("thread-call-runner-%d").build();
+		ExecutorService es = new ThreadPoolExecutor(5, 10, 200L, TimeUnit.SECONDS, new LinkedBlockingQueue<Runnable>(), namedThreadFactory);
+		try {
+			List<Future> resultFuture = new ArrayList<>();
+			for (int i = 0; i < listArray.length; i++) {
+				int finalI = i;
+				Future<Boolean> submit = es.submit(() -> {
+					try {
+						List<DbTable> list = (List<DbTable>) listArray[finalI];
+						setColumnDataInfo(jdbcTemplate, list, executeSql);
+						return true;
+					} catch (Exception e) {
+						log.error("多线程查询表的列信息失败,e={}", e);
+					}
+					return false;
+				});
+				resultFuture.add(submit);
+			}
+			for (int i = 0; i < resultFuture.size(); i++) {
+				Boolean o = (Boolean) resultFuture.get(i).get();
+				if (!o) {
+					throw new DatabaseExportException("导出word失败");
+				}
+			}
+		} finally {
+			if (es != null) {
+				es.shutdown();
+			}
+		}
+
+	}
+
+	public void setColumnDataInfo(JdbcTemplate jdbcTemplate, List<DbTable> list, String executeSql) {
+		for (int j = 0; j < list.size(); j++) {
+			DbTable dbTable = list.get(j);
+			List<Map<String, Object>> resultList = jdbcTemplate.queryForList(executeSql, dbTable.getTableName());
+			List<DbColumnInfo> dbColumnInfos = new ArrayList<>();
+			if (CollectionUtils.isNotEmpty(resultList)) {
+				for (Map<String, Object> resultSet : resultList) {
+					DbColumnInfo dbColumnInfo = new DbColumnInfo();
+					dbColumnInfo.setColumnName(MapUtils.getString(resultSet, "COLUMN_NAME"));
+					dbColumnInfo.setDataType(MapUtils.getString(resultSet, "COLUMN_TYPE"));
+					dbColumnInfo.setDataLength(MapUtils.getString(resultSet, "DATA_LENGTH"));
+					dbColumnInfo.setNullAble(getStringToBoolean(MapUtils.getString(resultSet, "NULLABLE")));
+					dbColumnInfo.setDefaultVal(MapUtils.getString(resultSet, "DATA_DEFAULT"));
+					dbColumnInfo.setDataScale(MapUtils.getString(resultSet, "DATA_SCALE"));
+					String comments = MapUtils.getString(resultSet, "COMMENTS");
+					dbColumnInfo.setAutoIncrement(getStringToBoolean(MapUtils.getString(resultSet, "AUTOINCREMENT")));
+					dbColumnInfo.setPrimary(getStringToBoolean(MapUtils.getString(resultSet, "PRIMARY_KEY")));
+					if (StringUtils.isEmpty(comments)) {
+						dbColumnInfo.setComments(FiledDefaultValue.TABLE_FIELD_COMMENTS_DEFAULT);
+					} else {
+						dbColumnInfo.setComments(comments);
+					}
+					dbColumnInfos.add(dbColumnInfo);
+				}
+				dbTable.setTabsColumn(dbColumnInfos);
+			}
+		}
+	}
+
+	private static boolean getStringToBoolean(final String val) {
+		if (StringUtils.isEmpty(val)) {
+			return false;
+		} else {
+			if ("TRUE".equals(val)) {
+				return true;
+			} else {
+				return false;
+			}
+		}
+	}
 }
