@@ -44,7 +44,7 @@ How to use
 ## 1.下载release下的最新打包的压缩包(推荐)
 
 
-cmd执行jar -jar xxx.jar 即可启动
+cmd/shell执行java -jar xxx.jar 即可启动
 
 下载
 
