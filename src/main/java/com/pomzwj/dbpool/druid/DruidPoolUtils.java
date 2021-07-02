@@ -29,6 +29,10 @@ public class DruidPoolUtils {
 	String sqlServerJdbc;
 	@Value("${database.driver.sqlServer}")
 	String sqlServerDriver;
+	@Value("${database.jdbc.postgresql}")
+	String postgresqlJdbc;
+	@Value("${database.driver.postgresql}")
+	String postgresqlDriver;
 
 	public DruidDataSource createDbPool(DbBaseInfo dbBaseInfo){
 		String dbKind = dbBaseInfo.getDbKind();
@@ -49,6 +53,9 @@ public class DruidPoolUtils {
 		}else if(dataBaseType.equals(DataBaseType.SQLSERVER)){
 			sqlConnectionStr = sqlServerJdbc;
 			driverClassName = sqlServerDriver;
+		}else if(dataBaseType.equals(DataBaseType.POSTGRESQL)){
+			sqlConnectionStr = postgresqlJdbc;
+			driverClassName = postgresqlDriver;
 		}
 		String jdbcUrl = String.format(sqlConnectionStr, ip, port, dbName);
 		DruidDataSource dataSource = new DruidDataSource();

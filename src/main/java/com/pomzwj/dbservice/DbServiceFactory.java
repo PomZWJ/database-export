@@ -3,6 +3,7 @@ package com.pomzwj.dbservice;
 import com.pomzwj.constant.DataBaseType;
 import com.pomzwj.dbservice.mysql.MySqlDbService;
 import com.pomzwj.dbservice.oracle.OracleDbService;
+import com.pomzwj.dbservice.postgresql.PostgresqlDbService;
 import com.pomzwj.dbservice.sqlserver.SqlServerDbService;
 import com.pomzwj.exception.DatabaseExportException;
 import com.pomzwj.exception.MessageCode;
@@ -23,6 +24,8 @@ public class DbServiceFactory {
     private OracleDbService oracleDbService;
     @Autowired
     private SqlServerDbService sqlServerDbService;
+    @Autowired
+    private PostgresqlDbService postgresqlDbService;
 
     public DbService getDbServiceBean(String dbKind) {
         if (StringUtils.isEmpty(dbKind)) {
@@ -36,6 +39,8 @@ public class DbServiceFactory {
                 return oracleDbService;
             } else if (DataBaseType.SQLSERVER.name().equals(dbKind.toUpperCase())) {
                 return sqlServerDbService;
+            } else if (DataBaseType.POSTGRESQL.name().equals(dbKind.toUpperCase())) {
+                return postgresqlDbService;
             }
         }
         return null;
