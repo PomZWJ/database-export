@@ -23,8 +23,12 @@ public enum DataBaseType {
     /**
      * SQL_SERVER
      */
-    SQLSERVER(Arrays.asList("columnName", "dataType","dataLength","dataScale","nullAble","primary","autoIncrement", "defaultVal", "comments"));
+    SQLSERVER(Arrays.asList("columnName", "dataType","dataLength","dataScale","nullAble","primary","autoIncrement", "defaultVal", "comments")),
 
+    /**
+     * postgresql
+     */
+    POSTGRESQL(Arrays.asList("columnName", "dataType","nullAble","primary", "defaultVal", "comments"));
     private List<String>columnName;
 
     DataBaseType(List<String> columnName){

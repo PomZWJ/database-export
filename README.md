@@ -54,7 +54,7 @@ cmd/shell执行java -jar xxx.jar 即可启动
 | V.2.0.0    | [database-export-2.0.0_noJre8.rar](https://github.com/PomZWJ/database-export/releases/download/2.0.0/database-export-2.0.0_noJre8.rar)      |   [database-export-2.0.0_withJre8.rar](https://github.com/PomZWJ/database-export/releases/download/2.0.0/database-export-2.0.0_withJre8.rar)    |
 | V.2.1.0    | (后续版本都不含jre1.8,win和linux都是同一个包,不再区分)  https://pan.baidu.com/s/1A7EttMBIdVy3oAkFd0zo-w  提取码6gdr |
 | V.2.2.0    | https://pan.baidu.com/s/1geYr9ksIXvf1R_xWiw_KDg  提取码kzmg |
-| V.3.0.0    | https://pan.baidu.com/s/10U9pfj6No47WmCdjS-5daA  提取码oqep |
+| V.3.0.0    | https://pan.baidu.com/s/1dKkSHFmRhcjNeF8JJ4CHbg  提取码xf7c |
 
 
 ## 2.下载最新的源码启动
@@ -148,5 +148,4 @@ Discussing
 
 - [submit issue](https://github.com/PomZWJ/database-export/issues/new)
 - E-mail: 1513041820@qq.com
-- WX:ZWJ1513041820
 
