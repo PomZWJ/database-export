@@ -105,6 +105,9 @@ public class SqlServerDbService extends AbstractDbService implements DbService {
 			if (es != null) {
 				es.shutdown();
 			}
+			if(inputStream!=null){
+				inputStream.close();
+			}
 		}
 
 	}

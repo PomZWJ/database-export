@@ -77,7 +77,7 @@ public class DruidPoolUtils {
 
 
 	public void closeDbPool(DruidDataSource druidDataSource){
-		if(!druidDataSource.isClosed()){
+		if(druidDataSource!=null && !druidDataSource.isClosed()){
 			druidDataSource.close();
 		}
 	}

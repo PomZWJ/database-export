@@ -24,7 +24,7 @@ database:
     postgresql: jdbc:postgresql://%s:%s/%s
   driver:
     mysql: com.mysql.cj.jdbc.Driver
-    oracle: oracle.jdbc.driver.OracleDriver
+    oracle: oracle.jdbc.OracleDriver
     sqlServer: com.microsoft.sqlserver.jdbc.SQLServerDriver
     postgresql: org.postgresql.Driver
   getTableNameSql:
