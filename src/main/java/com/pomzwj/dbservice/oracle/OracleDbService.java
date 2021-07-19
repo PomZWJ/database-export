@@ -44,8 +44,9 @@ public class OracleDbService extends AbstractDbService implements DbService {
 	@Override
 	public List<DbTable> getTableDetailInfo(DbBaseInfo dbBaseInfo) throws Exception {
 		//获取数据库线程池
-		DruidDataSource dbPool = druidPoolUtils.createDbPool(dbBaseInfo);
+		DruidDataSource dbPool = null;
 		try {
+			dbPool = druidPoolUtils.createDbPool(dbBaseInfo);
 			JdbcTemplate jdbcTemplate = new JdbcTemplate(dbPool);
 			List<DbTable> tableName = this.getTableName(jdbcTemplate);
 			//2.1 把List进行分页
