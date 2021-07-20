@@ -1,6 +1,7 @@
 var vue = new Vue({
     el: '#app',
     data: {
+        fit: 'fill',
         value: new Date(),
         loading: false,
         iconUrl: ctx+"assetss/images/fav.png",
@@ -28,13 +29,16 @@ var vue = new Vue({
         oracleDivShow: false,
         mysqlDivShow: false,
         sqlserverDivShow: false,
+        postgresqlDivShow: false,
         oraclePopoverVisible: false,
         mysqlPopoverVisible: false,
         sqlserverPopoverVisible: false,
+        postgresqlPopoverVisible: false,
         welcomeIconImg: ctx+"/assetss/images/v2/welcome-icon-click.png",
         oracleIconImg: ctx+"/assetss/images/v2/oracle-icon-unclick.png",
         mysqlIconImg: ctx+"/assetss/images/v2/mysql-icon-unclick.png",
         sqlserverIconImg: ctx+"/assetss/images/v2/sqlserver-icon-unclick.png",
+        postgresqlIconImg: ctx+"/assetss/images/v2/postgresql-icon-unclick.png",
         githubIconImg: ctx+"/assetss/images/v2/GitHub-icon.png",
         emailIconImg: ctx+"/assetss/images/v2/email-icon.png",
         weChatIconImg: ctx+"/assetss/images/v2/wechat-icon.png",
@@ -51,6 +55,10 @@ var vue = new Vue({
             background: "rgb(255,255,255)"
         },
         sqlServerBarStyle: {
+            borderTop: "1px solid rgb(235, 233, 233)",
+            background: "rgb(255,255,255)"
+        },
+        postgresqlBarStyle: {
             borderTop: "1px solid rgb(235, 233, 233)",
             background: "rgb(255,255,255)"
         },
@@ -127,31 +135,37 @@ var vue = new Vue({
                 this.oracleDivShow = false;
                 this.mysqlDivShow = false;
                 this.sqlserverDivShow = false;
+                this.postgresqlDivShow = false;
                 this.welcomeBarStyle.background = "#F2F6FC";
                 this.mysqlBarStyle.background = "rgb(255,255,255)";
                 this.sqlServerBarStyle.background = "rgb(255,255,255)";
                 this.oracleBarStyle.background = "rgb(255,255,255)";
+                this.postgresqlBarStyle.background = "rgb(255,255,255)";
                 //图片
                 this.welcomeIconImg = ctx+"/assetss/images/v2/welcome-icon-click.png";
                 this.oracleIconImg = ctx+"/assetss/images/v2/oracle-icon-unclick.png";
                 this.mysqlIconImg = ctx+"/assetss/images/v2/mysql-icon-unclick.png";
                 this.sqlserverIconImg = ctx+"/assetss/images/v2/sqlserver-icon-unclick.png";
+                this.postgresqlIconImg = ctx+"/assetss/images/v2/postgresql-icon-unclick.png";
             } else if (sqlKind == 'oracle') {
                 this.welcomeDivShow = false;
                 this.oracleDivShow = true;
                 this.mysqlDivShow = false;
                 this.sqlserverDivShow = false;
+                this.postgresqlDivShow = false;
                 this.welcomeBarStyle.background = "rgb(255,255,255)";
                 this.mysqlBarStyle.background = "rgb(255,255,255)";
                 this.sqlServerBarStyle.background = "rgb(255,255,255)";
                 this.oracleBarStyle.background = "#F2F6FC";
+                this.postgresqlBarStyle.background = "rgb(255,255,255)";
                 //图片
                 this.welcomeIconImg = ctx+"/assetss/images/v2/welcome-icon-unclick.png";
                 this.oracleIconImg = ctx+"/assetss/images/v2/oracle-icon-click.png";
                 this.mysqlIconImg = ctx+"/assetss/images/v2/mysql-icon-unclick.png";
                 this.sqlserverIconImg = ctx+"/assetss/images/v2/sqlserver-icon-unclick.png";
+                this.postgresqlIconImg = ctx+"/assetss/images/v2/postgresql-icon-unclick.png";
             } else if (sqlKind == 'mysql') {
-
+                this.postgresqlDivShow = false;
                 this.welcomeDivShow = false;
                 this.oracleDivShow = false;
                 this.mysqlDivShow = true;
@@ -160,25 +174,48 @@ var vue = new Vue({
                 this.welcomeBarStyle.background = "rgb(255,255,255)";
                 this.sqlServerBarStyle.background = "rgb(255,255,255)";
                 this.oracleBarStyle.background = "rgb(255,255,255)";
+                this.postgresqlBarStyle.background = "rgb(255,255,255)";
                 //图片
                 this.welcomeIconImg = ctx+"/assetss/images/v2/welcome-icon-unclick.png";
                 this.oracleIconImg = ctx+"/assetss/images/v2/oracle-icon-unclick.png";
                 this.mysqlIconImg = ctx+"/assetss/images/v2/mysql-icon-click.png";
                 this.sqlserverIconImg = ctx+"/assetss/images/v2/sqlserver-icon-unclick.png";
+                this.postgresqlIconImg = ctx+"/assetss/images/v2/postgresql-icon-unclick.png";
             } else if (sqlKind == 'sqlserver') {
                 this.welcomeDivShow = false;
                 this.oracleDivShow = false;
                 this.mysqlDivShow = false;
                 this.sqlserverDivShow = true;
+                this.postgresqlDivShow = false;
                 this.welcomeBarStyle.background = "rgb(255,255,255)";
                 this.mysqlBarStyle.background = "rgb(255,255,255)";
                 this.oracleBarStyle.background = "rgb(255,255,255)";
                 this.sqlServerBarStyle.background = "#F2F6FC";
+                this.postgresqlBarStyle.background = "rgb(255,255,255)";
                 //图片
                 this.welcomeIconImg = ctx+"/assetss/images/v2/welcome-icon-unclick.png";
                 this.oracleIconImg = ctx+"/assetss/images/v2/oracle-icon-unclick.png";
                 this.mysqlIconImg = ctx+"/assetss/images/v2/mysql-icon-unclick.png";
                 this.sqlserverIconImg = ctx+"/assetss/images/v2/sqlserver-icon-click.png";
+                this.postgresqlIconImg = ctx+"/assetss/images/v2/postgresql-icon-unclick.png";
+
+            }else if (sqlKind == 'postgresql') {
+                this.welcomeDivShow = false;
+                this.oracleDivShow = false;
+                this.mysqlDivShow = false;
+                this.sqlserverDivShow = false;
+                this.postgresqlDivShow = true;
+                this.welcomeBarStyle.background = "rgb(255,255,255)";
+                this.mysqlBarStyle.background = "rgb(255,255,255)";
+                this.oracleBarStyle.background = "rgb(255,255,255)";
+                this.postgresqlBarStyle.background = "#F2F6FC";
+                this.sqlServerBarStyle.background = "rgb(255,255,255)";
+                //图片
+                this.welcomeIconImg = ctx+"/assetss/images/v2/welcome-icon-unclick.png";
+                this.oracleIconImg = ctx+"/assetss/images/v2/oracle-icon-unclick.png";
+                this.mysqlIconImg = ctx+"/assetss/images/v2/mysql-icon-unclick.png";
+                this.sqlserverIconImg = ctx+"/assetss/images/v2/sqlserver-icon-unclick.png";
+                this.postgresqlIconImg = ctx+"/assetss/images/v2/postgresql-icon-click.png";
 
             }
             this.contentStyle.background = "#F2F6FC";

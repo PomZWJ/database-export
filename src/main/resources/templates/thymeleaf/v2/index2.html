@@ -49,6 +49,9 @@
                 <div class="sql-kind-div" v-bind:style="sqlServerBarStyle" @click="barClick('sqlserver')">
                     <img class="bar-icon" v-bind:src="sqlserverIconImg" />
                 </div>
+                <div class="sql-kind-div" v-bind:style="postgresqlBarStyle" @click="barClick('postgresql')">
+                    <img class="bar-icon" v-bind:src="postgresqlIconImg" />
+                </div>
             </div>
             <div class="body_content" v-loading="loading" element-loading-text="拼命生成中...请勿刷新网页,如果表多,可能需要等待几分钟" element-loading-background="rgba(242,246,252, 0.8)">
                 <div v-bind:style="contentStyle" v-show="welcomeDivShow">
@@ -222,6 +225,56 @@
                         </el-row>
                         <el-row style="margin: 0 auto">
                             <el-popover placement="top" width="200" v-model="sqlserverPopoverVisible">
+                                <el-row>
+                                    <el-button class="el-icon-download" type="primary" plain @click="generateWord('sqlserver','word')">word</el-button>
+                                    <el-button class="el-icon-download" type="primary" plain @click="generateWord('sqlserver','excel')">excel</el-button>
+                                </el-row>
+                                <el-button class="el-icon-download" slot="reference">生成文档</el-button>
+                            </el-popover>
+                            <el-button class="el-icon-view" @click="generateDocHtml('sqlserver')">HTML预览</el-button>
+                        </el-row>
+                    </el-form>
+                </div>
+                <div v-bind:style="contentStyle" v-show="postgresqlDivShow" style="display: none;">
+                    <el-image src="sqlserver-bg.png" th:src="@{/assetss/images/v2/postgresql-bg.png}" :fit="fit" style="width: 306.8px;height:80px;;padding-top: 30px" ></el-image>
+                    <el-form label-width="250px" style="width: 90%;padding-left: 10%;padding-top: 20px">
+                        <el-row style="margin-bottom: 20px;">
+                            <el-col :span="20">
+                                <el-input v-model="s_ip" placeholder="127.0.0.1" clearable>
+                                    <template style="width: 200px;" slot="prepend">IP地址</template>
+                                </el-input>
+                            </el-col>
+                        </el-row>
+                        <el-row style="margin-bottom: 20px;">
+                            <el-col :span="20">
+                                <el-input v-model="s_port" clearable>
+                                    <template slot="prepend">端&nbsp;&nbsp;&nbsp;口</template>
+                                </el-input>
+                            </el-col>
+                        </el-row>
+                        <el-row style="margin-bottom: 20px;">
+                            <el-col :span="20">
+                                <el-input v-model="s_dataname" clearable>
+                                    <template slot="prepend">数据库</template>
+                                </el-input>
+                            </el-col>
+                        </el-row>
+                        <el-row style="margin-bottom: 20px;">
+                            <el-col :span="20">
+                                <el-input v-model="s_username" clearable>
+                                    <template slot="prepend">用户名</template>
+                                </el-input>
+                            </el-col>
+                        </el-row>
+                        <el-row style="margin-bottom: 20px;">
+                            <el-col :span="20">
+                                <el-input v-model="s_password" clearable>
+                                    <template slot="prepend">密&nbsp;&nbsp;&nbsp;码</template>
+                                </el-input>
+                            </el-col>
+                        </el-row>
+                        <el-row style="margin: 0 auto">
+                            <el-popover placement="top" width="200" v-model="postgresqlPopoverVisible">
                                 <el-row>
                                     <el-button class="el-icon-download" type="primary" plain @click="generateWord('sqlserver','word')">word</el-button>
                                     <el-button class="el-icon-download" type="primary" plain @click="generateWord('sqlserver','excel')">excel</el-button>
