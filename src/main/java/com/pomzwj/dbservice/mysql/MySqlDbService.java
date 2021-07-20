@@ -45,8 +45,9 @@ public class MySqlDbService extends AbstractDbService implements DbService {
     @Override
     public List<DbTable> getTableDetailInfo(DbBaseInfo dbBaseInfo) throws Exception {
         //获取数据库线程池
-        DruidDataSource dbPool = druidPoolUtils.createDbPool(dbBaseInfo);
+        DruidDataSource dbPool = null;
         try {
+            dbPool = druidPoolUtils.createDbPool(dbBaseInfo);
             JdbcTemplate jdbcTemplate = new JdbcTemplate(dbPool);
             //1.获取所有表基本信息
             List<DbTable> tableName = this.getTableName(jdbcTemplate, dbBaseInfo.getDbName());
