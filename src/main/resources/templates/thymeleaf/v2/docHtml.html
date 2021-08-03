@@ -12,21 +12,19 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="icon" href="../../../static/assetss/images/fav.png" th:href="@{/assetss/images/fav.png}">
     <link rel="stylesheet" href="../../../static/bootstrap/css/bootstrap.min.css" th:href="@{/bootstrap/css/bootstrap.min.css}">
+    <link rel="stylesheet" href="../../../static/bootstrap/select/bootstrap-select.min.css" th:href="@{/bootstrap/select/bootstrap-select.min.css}">
     <link rel="stylesheet" href="../../../static/css/index.css" th:href="@{/css/index.css}">
     <script src="../../../static/js/jquery-3.3.1.js" th:src="@{/js/jquery-3.3.1.js}"></script>
     <script src="../../../static/bootstrap/js/bootstrap.min.js" th:src="@{/bootstrap/js/bootstrap.min.js}"></script>
-    <script th:inline="javascript">
-
-    </script>
+    <script src="../../../static/bootstrap/select/bootstrap-select.min.js" th:src="@{/bootstrap/select/bootstrap-select.min.js}"></script>
 </head>
 <style>
     .body{
-        margin-top: 20px;
         margin-left: 200px;
         margin-right: 200px;
     }
     .table{
-        margin: 100px 0 100px 0;
+        margin: 8% 0 100px 0;
 
     }
     .sp {
@@ -61,17 +59,45 @@
             transform: rotate(359deg);
         }
     }
+    .top-nav{
+        height: 8%;
+        width: 100%;
+        box-shadow: none;
+        position: fixed;
+        top: 0;
+        background-color: white;
+    }
+    #backToTopBtn{
+        width: 40px;
+        background-repeat: no-repeat;
+        background-position:center;
+        position: fixed;
+        bottom: 5%;
+        right:2%;
+        cursor: pointer;
+        display: none;
+    }
 </style>
 <body>
+<div class="top-nav">
+    <div style="text-align: left;margin-left: 10%;">
+        <img style="width: 80px" th:src="@{/assetss/images/fav.png}"><span style="font-size: 30px;margin-left: 10px;">database-export 数据库表html预览</span>
+        <div style="display: inline-block;position: fixed;right:5%;top:2%;">
+            <select id="db-contents" onchange="selectOnChang(this)" class="selectpicker" data-live-search="true" data-live-search-placeholder="搜索" data-actions-box="true" th:title="${dbBaseInfo.dbName}">
+            </select>
+        </div>
+
+    </div>
+</div>
 <div id="app">
-    <div class="body" id="body">
+    <div class="body" id="body" style="margin-top: 40px;">
         <div class="row">
             <div class="sp sp-circle"></div>
             <h5 style="text-align: center">正在加载中...</h5>
         </div>
     </div>
-
 </div>
+<img id="backToTopBtn" title="回到顶部" onclick="topFunction()" th:src="@{/assetss/images/back-to-top.png}"></span>
 <script type="text/javascript" th:inline="javascript">
     /*<![CDATA[*/
     var ctx = [[@{/}]];

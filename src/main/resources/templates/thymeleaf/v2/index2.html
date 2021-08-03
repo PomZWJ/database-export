@@ -240,35 +240,35 @@
                     <el-form label-width="250px" style="width: 90%;padding-left: 10%;padding-top: 20px">
                         <el-row style="margin-bottom: 20px;">
                             <el-col :span="20">
-                                <el-input v-model="s_ip" placeholder="127.0.0.1" clearable>
+                                <el-input v-model="postgresql_ip" placeholder="127.0.0.1" clearable>
                                     <template style="width: 200px;" slot="prepend">IP地址</template>
                                 </el-input>
                             </el-col>
                         </el-row>
                         <el-row style="margin-bottom: 20px;">
                             <el-col :span="20">
-                                <el-input v-model="s_port" clearable>
+                                <el-input v-model="postgresql_port" clearable>
                                     <template slot="prepend">端&nbsp;&nbsp;&nbsp;口</template>
                                 </el-input>
                             </el-col>
                         </el-row>
                         <el-row style="margin-bottom: 20px;">
                             <el-col :span="20">
-                                <el-input v-model="s_dataname" clearable>
+                                <el-input v-model="postgresql_dataname" clearable>
                                     <template slot="prepend">数据库</template>
                                 </el-input>
                             </el-col>
                         </el-row>
                         <el-row style="margin-bottom: 20px;">
                             <el-col :span="20">
-                                <el-input v-model="s_username" clearable>
+                                <el-input v-model="postgresql_username" clearable>
                                     <template slot="prepend">用户名</template>
                                 </el-input>
                             </el-col>
                         </el-row>
                         <el-row style="margin-bottom: 20px;">
                             <el-col :span="20">
-                                <el-input v-model="s_password" clearable>
+                                <el-input v-model="postgresql_password" clearable>
                                     <template slot="prepend">密&nbsp;&nbsp;&nbsp;码</template>
                                 </el-input>
                             </el-col>
@@ -276,12 +276,12 @@
                         <el-row style="margin: 0 auto">
                             <el-popover placement="top" width="200" v-model="postgresqlPopoverVisible">
                                 <el-row>
-                                    <el-button class="el-icon-download" type="primary" plain @click="generateWord('sqlserver','word')">word</el-button>
-                                    <el-button class="el-icon-download" type="primary" plain @click="generateWord('sqlserver','excel')">excel</el-button>
+                                    <el-button class="el-icon-download" type="primary" plain @click="generateWord('postgresql','word')">word</el-button>
+                                    <el-button class="el-icon-download" type="primary" plain @click="generateWord('postgresql','excel')">excel</el-button>
                                 </el-row>
                                 <el-button class="el-icon-download" slot="reference">生成文档</el-button>
                             </el-popover>
-                            <el-button class="el-icon-view" @click="generateDocHtml('sqlserver')">HTML预览</el-button>
+                            <el-button class="el-icon-view" @click="generateDocHtml('postgresql')">HTML预览</el-button>
                         </el-row>
                     </el-form>
                 </div>

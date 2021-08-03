@@ -25,6 +25,11 @@ var vue = new Vue({
         s_username: "",
         s_password: "",
         s_filepath: "D://",
+        postgresql_ip: '',
+        postgresql_port: "1433",
+        postgresql_dataname: "",
+        postgresql_username: "",
+        postgresql_password: "",
         welcomeDivShow: true,
         oracleDivShow: false,
         mysqlDivShow: false,
@@ -100,6 +105,13 @@ var vue = new Vue({
                 dataname = this.s_dataname;
                 username = this.s_username;
                 password = this.s_password;
+            }else if(sqlKind == 'postgresql'){
+                this.postgresqlPopoverVisible = false;
+                ip = this.postgresql_ip;
+                port = this.postgresql_port;
+                dataname = this.postgresql_dataname;
+                username = this.postgresql_username;
+                password = this.postgresql_password;
             }
 
             if (ip == '') {
@@ -255,6 +267,12 @@ var vue = new Vue({
                 dataname = this.s_dataname;
                 username = this.s_username;
                 password = this.s_password;
+            }else if(sqlKind == 'postgresql'){
+                ip = this.postgresql_ip;
+                port = this.postgresql_port;
+                dataname = this.postgresql_dataname;
+                username = this.postgresql_username;
+                password = this.postgresql_password;
             }
 
             if (ip == '') {
