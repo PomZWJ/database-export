@@ -82,14 +82,14 @@
 <div class="top-nav">
     <div style="text-align: left;margin-left: 10%;">
         <img style="width: 80px" th:src="@{/assetss/images/fav.png}"><span style="font-size: 30px;margin-left: 10px;">database-export 数据库表html预览</span>
-        <div style="display: inline-block;position: fixed;right:5%;top:2%;">
-            <select id="db-contents" onchange="selectOnChang(this)" class="selectpicker" data-live-search="true" data-live-search-placeholder="搜索" data-actions-box="true" th:title="${dbBaseInfo.dbName}">
+        <div style="display: inline-block;"><!--position: fixed;right:20%;top:2%;-->
+            <select id="db-contents" onchange="selectOnChang(this)" data-size="10" class="selectpicker" data-live-search="true" data-live-search-placeholder="搜索" data-actions-box="true" th:title="${dbBaseInfo.dbName}">
             </select>
         </div>
 
     </div>
 </div>
-<div id="app">
+<div id="app" style="overflow-x: hidden">
     <div class="body" id="body" style="margin-top: 40px;">
         <div class="row">
             <div class="sp sp-circle"></div>
