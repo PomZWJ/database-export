@@ -13,7 +13,7 @@
 			<level>INFO</level>
 		</filter>
 		<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
-			<FileNamePattern>./log/database-export/database-export_debug.%d{yyyy-MM-dd}_%i.log</FileNamePattern>
+			<FileNamePattern>./.databaseExport/log/database-export_debug.%d{yyyy-MM-dd}_%i.log</FileNamePattern>
 			<MaxHistory>100</MaxHistory>
  			<timeBasedFileNamingAndTriggeringPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">   
                 <maxFileSize>10mb</maxFileSize>   
@@ -31,7 +31,7 @@
 			<onMismatch>DENY</onMismatch>
 		</filter>
 		<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
-			<FileNamePattern>./log/database-export/database-export_error.%d{yyyy-MM-dd}_%i.log</FileNamePattern>
+			<FileNamePattern>./.databaseExport/log/database-export_error.%d{yyyy-MM-dd}_%i.log</FileNamePattern>
 			<MaxHistory>100</MaxHistory>
  			<timeBasedFileNamingAndTriggeringPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">   
                 <maxFileSize>10mb</maxFileSize>   
