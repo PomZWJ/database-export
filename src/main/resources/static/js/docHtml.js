@@ -78,13 +78,15 @@ function loadTable(params) {
         }
         let tableLable = table.tableName + '(' + table.tableComments + ')';
         tableHtml +=
-            '<table id="' + tableLable + '" class="table table-bordered table-hover">' +
+            '<div id="' + tableLable + '" style="padding-top: 60px;">'+
+            '<table class="table table-bordered table-hover">' +
             '<caption style="font-weight: bolder;font-size: 30px">' + tableLable + '</caption>' +
             '<thead>' +
             '<tr>' + headerHtml + '</tr>' +
             '</thead>' +
             '<tbody>' + tbodyHtml + '</tbody>' +
-            '</table>';
+            '</table>'+
+            '</div>';
         dbContentsHmtl.push('<option value="' + tableLable + '">' + tableLable + '</option>');
         $("#db-contents").empty();
         $("#db-contents").append(dbContentsHmtl.join(''));
