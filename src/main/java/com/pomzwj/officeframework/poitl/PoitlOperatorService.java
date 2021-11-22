@@ -2,12 +2,14 @@ package com.pomzwj.officeframework.poitl;
 
 import com.deepoove.poi.XWPFTemplate;
 import com.deepoove.poi.data.*;
+import com.google.common.collect.Lists;
 import com.pomzwj.anno.DataColumnName;
 import com.pomzwj.constant.DataBaseType;
 import com.pomzwj.constant.TemplateFileConstants;
 import com.pomzwj.domain.DbColumnInfo;
 import com.pomzwj.domain.DbTable;
 import com.pomzwj.domain.SegmentData;
+import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
@@ -81,6 +83,9 @@ public class PoitlOperatorService {
 		Class<DbColumnInfo> dbColumnInfoClass = DbColumnInfo.class;
 		List<RowRenderData> rows = new ArrayList<>();
 		rows.add(headerRow);
+		if(CollectionUtils.isEmpty(tabsColumn)){
+			return Lists.newArrayList();
+		}
 		for (int k = 0; k < tabsColumn.size(); k++) {
 			DbColumnInfo dbColumnInfo = tabsColumn.get(k);
 			List<String> dataBody = new ArrayList<>();
