@@ -12,12 +12,10 @@
 		<filter class="ch.qos.logback.classic.filter.ThresholdFilter">
 			<level>INFO</level>
 		</filter>
-		<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+		<rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
 			<FileNamePattern>./.databaseExport/log/database-export_debug.%d{yyyy-MM-dd}_%i.log</FileNamePattern>
 			<MaxHistory>100</MaxHistory>
- 			<timeBasedFileNamingAndTriggeringPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">   
-                <maxFileSize>10mb</maxFileSize>   
-            </timeBasedFileNamingAndTriggeringPolicy>
+			<maxFileSize>10mb</maxFileSize>
 		</rollingPolicy>
 		<encoder charset="UTF-8">
 			<pattern>%date [%thread] %-5level %logger{80} [%X{logId}] - %msg%n</pattern>
@@ -30,12 +28,10 @@
 			<onMatch>ACCEPT</onMatch>
 			<onMismatch>DENY</onMismatch>
 		</filter>
-		<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+		<rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
 			<FileNamePattern>./.databaseExport/log/database-export_error.%d{yyyy-MM-dd}_%i.log</FileNamePattern>
 			<MaxHistory>100</MaxHistory>
- 			<timeBasedFileNamingAndTriggeringPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">   
-                <maxFileSize>10mb</maxFileSize>   
-            </timeBasedFileNamingAndTriggeringPolicy>
+			<maxFileSize>10mb</maxFileSize>
 		</rollingPolicy>
 		<encoder charset="UTF-8">
 			<pattern>%date [%thread] %-5level %logger{80} [%X{logId}] - %msg%n</pattern>
