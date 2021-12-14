@@ -61,6 +61,8 @@
 	<!-- httpClient -->
 	<logger name="org.apache.http.wire" level="INFO" />
 	<!-- sql语句监控 end -->
+	<!--生成word类仅输出错误信息，其他不输出-->
+	<logger name="com.deepoove.poi" level="ERROR"/>
 	<root level="INFO">
 		 <appender-ref ref="stdout" />
 		<appender-ref ref="file—stdout" />
