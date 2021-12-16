@@ -7,7 +7,9 @@ import org.apache.commons.lang3.StringUtils;
  * @date 2021-12-16
  */
 public enum DbPoolType {
-	DRUID("druid");
+	DRUID("druid"),
+	HIKARICP("hikaricp")
+	;
 	private String name;
 
 	public String getName() {

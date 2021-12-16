@@ -3,6 +3,7 @@ package com.pomzwj.dbpool;
 import com.pomzwj.constant.DataBaseType;
 import com.pomzwj.constant.DbPoolType;
 import com.pomzwj.dbpool.druid.DruidPoolUtils;
+import com.pomzwj.dbpool.hikaricp.HikariCpPoolUtils;
 import com.pomzwj.dbservice.DbService;
 import com.pomzwj.exception.DatabaseExportException;
 import com.pomzwj.exception.MessageCode;
@@ -22,10 +23,13 @@ public class DbPoolFactory {
 
 	@Autowired
 	private DruidPoolUtils druidPoolUtils;
-
+	@Autowired
+	private HikariCpPoolUtils hikariCpPoolUtils;
 	public DbPoolService getDbPoolServiceBean() {
 		if (DbPoolType.DRUID.name().equals(databasePoolType.toUpperCase())) {
 			return druidPoolUtils;
+		}else if(DbPoolType.HIKARICP.name().equals(databasePoolType.toUpperCase())){
+			return hikariCpPoolUtils;
 		}
 		return null;
 	}
