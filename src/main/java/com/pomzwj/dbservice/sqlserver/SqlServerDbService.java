@@ -2,6 +2,7 @@ package com.pomzwj.dbservice.sqlserver;
 
 import com.alibaba.druid.pool.DruidDataSource;
 import com.google.common.util.concurrent.ThreadFactoryBuilder;
+import com.pomzwj.dbpool.DbPoolFactory;
 import com.pomzwj.dbpool.druid.DruidPoolUtils;
 import com.pomzwj.dbservice.AbstractDbService;
 import com.pomzwj.dbservice.DbService;
@@ -19,6 +20,7 @@ import org.springframework.core.io.ClassPathResource;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Component;
 
+import javax.sql.DataSource;
 import java.io.FileNotFoundException;
 import java.io.InputStream;
 import java.util.ArrayList;
@@ -39,7 +41,7 @@ public class SqlServerDbService extends AbstractDbService implements DbService {
 	static final Logger log = LoggerFactory.getLogger(SqlServerDbService.class);
 
 	@Autowired
-	private DruidPoolUtils druidPoolUtils;
+	private DbPoolFactory dbPoolFactory;
 	@Value("${database.getTableNameSql.sqlServer}")
 	String sqlServerGetTableNameSql;
 
@@ -47,9 +49,9 @@ public class SqlServerDbService extends AbstractDbService implements DbService {
 	@Override
 	public List<DbTable> getTableDetailInfo(DbBaseInfo dbBaseInfo) throws Exception {
 		//获取数据库线程池
-		DruidDataSource dbPool = null;
+		DataSource dbPool = null;
 		try {
-			dbPool = druidPoolUtils.createDbPool(dbBaseInfo);
+			dbPool = dbPoolFactory.getDbPoolServiceBean().createDbPool(dbBaseInfo);
 			JdbcTemplate jdbcTemplate = new JdbcTemplate(dbPool);
 			List<DbTable> tableName = this.getTableName(jdbcTemplate);
 			//2.1 把List进行分页
@@ -61,7 +63,7 @@ public class SqlServerDbService extends AbstractDbService implements DbService {
 			log.error("发生错误 = {}", e);
 			throw e;
 		} finally {
-			druidPoolUtils.closeDbPool(dbPool);
+			dbPoolFactory.getDbPoolServiceBean().closeDbPool(dbPool);
 		}
 	}
 

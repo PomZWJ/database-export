@@ -2,7 +2,9 @@ package com.pomzwj.dbpool.druid;
 
 import com.alibaba.druid.pool.DruidDataSource;
 import com.pomzwj.constant.DataBaseType;
+import com.pomzwj.dbpool.DbPoolService;
 import com.pomzwj.domain.DbBaseInfo;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
@@ -15,7 +17,7 @@ import javax.sql.DataSource;
  * @date 2021-06-25
  */
 @Component
-public class DruidPoolUtils {
+public class DruidPoolUtils implements DbPoolService {
 
 	@Value("${database.jdbc.mysql}")
 	String mysqlJdbc;
@@ -34,7 +36,8 @@ public class DruidPoolUtils {
 	@Value("${database.driver.postgresql}")
 	String postgresqlDriver;
 
-	public DruidDataSource createDbPool(DbBaseInfo dbBaseInfo){
+	@Override
+	public DataSource createDbPool(DbBaseInfo dbBaseInfo){
 		String dbKind = dbBaseInfo.getDbKind();
 		String dbName = dbBaseInfo.getDbName();
 		String ip = dbBaseInfo.getIp();
@@ -75,8 +78,9 @@ public class DruidPoolUtils {
 		return dataSource;
 	}
 
-
-	public void closeDbPool(DruidDataSource druidDataSource){
+	@Override
+	public void closeDbPool(DataSource dataSource){
+		DruidDataSource druidDataSource = (DruidDataSource)dataSource;
 		if(druidDataSource!=null && !druidDataSource.isClosed()){
 			druidDataSource.close();
 		}

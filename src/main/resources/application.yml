@@ -17,6 +17,7 @@ export:
   template-copy-path: .databaseExport
 
 database:
+  pool: druid
   jdbc:
     mysql: jdbc:mysql://%s:%s/%s?serverTimezone=UTC
     oracle: jdbc:oracle:thin:@//%s:%s/%s
