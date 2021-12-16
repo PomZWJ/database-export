@@ -1,6 +1,8 @@
+**[转到Gitee](https://gitee.com/pomz/database-export)**
+
 ![](https://img-blog.csdnimg.cn/2021062719254559.png#pic_center)
 
-**database-export V3.0.0**
+**database-export V3.1.0**
 =========================
 
 ![Spring Boot 2.0.6](https://img.shields.io/badge/Spring%20Boot-2.5.0-brightgreen.svg)
@@ -55,6 +57,7 @@ cmd/shell执行java -jar xxx.jar 即可启动
 | V.2.1.0    | (后续版本都不含jre1.8,win和linux都是同一个包,不再区分)  https://pan.baidu.com/s/1A7EttMBIdVy3oAkFd0zo-w  提取码6gdr |
 | V.2.2.0    | https://pan.baidu.com/s/1geYr9ksIXvf1R_xWiw_KDg  提取码kzmg |
 | V.3.0.0    | https://pan.baidu.com/s/1dKkSHFmRhcjNeF8JJ4CHbg  提取码xf7c |
+| V.3.1.0    | https://pan.baidu.com/s/1cwWkS2I8QYE9mqApRATxYQ  提取码wy18 |
 
 
 ## 2.下载最新的源码启动
@@ -102,6 +105,15 @@ cmd/shell执行java -jar xxx.jar 即可启动
 <img src="https://img-blog.csdnimg.cn/2021062719334713.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L2h1YW5ndXRhMTE3OA==,size_16,color_FFFFFF,t_70#pic_center" width="300" height="300"/>
 
 ## 6.更新日志
+
+**2021-12-16(V3.1.0)**
+
+>1.数据库连接池改成工厂模式，引入了druid和hikaricp两种连接池，可在yml自定义配置
+
+>2.前端html预览美化，加入了导航
+
+>3.修复已知BUG
+
 
 **2021-06-27(V3.0.0)**
 
