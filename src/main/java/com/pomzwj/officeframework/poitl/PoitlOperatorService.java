@@ -81,6 +81,9 @@ public class PoitlOperatorService {
 		Class<DbColumnInfo> dbColumnInfoClass = DbColumnInfo.class;
 		List<RowRenderData> rows = new ArrayList<>();
 		rows.add(headerRow);
+		if(tabsColumn == null){
+			tabsColumn = new ArrayList<>();
+		}
 		for (int k = 0; k < tabsColumn.size(); k++) {
 			DbColumnInfo dbColumnInfo = tabsColumn.get(k);
 			List<String> dataBody = new ArrayList<>();
