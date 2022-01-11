@@ -128,8 +128,8 @@ public class PoiExcelOperatorService {
             for (int j = 0; j < columnNames.size(); j++) {
                 String fieldName = columnNames.get(j);
                 fieldName = fieldName.substring(0, 1).toUpperCase() + fieldName.substring(1);
-                Method method = dbColumnInfoClass.getMethod("get" + fieldName, null);
-                dataBody.add(method.invoke(dbColumnInfo, null).toString());
+                Method method = dbColumnInfoClass.getMethod("get" + fieldName, new Class[0]);
+                dataBody.add(method.invoke(dbColumnInfo, new Object[0]).toString());
             }
             dataBodys.add(dataBody);
         }
