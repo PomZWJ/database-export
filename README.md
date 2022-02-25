@@ -4,10 +4,10 @@
 
 ![](https://img-blog.csdnimg.cn/2021062719254559.png#pic_center)
 
-**database-export V3.1.0**
+**database-export V3.2.0**
 =========================
 
-![Spring Boot 2.0.6](https://img.shields.io/badge/Spring%20Boot-2.5.0-brightgreen.svg)
+![Spring Boot 2.6.3](https://img.shields.io/badge/Spring%20Boot-2.6.3-brightgreen.svg)
 ![Vue 2.0](https://img.shields.io/badge/Vue-2.0-green.svg)
 ![Element-UI 2.0](https://img.shields.io/badge/ElementUI-2.0-green.svg)
 ![Thymeleaf 3.0](https://img.shields.io/badge/Thymeleaf-3.0-yellow.svg)
@@ -35,7 +35,7 @@ database-export是一款多线程生成数据库结构文档的开源springboot�
 * 导出sql支持多线程查询，导出速度更快
 * 使用element-ui，界面更美观
 * 支持导出word和excel，更支持网页预览
-* 支持MySQL8.0版本,Oracle 11g以上以及sqlserver
+* 支持MySQL8.0版本,Oracle 11g,sqlserver以及Postgresql
 * 导出速度高于现在的所有导出工具
 
 
@@ -104,7 +104,7 @@ cmd/shell执行java -jar xxx.jar 即可启动
 
 
 ## 5.想加入技术开发群的加我，备注加群即可
-<img src="https://img-blog.csdnimg.cn/2021062719334713.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L2h1YW5ndXRhMTE3OA==,size_16,color_FFFFFF,t_70#pic_center" width="300" height="300"/>
+<img alt="加群" src="https://img-blog.csdnimg.cn/2021062719334713.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L2h1YW5ndXRhMTE3OA==,size_16,color_FFFFFF,t_70#pic_center" width="300" height="300"/>
 
 ## 6.更新日志
 
