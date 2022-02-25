@@ -20,7 +20,7 @@
 	<parent>
 		<groupId>org.springframework.boot</groupId>
 		<artifactId>spring-boot-starter-parent</artifactId>
-		<version>2.5.0</version>
+		<version>2.6.3</version>
 		<relativePath/>
 	</parent>
 
@@ -31,13 +31,13 @@
 		<oracle.version>19.7.0.0</oracle.version>
 		<mysql.version>8.0.20</mysql.version>
 		<sqlserver.version>7.4.0.jre8</sqlserver.version>
-		<postgresql.version>42.2.22</postgresql.version>
+		<postgresql.version>42.3.3</postgresql.version>
 		<poitl.version>1.10.0</poitl.version>
-		<common-io.version>2.7</common-io.version>
+		<common-io.version>2.11.0</common-io.version>
 		<common-lang3.version>3.12.0</common-lang3.version>
 		<orai18n.version>12.1.0.2.0</orai18n.version>
-		<fastjson.version>1.2.75</fastjson.version>
-		<druid.version>1.1.24</druid.version>
+		<fastjson.version>1.2.79</fastjson.version>
+		<druid.version>1.2.8</druid.version>
 		<guava.version>30.1-jre</guava.version>
 	</properties>
 
