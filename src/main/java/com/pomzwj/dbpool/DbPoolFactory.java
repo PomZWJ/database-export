@@ -13,7 +13,10 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 /**
- * @author zhaowj
+ * 数据库连接池配置
+ * @author PomZWJ
+ * @email 1513041820@qq.com
+ * @github https://github.com/PomZWJ
  * @date 2021-12-16
  */
 @Component

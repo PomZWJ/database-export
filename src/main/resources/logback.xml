@@ -40,8 +40,6 @@
 	<!-- 设置 Appender , 该Appender是logback与spring的一个桥接类,最终日志请求会交给 spring容器中 bean id 为 "sqlMonitor" 的类处理,该bean 第一步中已经声明,注意两边的 name 值要一致 -->
 	<!-- 应用代码DUBBO访问日志控制 -->
 	<logger name="service.accesslog" level="INFO" />
-	<!-- 校验日志控制 -->
-	<logger name="org.hibernate.validator" level="INFO" />
 	<!-- Spring日志控制 -->
 	<logger name="org.springframework.core" level="INFO" />
 	<logger name="org.springframework.beans.factory" level="INFO" />
@@ -49,8 +47,6 @@
 	<logger name="org.springframework.aop" level="INFO" />
 	<logger name="org.springframework.jdbc" level="INFO" />
 	<logger name="org.springframework.transaction.annotation" level="INFO" />
-	<logger name="org.apache.activemq" level="INFO" />
-	<logger name="org.springframework.jms.listener.DefaultMessageListenerContainer" level="INFO" />
 	<!-- MyBatis日志控制 -->
 	<logger name="org.mybatis.spring" level="INFO" />
 	<logger name="org.apache.ibatis" level="INFO" />

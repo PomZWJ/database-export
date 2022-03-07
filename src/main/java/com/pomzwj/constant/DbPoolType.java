@@ -3,8 +3,10 @@ package com.pomzwj.constant;
 import org.apache.commons.lang3.StringUtils;
 
 /**
- * @author zhaowj
- * @date 2021-12-16
+ * 数据库连接池类型
+ * @author PomZWJ
+ * @email 1513041820@qq.com
+ * @github https://github.com/PomZWJ
  */
 public enum DbPoolType {
 	DRUID("druid"),

@@ -6,7 +6,9 @@ import com.pomzwj.domain.DbBaseInfo;
 import javax.sql.DataSource;
 
 /**
- * @author zhaowj
+ * @author PomZWJ
+ * @email 1513041820@qq.com
+ * @github https://github.com/PomZWJ
  * @date 2021-12-16
  */
 public interface DbPoolService {
