@@ -48,6 +48,12 @@ public class DataExportV2Controller {
     @Autowired
     private DbServiceFactory dbServiceFactory;
 
+    @RequestMapping("/viewDocVue")
+    public String viewDocVue(DbBaseInfo info, ModelMap modelMap){
+        modelMap.put("dbBaseInfo",info);
+        return "v2/docView";
+    }
+
     @RequestMapping("/viewDocHtml")
     public String docHtml(DbBaseInfo info, ModelMap modelMap){
         modelMap.put("dbBaseInfo",info);
@@ -204,7 +210,9 @@ public class DataExportV2Controller {
             resultMap.put("tableDetailInfo", tableDetailInfo);
             responseParams.setParams(resultMap);
         } catch (Exception e) {
+            responseParams.setResultCode("500");
             responseParams.setParams(null);
+            responseParams.setResultMsg(e.getMessage());
             log.error("desc={},获取失败, 原因:{}", desc, e.getMessage(), e);
         }
         return responseParams;
