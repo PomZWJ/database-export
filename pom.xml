@@ -29,7 +29,7 @@
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 		<java.version>1.8</java.version>
 		<oracle.version>19.7.0.0</oracle.version>
-		<mysql.version>8.0.20</mysql.version>
+		<mysql.version>8.0.28</mysql.version>
 		<sqlserver.version>7.4.0.jre8</sqlserver.version>
 		<postgresql.version>42.3.3</postgresql.version>
 		<poitl.version>1.10.0</poitl.version>
