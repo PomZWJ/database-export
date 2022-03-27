@@ -1,0 +1,141 @@
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta http-equiv="pragma" content="no-cache"/>
+    <meta http-equiv="Cache-Control" content="no-cache"/>
+    <meta http-equiv="Cache-Control" content="no-store"/>
+    <meta http-equiv="Expires" content="0"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+    <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport"/>
+    <meta charset="UTF-8">
+    <title>database-export</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="icon" href="../../../static/assetss/images/fav.png" th:href="@{/assetss/images/fav.png}">
+    <!-- 引入样式 -->
+    <link rel="stylesheet" href="../../../static/element-ui/element-ui.css" th:href="@{/element-ui/element-ui.css}">
+    <link rel="stylesheet" href="../../../static/css/index2.css" th:href="@{/css/index2.css}">
+    <script th:inline="javascript">
+        /*<![CDATA[*/
+        var ctx = [[@{/}]];
+        var ip = [[${dbBaseInfo.ip}]];
+        var port = [[${dbBaseInfo.port}]];
+        var dbName = [[${dbBaseInfo.dbName}]];
+        var userName = [[${dbBaseInfo.userName}]];
+        var password = [[${dbBaseInfo.password}]];
+        var dbKind = [[${dbBaseInfo.dbKind}]];
+    </script>
+    </script>
+    <!-- 引入组件库 -->
+    <script src="../../../static/vue/vue.v2.6.10.js" th:src="@{/vue/vue.v2.6.10.js}"></script>
+    <script src="../../../static/vue/axios.v0.19.0.min.js" th:src="@{/vue/axios.v0.19.0.min.js}"></script>
+    <script src="../../../static/element-ui/element-ui.js" th:src="@{/element-ui/element-ui.js}"></script>
+</head>
+<style type="text/css">
+    .top-nav {
+        height: 8%;
+        width: 100%;
+        box-shadow: none;
+        position: fixed;
+        top: 0;
+        background-color: white;
+        padding-top: 20px;
+    }
+</style>
+<body>
+<div id="app">
+    <el-header class="top-nav">
+        <el-row type="flex" align="middle">
+            <el-col :span="1"><img style="width: 80px" th:src="@{/assetss/images/fav.png}"></el-col>
+            <el-col :span="8" style="margin-left: 30px;">
+                <span style="font-size: 34px;">database-export 数据库表html预览</span>
+            </el-col>
+            <el-col :span="8">
+                <el-select v-model="selectDefaultValue" filterable placeholder="搜索表名" size="medium" style="width: 500px;">
+                    <el-option
+                            v-for="item in selectOptions"
+                            :key="item.value"
+                            :label="item.label"
+                            :value="item.value">
+                    </el-option>
+                </el-select>
+            </el-col>
+        </el-row>
+    </el-header>
+    <el-main style="margin-top: 100px;">
+        <div>
+            <el-table :data="tableData" border style="width: 100%">
+                <el-table-column prop="date" label="日期" width="180"></el-table-column>
+                <el-table-column prop="name" label="姓名" width="180"></el-table-column>
+                <el-table-column prop="address" label="地址"></el-table-column>
+            </el-table>
+        </div>
+    </el-main>
+</div>
+</body>
+<script type="text/javascript">
+    var vue = new Vue({
+        el: '#app',
+        data: {
+            selectOptions: [],
+            selectDefaultValue: '',
+            tableData: [{
+                date: '2016-05-02',
+                name: '王小虎',
+                address: '上海市普陀区金沙江路 1518 弄'
+            }, {
+                date: '2016-05-04',
+                name: '王小虎',
+                address: '上海市普陀区金沙江路 1517 弄'
+            }, {
+                date: '2016-05-01',
+                name: '王小虎',
+                address: '上海市普陀区金沙江路 1519 弄'
+            }, {
+                date: '2016-05-03',
+                name: '王小虎',
+                address: '上海市普陀区金沙江路 1516 弄'
+            }]
+        },
+        methods: {
+            loadTable:function (data) {
+                let tableDetailInfo = data.tableDetailInfo;
+                let headerList = data.headerList;
+                let fieldList = data.fieldList;
+                let selectEleDataArray = [];
+                let tableDataArray = [];
+                for(let i=0;i<tableDetailInfo.length;i++){
+                    let tableLable = tableDetailInfo[i].tableName + '(' + tableDetailInfo[i].tableComments + ')';
+                    selectEleDataArray.push({
+                        label : tableLable,
+                        value : tableLable
+                    });
+                }
+                this.selectOptions = selectEleDataArray;
+            },
+            loadInfo:function(){
+                axios.get(ctx + "v2/getTableData",{
+                    params:{ip: ip,
+                        port: port,
+                        dbName: dbName,
+                        userName: userName,
+                        password: password,
+                        dbKind: dbKind}
+                }).then(resp =>{
+                    resp = resp.data;
+                    if (resp.resultCode == '000000') {
+                        this.loadTable(resp.params);
+                    } else {
+                        this.$message({
+                            message: resp.resultMsg,
+                            type: 'warning'
+                        });
+                    }
+                }).catch(err =>{
+                    console.log(err);
+                });
+            }
+        },
+    });
+    vue.loadInfo();
+</script>
+</html>

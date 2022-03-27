@@ -2,14 +2,12 @@ package com.pomzwj.officeframework.poitl;
 
 import com.deepoove.poi.XWPFTemplate;
 import com.deepoove.poi.data.*;
-import com.google.common.collect.Lists;
 import com.pomzwj.anno.DataColumnName;
 import com.pomzwj.constant.DataBaseType;
 import com.pomzwj.constant.TemplateFileConstants;
 import com.pomzwj.domain.DbColumnInfo;
 import com.pomzwj.domain.DbTable;
 import com.pomzwj.domain.SegmentData;
-import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
@@ -83,8 +81,8 @@ public class PoitlOperatorService {
 		Class<DbColumnInfo> dbColumnInfoClass = DbColumnInfo.class;
 		List<RowRenderData> rows = new ArrayList<>();
 		rows.add(headerRow);
-		if(CollectionUtils.isEmpty(tabsColumn)){
-			return Lists.newArrayList();
+		if(tabsColumn == null){
+			tabsColumn = new ArrayList<>();
 		}
 		for (int k = 0; k < tabsColumn.size(); k++) {
 			DbColumnInfo dbColumnInfo = tabsColumn.get(k);
@@ -92,8 +90,8 @@ public class PoitlOperatorService {
 			for (int j = 0; j < columnNames.size(); j++) {
 				String fieldName = columnNames.get(j);
 				fieldName = fieldName.substring(0, 1).toUpperCase() + fieldName.substring(1);
-				Method method = dbColumnInfoClass.getMethod("get" + fieldName, null);
-				dataBody.add(method.invoke(dbColumnInfo, null).toString());
+				Method method = dbColumnInfoClass.getMethod("get" + fieldName, new Class[0]);
+				dataBody.add(method.invoke(dbColumnInfo, new Object[0]).toString());
 			}
 			rows.add(Rows.create(dataBody.toArray(new String[dataBody.size()])));
 		}

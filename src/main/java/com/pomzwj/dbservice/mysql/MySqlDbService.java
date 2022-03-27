@@ -2,6 +2,7 @@ package com.pomzwj.dbservice.mysql;
 
 import com.alibaba.druid.pool.DruidDataSource;
 import com.google.common.util.concurrent.ThreadFactoryBuilder;
+import com.pomzwj.dbpool.DbPoolFactory;
 import com.pomzwj.dbpool.druid.DruidPoolUtils;
 import com.pomzwj.dbservice.AbstractDbService;
 import com.pomzwj.dbservice.DbService;
@@ -19,6 +20,7 @@ import org.springframework.core.io.ClassPathResource;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Component;
 
+import javax.sql.DataSource;
 import java.io.FileNotFoundException;
 import java.io.InputStream;
 import java.util.ArrayList;
@@ -38,16 +40,16 @@ public class MySqlDbService extends AbstractDbService implements DbService {
     static final Logger log = LoggerFactory.getLogger(MySqlDbService.class);
 
     @Autowired
-    private DruidPoolUtils druidPoolUtils;
+    private DbPoolFactory dbPoolFactory;
     @Value("${database.getTableNameSql.mysql}")
     String mysqlGetTableNameSql;
 
     @Override
     public List<DbTable> getTableDetailInfo(DbBaseInfo dbBaseInfo) throws Exception {
         //获取数据库线程池
-        DruidDataSource dbPool = null;
+        DataSource dbPool = null;
         try {
-            dbPool = druidPoolUtils.createDbPool(dbBaseInfo);
+            dbPool = dbPoolFactory.getDbPoolServiceBean().createDbPool(dbBaseInfo);
             JdbcTemplate jdbcTemplate = new JdbcTemplate(dbPool);
             //1.获取所有表基本信息
             List<DbTable> tableName = this.getTableName(jdbcTemplate, dbBaseInfo.getDbName());
@@ -61,7 +63,7 @@ public class MySqlDbService extends AbstractDbService implements DbService {
             throw e;
         } finally {
             //关闭线程池
-            druidPoolUtils.closeDbPool(dbPool);
+            dbPoolFactory.getDbPoolServiceBean().closeDbPool(dbPool);
         }
     }
 

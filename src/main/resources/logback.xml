@@ -12,12 +12,10 @@
 		<filter class="ch.qos.logback.classic.filter.ThresholdFilter">
 			<level>INFO</level>
 		</filter>
-		<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+		<rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
 			<FileNamePattern>./.databaseExport/log/database-export_debug.%d{yyyy-MM-dd}_%i.log</FileNamePattern>
 			<MaxHistory>100</MaxHistory>
- 			<timeBasedFileNamingAndTriggeringPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">   
-                <maxFileSize>10mb</maxFileSize>   
-            </timeBasedFileNamingAndTriggeringPolicy>
+			<maxFileSize>10mb</maxFileSize>
 		</rollingPolicy>
 		<encoder charset="UTF-8">
 			<pattern>%date [%thread] %-5level %logger{80} [%X{logId}] - %msg%n</pattern>
@@ -30,12 +28,10 @@
 			<onMatch>ACCEPT</onMatch>
 			<onMismatch>DENY</onMismatch>
 		</filter>
-		<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+		<rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
 			<FileNamePattern>./.databaseExport/log/database-export_error.%d{yyyy-MM-dd}_%i.log</FileNamePattern>
 			<MaxHistory>100</MaxHistory>
- 			<timeBasedFileNamingAndTriggeringPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">   
-                <maxFileSize>10mb</maxFileSize>   
-            </timeBasedFileNamingAndTriggeringPolicy>
+			<maxFileSize>10mb</maxFileSize>
 		</rollingPolicy>
 		<encoder charset="UTF-8">
 			<pattern>%date [%thread] %-5level %logger{80} [%X{logId}] - %msg%n</pattern>
@@ -44,8 +40,6 @@
 	<!-- 设置 Appender , 该Appender是logback与spring的一个桥接类,最终日志请求会交给 spring容器中 bean id 为 "sqlMonitor" 的类处理,该bean 第一步中已经声明,注意两边的 name 值要一致 -->
 	<!-- 应用代码DUBBO访问日志控制 -->
 	<logger name="service.accesslog" level="INFO" />
-	<!-- 校验日志控制 -->
-	<logger name="org.hibernate.validator" level="INFO" />
 	<!-- Spring日志控制 -->
 	<logger name="org.springframework.core" level="INFO" />
 	<logger name="org.springframework.beans.factory" level="INFO" />
@@ -53,8 +47,6 @@
 	<logger name="org.springframework.aop" level="INFO" />
 	<logger name="org.springframework.jdbc" level="INFO" />
 	<logger name="org.springframework.transaction.annotation" level="INFO" />
-	<logger name="org.apache.activemq" level="INFO" />
-	<logger name="org.springframework.jms.listener.DefaultMessageListenerContainer" level="INFO" />
 	<!-- MyBatis日志控制 -->
 	<logger name="org.mybatis.spring" level="INFO" />
 	<logger name="org.apache.ibatis" level="INFO" />
@@ -65,6 +57,8 @@
 	<!-- httpClient -->
 	<logger name="org.apache.http.wire" level="INFO" />
 	<!-- sql语句监控 end -->
+	<!--生成word类仅输出错误信息，其他不输出-->
+	<logger name="com.deepoove.poi" level="ERROR"/>
 	<root level="INFO">
 		 <appender-ref ref="stdout" />
 		<appender-ref ref="file—stdout" />

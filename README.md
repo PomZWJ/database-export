@@ -1,14 +1,19 @@
+**[转到Gitee](https://gitee.com/pomz/database-export)**
+
+**[转到Github](https://github.com/PomZWJ/database-export)**
+
 ![](https://img-blog.csdnimg.cn/2021062719254559.png#pic_center)
 
-**database-export V3.0.0**
+**database-export V3.2.0**
 =========================
 
-![Spring Boot 2.0.6](https://img.shields.io/badge/Spring%20Boot-2.5.0-brightgreen.svg)
-![Vue 2.0](https://img.shields.io/badge/Vue-2.0-green.svg)
+![Spring Boot 2.6.3](https://img.shields.io/badge/Spring%20Boot-2.6.3-brightgreen.svg)
 ![Element-UI 2.0](https://img.shields.io/badge/ElementUI-2.0-green.svg)
-![Thymeleaf 3.0](https://img.shields.io/badge/Thymeleaf-3.0-yellow.svg)
 ![JDK 1.8](https://img.shields.io/badge/JDK-1.8-brightgreen.svg)
-![Maven](https://img.shields.io/badge/Maven-3.5.0-yellowgreen.svg)
+![MySQL](https://img.shields.io/badge/MySQL-8-blue.svg)
+![ORACLE](https://img.shields.io/badge/ORACLE-11g-red.svg)
+![SqlServer](https://img.shields.io/badge/SqlServer-2008-red.svg)
+![Postgresql](https://img.shields.io/badge/Postgresql-14-blue.svg)
 
 database-export是一款多线程生成数据库结构文档的开源springboot工程，能支持最新的数据库版本，可以导出docx格式和xlsx的文档，也能直接在网页上预览
 
@@ -31,7 +36,7 @@ database-export是一款多线程生成数据库结构文档的开源springboot�
 * 导出sql支持多线程查询，导出速度更快
 * 使用element-ui，界面更美观
 * 支持导出word和excel，更支持网页预览
-* 支持MySQL8.0版本,Oracle 11g以上以及sqlserver
+* 支持MySQL8.0版本,Oracle 11g,sqlserver以及Postgresql
 * 导出速度高于现在的所有导出工具
 
 
@@ -55,6 +60,7 @@ cmd/shell执行java -jar xxx.jar 即可启动
 | V.2.1.0    | (后续版本都不含jre1.8,win和linux都是同一个包,不再区分)  https://pan.baidu.com/s/1A7EttMBIdVy3oAkFd0zo-w  提取码6gdr |
 | V.2.2.0    | https://pan.baidu.com/s/1geYr9ksIXvf1R_xWiw_KDg  提取码kzmg |
 | V.3.0.0    | https://pan.baidu.com/s/1dKkSHFmRhcjNeF8JJ4CHbg  提取码xf7c |
+| V.3.1.0    | https://pan.baidu.com/s/1cwWkS2I8QYE9mqApRATxYQ  提取码wy18 |
 
 
 ## 2.下载最新的源码启动
@@ -99,9 +105,26 @@ cmd/shell执行java -jar xxx.jar 即可启动
 
 
 ## 5.想加入技术开发群的加我，备注加群即可
-<img src="https://img-blog.csdnimg.cn/2021062719334713.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L2h1YW5ndXRhMTE3OA==,size_16,color_FFFFFF,t_70#pic_center" width="300" height="300"/>
+<img alt="加群" src="https://img-blog.csdnimg.cn/2021062719334713.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L2h1YW5ndXRhMTE3OA==,size_16,color_FFFFFF,t_70#pic_center" width="300" height="300"/>
 
 ## 6.更新日志
+
+**2022-02-28(V3.2.0)**
+
+>1.支持Postgresql
+
+>2.修复已知BUG
+
+
+
+**2021-12-16(V3.1.0)**
+
+>1.数据库连接池改成工厂模式，引入了druid和hikaricp两种连接池，可在yml自定义配置
+
+>2.前端html预览美化，加入了导航
+
+>3.修复已知BUG
+
 
 **2021-06-27(V3.0.0)**
 
