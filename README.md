@@ -61,6 +61,7 @@ cmd/shell执行java -jar xxx.jar 即可启动
 | V.2.2.0    | https://pan.baidu.com/s/1geYr9ksIXvf1R_xWiw_KDg  提取码kzmg |
 | V.3.0.0    | https://pan.baidu.com/s/1dKkSHFmRhcjNeF8JJ4CHbg  提取码xf7c |
 | V.3.1.0    | https://pan.baidu.com/s/1cwWkS2I8QYE9mqApRATxYQ  提取码wy18 |
+| V.3.2.0    | https://pan.baidu.com/s/1SRdbH0-DwO9IAFF5jttwbQ  提取码g11i |
 
 
 ## 2.下载最新的源码启动
@@ -87,14 +88,21 @@ cmd/shell执行java -jar xxx.jar 即可启动
 
 ## 4.项目截图
 
-**ORACLE**
-![](https://img-blog.csdnimg.cn/20210627192751555.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L2h1YW5ndXRhMTE3OA==,size_16,color_FFFFFF,t_70#pic_center)
+**首页**
+![](https://img-blog.csdnimg.cn/73b2f2a8c7484bcca3b596d307240ca5.png?x-oss-process=image/watermark,type_d3F5LXplbmhlaQ,shadow_50,text_Q1NETiBA5oOK5Ye65bCY,size_20,color_FFFFFF,t_70,g_se,x_16)
 
-**MYSQL**
-![](https://img-blog.csdnimg.cn/20210627192804437.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L2h1YW5ndXRhMTE3OA==,size_16,color_FFFFFF,t_70#pic_center)
+**ORACLE**
+![](https://img-blog.csdnimg.cn/8a2df0c45c994b6b93926f1c39c1b7df.png?x-oss-process=image/watermark,type_d3F5LXplbmhlaQ,shadow_50,text_Q1NETiBA5oOK5Ye65bCY,size_20,color_FFFFFF,t_70,g_se,x_16)
+
+**MySQL**
+![](https://img-blog.csdnimg.cn/f285524f4ef749e4a8a6dc495d698a09.png?x-oss-process=image/watermark,type_d3F5LXplbmhlaQ,shadow_50,text_Q1NETiBA5oOK5Ye65bCY,size_20,color_FFFFFF,t_70,g_se,x_16)
 
 **SQLServer**
-![](https://img-blog.csdnimg.cn/20210627192817733.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L2h1YW5ndXRhMTE3OA==,size_16,color_FFFFFF,t_70#pic_center)
+![](https://img-blog.csdnimg.cn/83bb44a0563d40a19976121e9e5e5240.png?x-oss-process=image/watermark,type_d3F5LXplbmhlaQ,shadow_50,text_Q1NETiBA5oOK5Ye65bCY,size_20,color_FFFFFF,t_70,g_se,x_16)
+
+**postgresql**
+![](https://img-blog.csdnimg.cn/5ae17c36bddc44f9a785486d43dc94ce.png?x-oss-process=image/watermark,type_d3F5LXplbmhlaQ,shadow_50,text_Q1NETiBA5oOK5Ye65bCY,size_20,color_FFFFFF,t_70,g_se,x_16)
+
 
 **其他图片**
 ![](https://img-blog.csdnimg.cn/2021062719315467.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L2h1YW5ndXRhMTE3OA==,size_16,color_FFFFFF,t_70#pic_center)
@@ -105,11 +113,11 @@ cmd/shell执行java -jar xxx.jar 即可启动
 
 
 ## 5.想加入技术开发群的加我，备注加群即可
-<img alt="加群" src="https://img-blog.csdnimg.cn/2021062719334713.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L2h1YW5ndXRhMTE3OA==,size_16,color_FFFFFF,t_70#pic_center" width="300" height="300"/>
+<img alt="加群" src="https://img-blog.csdnimg.cn/db8572f0f5434ed08ba99b8e14c7fa19.png?x-oss-process=image/watermark,type_d3F5LXplbmhlaQ,shadow_50,text_Q1NETiBA5oOK5Ye65bCY,size_17,color_FFFFFF,t_70,g_se,x_16#pic_center" width="300" height="300"/>
 
 ## 6.更新日志
 
-**2022-02-28(V3.2.0)**
+**2022-03-27(V3.2.0)**
 
 >1.支持Postgresql
 
@@ -168,7 +176,6 @@ cmd/shell执行java -jar xxx.jar 即可启动
 
 Discussing
 ----------
-
+- [CSDN](https://blog.csdn.net/huanguta1178/article/details/83690318)
 - [submit issue](https://github.com/PomZWJ/database-export/issues/new)
-- E-mail: 1513041820@qq.com
 
