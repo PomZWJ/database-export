@@ -39,6 +39,11 @@ database-export是一款多线程生成数据库结构文档的开源springboot�
 * 支持MySQL8.0版本,Oracle 11g,sqlserver以及Postgresql
 * 导出速度高于现在的所有导出工具
 
+想加入技术开发群的加我，备注加群即可(定制模板请备注定制模板)
+----------
+
+<img alt="加群" src="https://img-blog.csdnimg.cn/db8572f0f5434ed08ba99b8e14c7fa19.png?x-oss-process=image/watermark,type_d3F5LXplbmhlaQ,shadow_50,text_Q1NETiBA5oOK5Ye65bCY,size_17,color_FFFFFF,t_70,g_se,x_16#pic_center" width="300" height="300"/>
+
 
 How to use
 ------------
@@ -71,7 +76,6 @@ cmd/shell执行java -jar xxx.jar 即可启动
 **源码运行方法**
 >执行DatabaseExportApplication.java即可
 
-------------
 
 
 
@@ -111,11 +115,7 @@ cmd/shell执行java -jar xxx.jar 即可启动
 
 ![](https://img-blog.csdnimg.cn/20210627193227925.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L2h1YW5ndXRhMTE3OA==,size_16,color_FFFFFF,t_70#pic_center)
 
-
-## 5.想加入技术开发群的加我，备注加群即可
-<img alt="加群" src="https://img-blog.csdnimg.cn/db8572f0f5434ed08ba99b8e14c7fa19.png?x-oss-process=image/watermark,type_d3F5LXplbmhlaQ,shadow_50,text_Q1NETiBA5oOK5Ye65bCY,size_17,color_FFFFFF,t_70,g_se,x_16#pic_center" width="300" height="300"/>
-
-## 6.更新日志
+## 5.更新日志
 
 **2022-03-27(V3.2.0)**
 
