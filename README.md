@@ -42,7 +42,7 @@ database-export是一款多线程生成数据库结构文档的开源springboot�
 想加入技术开发群的加我，备注加群即可(定制模板请备注定制模板)
 ----------
 
-<img alt="加群" src="https://img-blog.csdnimg.cn/db8572f0f5434ed08ba99b8e14c7fa19.png?x-oss-process=image/watermark,type_d3F5LXplbmhlaQ,shadow_50,text_Q1NETiBA5oOK5Ye65bCY,size_17,color_FFFFFF,t_70,g_se,x_16#pic_center" width="300" height="300"/>
+<img alt="加群" src="https://github.com/PomZWJ/database-export/blob/master/src/main/resources/static/assetss/images/v2/mywxqr.png?raw=true" width="300" height="300"/>
 
 
 How to use
