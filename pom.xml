@@ -31,7 +31,7 @@
 		<oracle.version>19.7.0.0</oracle.version>
 		<mysql.version>8.0.28</mysql.version>
 		<sqlserver.version>7.4.0.jre8</sqlserver.version>
-		<postgresql.version>42.3.3</postgresql.version>
+		<postgresql.version>42.3.7</postgresql.version>
 		<poitl.version>1.10.0</poitl.version>
 		<common-io.version>2.11.0</common-io.version>
 		<common-lang3.version>3.12.0</common-lang3.version>
