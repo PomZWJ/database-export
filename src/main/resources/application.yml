@@ -20,7 +20,7 @@ database:
   # 数据库连接池框架 默认druid 可选hikaricp,druid
   pool: druid
   jdbc:
-    mysql: jdbc:mysql://%s:%s/%s?serverTimezone=UTC
+    mysql: jdbc:mysql://%s:%s/%s?useUnicode=true&zeroDateTimeBehavior=convertToNull&characterEncoding=UTF-8&useSSL=false
     oracle: jdbc:oracle:thin:@//%s:%s/%s
     sqlServer: jdbc:sqlserver://%s:%s;databaseName=%s
     postgresql: jdbc:postgresql://%s:%s/%s
