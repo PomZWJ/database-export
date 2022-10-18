@@ -135,10 +135,11 @@ var vue = new Vue({
                 this.$message.error('密码不能为空');
                 return;
             }
+            let params = {"dbKind":sqlKind,"ip":ip,"port":port,"dbName":dataname,"userName":username,"password":password,"exportFileType":exportFileType};
             if(exportFileType == 'excel'){
-                window.open("/dbExport/v2/makeExcel?dbKind="+sqlKind+"&ip="+ip+"&port="+port+"&dbName="+dataname+"&userName="+username+"&password="+password+"&exportFileType="+exportFileType);
+                window.open("/dbExport/v2/makeExcel?base64Params="+btoa(JSON.stringify(params)));
             }else if(exportFileType == 'word'){
-                window.open("/dbExport/v2/makeWord?dbKind="+sqlKind+"&ip="+ip+"&port="+port+"&dbName="+dataname+"&userName="+username+"&password="+password+"&exportFileType="+exportFileType);
+                window.open("/dbExport/v2/makeWord?base64Params="+btoa(JSON.stringify(params)));
             }
 
         },
@@ -256,7 +257,6 @@ var vue = new Vue({
                 password = this.o_password;
                 //filepath = this.o_filepath;
             } else if (sqlKind == 'mysql') {
-                console.log(this.m_ip);
                 ip = this.m_ip;
                 port = this.m_port;
                 dataname = this.m_dataname;
@@ -296,7 +296,8 @@ var vue = new Vue({
                 this.$message.error('密码不能为空');
                 return;
             }
-            window.open("/dbExport/v2/viewDocHtml?dbKind="+sqlKind+"&ip="+ip+"&port="+port+"&dbName="+dataname+"&userName="+username+"&password="+password);
+            let params = {"dbKind":sqlKind,"ip":ip,"port":port,"dbName":dataname,"userName":username,"password":password};
+            window.open("/dbExport/v2/viewDocHtml?base64Params="+btoa(JSON.stringify(params)));
         }
     }
 });

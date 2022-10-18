@@ -32,12 +32,7 @@ function loadInfo() {
     $.ajax({
         url: ctx + "v2/getTableData",
         data: {
-            ip: ip,
-            port: port,
-            dbName: dbName,
-            userName: userName,
-            password: password,
-            dbKind: dbKind
+            base64Params:base64Params
         },
         success: function (data) {
             let resultCode = data.resultCode;

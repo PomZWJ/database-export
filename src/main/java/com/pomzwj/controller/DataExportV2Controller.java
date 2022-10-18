@@ -1,5 +1,6 @@
 package com.pomzwj.controller;
 
+import com.alibaba.fastjson.JSON;
 import com.deepoove.poi.XWPFTemplate;
 import com.pomzwj.anno.DataColumnName;
 import com.pomzwj.constant.DataBaseType;
@@ -55,18 +56,19 @@ public class DataExportV2Controller {
     }
 
     @RequestMapping("/viewDocHtml")
-    public String docHtml(DbBaseInfo info, ModelMap modelMap){
-        modelMap.put("dbBaseInfo",info);
+    public String docHtml(String base64Params, ModelMap modelMap){
+        modelMap.put("base64Params",base64Params);
         return "v2/docHtml";
     }
 
     @RequestMapping(value = "/makeWord")
     @ResponseBody
-    public void makeWord(DbBaseInfo info, HttpServletResponse response) {
+    public void makeWord(String base64Params, HttpServletResponse response) {
         String desc = "生成word文档[v2]";
         XWPFTemplate xwpfTemplate = null;
         response.setHeader("Content-type", "text/html;charset=UTF-8");
         try {
+            DbBaseInfo info = JSON.parseObject(new String(Base64.getDecoder().decode(base64Params)),DbBaseInfo.class);
             //参数校验
             AssertUtils.isNull(info.getDbKind(), MessageCode.DATABASE_KIND_IS_NULL_ERROR);
             AssertUtils.isNull(info.getIp(), MessageCode.DATABASE_IP_IS_NULL_ERROR);
@@ -117,11 +119,12 @@ public class DataExportV2Controller {
 
     @RequestMapping(value = "/makeExcel")
     @ResponseBody
-    public void makeExcel(DbBaseInfo info, HttpServletResponse response) {
+    public void makeExcel(String base64Params, HttpServletResponse response) {
         String desc = "生成excel文档[v2]";
         XSSFWorkbook workbook = null;
         response.setHeader("Content-type", "text/html;charset=UTF-8");
         try {
+            DbBaseInfo info = JSON.parseObject(new String(Base64.getDecoder().decode(base64Params)),DbBaseInfo.class);
             //参数校验
             AssertUtils.isNull(info.getDbKind(), MessageCode.DATABASE_KIND_IS_NULL_ERROR);
             AssertUtils.isNull(info.getIp(), MessageCode.DATABASE_IP_IS_NULL_ERROR);
@@ -171,10 +174,12 @@ public class DataExportV2Controller {
     }
     @RequestMapping(value = "/getTableData")
     @ResponseBody
-    public ResponseParams<Map> getDocData(DbBaseInfo info) {
+    public ResponseParams<Map> getDocData(String base64Params) {
         String desc = "生成word文档[v2]";
         ResponseParams<Map> responseParams = new ResponseParams();
         try {
+            String s = new String(Base64.getDecoder().decode(base64Params));
+            DbBaseInfo info = JSON.parseObject(s,DbBaseInfo.class);
             //参数校验
             AssertUtils.isNull(info.getDbKind(), MessageCode.DATABASE_KIND_IS_NULL_ERROR);
             AssertUtils.isNull(info.getIp(), MessageCode.DATABASE_IP_IS_NULL_ERROR);
