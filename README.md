@@ -19,7 +19,7 @@
 database-export是一款多线程生成数据库结构文档的开源springboot工程，能支持最新的数据库版本，可以导出docx格式和xlsx的文档，也能直接在网页上预览
 
 
-支持的数据库
+现已支持的数据库
 ------------
 * MySQL
 * ORACLE
@@ -80,7 +80,7 @@ cmd/shell执行java -jar xxx.jar 即可启动
 | V.3.0.0 | https://pan.baidu.com/s/1dKkSHFmRhcjNeF8JJ4CHbg  提取码xf7c |
 | V.3.1.0 | https://pan.baidu.com/s/1cwWkS2I8QYE9mqApRATxYQ  提取码wy18 |
 | V.3.2.0 | https://pan.baidu.com/s/1SRdbH0-DwO9IAFF5jttwbQ  提取码g11i |
-| V.3.3.0 | https://pan.baidu.com/s/1SRdbH0-DwO9IAFF5jttwbQ  提取码g11i |
+| V.3.3.0 | https://pan.baidu.com/s/1FxH1Iz2J2fau_eIOgGjWWQ  提取码dj9q |
 
 
 ## 2.下载最新的源码启动
