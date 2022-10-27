@@ -39,6 +39,7 @@
 		<fastjson.version>1.2.83</fastjson.version>
 		<druid.version>1.2.8</druid.version>
 		<guava.version>30.1-jre</guava.version>
+		<clickhouse.version>0.3.2-patch11</clickhouse.version>
 	</properties>
 
 	<dependencies>
@@ -125,7 +126,11 @@
 			<artifactId>guava</artifactId>
 			<version>${guava.version}</version>
 		</dependency>
-
+		<dependency>
+			<groupId>com.clickhouse</groupId>
+			<artifactId>clickhouse-jdbc</artifactId>
+			<version>${clickhouse.version}</version>
+		</dependency>
 
 	</dependencies>
 

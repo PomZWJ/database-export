@@ -239,8 +239,20 @@
                     </el-form>
                 </div>
                 <div v-bind:style="contentStyle" v-show="postgresqlDivShow" style="display: none;">
-                    <el-image src="sqlserver-bg.png" th:src="@{/assetss/images/v2/postgresql-bg.png}" :fit="fit" style="width: 306.8px;height:80px;;padding-top: 30px" ></el-image>
+                    <el-image src="sqlserver-bg.png" th:src="@{/assetss/images/v2/postgresql-bg.png}" :fit="fit" style="width: 80px;height:80px;;padding-top: 30px" ></el-image>
                     <el-form label-width="250px" style="width: 90%;padding-left: 10%;padding-top: 20px">
+                        <el-row style="margin-bottom: 20px;">
+                            <el-col :span="20">
+                                <el-select style="display: block" size="large" v-model="dataBaseSelect" placeholder="请选择">
+                                    <el-option
+                                            v-for="item in options"
+                                            :key="item.value"
+                                            :label="item.label"
+                                            :value="item.value">
+                                    </el-option>
+                                </el-select>
+                            </el-col>
+                        </el-row>
                         <el-row style="margin-bottom: 20px;">
                             <el-col :span="20">
                                 <el-input v-model="postgresql_ip" placeholder="127.0.0.1" clearable>
@@ -279,12 +291,12 @@
                         <el-row style="margin: 0 auto">
                             <el-popover placement="top" width="200" v-model="postgresqlPopoverVisible">
                                 <el-row>
-                                    <el-button class="el-icon-download" type="primary" plain @click="generateWord('postgresql','word')">word</el-button>
-                                    <el-button class="el-icon-download" type="primary" plain @click="generateWord('postgresql','excel')">excel</el-button>
+                                    <el-button class="el-icon-download" type="primary" plain @click="generateWord('','word')">word</el-button>
+                                    <el-button class="el-icon-download" type="primary" plain @click="generateWord('','excel')">excel</el-button>
                                 </el-row>
                                 <el-button class="el-icon-download" slot="reference">生成文档</el-button>
                             </el-popover>
-                            <el-button class="el-icon-view" @click="generateDocHtml('postgresql')">HTML预览</el-button>
+                            <el-button class="el-icon-view" @click="generateDocHtml('')">HTML预览</el-button>
                         </el-row>
                     </el-form>
                 </div>
@@ -296,6 +308,14 @@
     var vue = new Vue({
         el: '#app',
         data: {
+            options: [{
+                value: 'postgresql',
+                label: 'postgresql'
+            }, {
+                value: 'clickhouse',
+                label: 'clickhouse'
+            }],
+            dataBaseSelect: '',
             fit: 'fill',
             value: new Date(),
             loading: false,
@@ -321,7 +341,7 @@
             s_password: "",
             s_filepath: "D://",
             postgresql_ip: '',
-            postgresql_port: "5432",
+            postgresql_port: "",
             postgresql_dataname: "",
             postgresql_username: "",
             postgresql_password: "",
@@ -339,6 +359,7 @@
             mysqlIconImg: ctx+"/assetss/images/v2/mysql-icon-unclick.png",
             sqlserverIconImg: ctx+"/assetss/images/v2/sqlserver-icon-unclick.png",
             postgresqlIconImg: ctx+"/assetss/images/v2/postgresql-icon-unclick.png",
+            clickhouseIconImg: ctx+"/assetss/images/v2/clickhouse-icon-unclick.png",
             githubIconImg: ctx+"/assetss/images/v2/GitHub-icon.png",
             giteeIconImg: ctx+"/assetss/images/v2/Gitee-icon.png",
             emailIconImg: ctx+"/assetss/images/v2/email-icon.png",
@@ -363,6 +384,10 @@
                 borderTop: "1px solid rgb(235, 233, 233)",
                 background: "rgb(255,255,255)"
             },
+            clickhouseBarStyle: {
+                borderTop: "1px solid rgb(235, 233, 233)",
+                background: "rgb(255,255,255)"
+            },
             contentStyle: {
                 background: "#F2F6FC",
                 width: "100%",
@@ -371,6 +396,13 @@
         },
         methods: {
             generateWord(sqlKind,exportFileType) {
+                if(!sqlKind){
+                    if(!this.dataBaseSelect){
+                        this.$message.error('请选择数据库类型');
+                        return;
+                    }
+                    sqlKind = this.dataBaseSelect;
+                }
                 let ip;
                 let port;
                 let dataname;
@@ -401,7 +433,7 @@
                     dataname = this.s_dataname;
                     username = this.s_username;
                     password = this.s_password;
-                }else if(sqlKind == 'postgresql'){
+                }else{
                     this.postgresqlPopoverVisible = false;
                     ip = this.postgresql_ip;
                     port = this.postgresql_port;
@@ -539,6 +571,13 @@
                 });
             },
             generateDocHtml(sqlKind) {
+                if(!sqlKind){
+                    if(!this.dataBaseSelect){
+                        this.$message.error('请选择数据库类型');
+                        return;
+                    }
+                    sqlKind = this.dataBaseSelect;
+                }
                 let ip;
                 let port;
                 let dataname;
@@ -563,7 +602,7 @@
                     dataname = this.s_dataname;
                     username = this.s_username;
                     password = this.s_password;
-                }else if(sqlKind == 'postgresql'){
+                }else{
                     ip = this.postgresql_ip;
                     port = this.postgresql_port;
                     dataname = this.postgresql_dataname;

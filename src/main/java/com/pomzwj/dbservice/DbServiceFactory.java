@@ -1,6 +1,7 @@
 package com.pomzwj.dbservice;
 
 import com.pomzwj.constant.DataBaseType;
+import com.pomzwj.dbservice.clickhouse.ClickhouseDbService;
 import com.pomzwj.dbservice.mysql.MySqlDbService;
 import com.pomzwj.dbservice.oracle.OracleDbService;
 import com.pomzwj.dbservice.postgresql.PostgresqlDbService;
@@ -26,6 +27,8 @@ public class DbServiceFactory {
     private SqlServerDbService sqlServerDbService;
     @Autowired
     private PostgresqlDbService postgresqlDbService;
+    @Autowired
+    private ClickhouseDbService clickhouseDbService;
 
     public DbService getDbServiceBean(String dbKind) {
         if (StringUtils.isEmpty(dbKind)) {
@@ -41,6 +44,8 @@ public class DbServiceFactory {
                 return sqlServerDbService;
             } else if (DataBaseType.POSTGRESQL.name().equals(dbKind.toUpperCase())) {
                 return postgresqlDbService;
+            } else if(DataBaseType.CLICKHOUSE.name().equals(dbKind.toUpperCase())){
+                return clickhouseDbService;
             }
         }
         return null;

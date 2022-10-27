@@ -29,7 +29,12 @@ public enum DataBaseType {
     /**
      * postgresql
      */
-    POSTGRESQL(Arrays.asList("columnName", "dataType","nullAble","primary", "defaultVal", "comments"));
+    POSTGRESQL(Arrays.asList("columnName", "dataType","nullAble", "defaultVal", "comments")),
+
+    /**
+     * clickhouse
+     */
+    CLICKHOUSE(Arrays.asList("columnName","dataType","nullAble","defaultVal","comments"));
     private List<String>columnName;
 
     DataBaseType(List<String> columnName){
