@@ -14,8 +14,19 @@
 ![ORACLE](https://img.shields.io/badge/ORACLE-11g-red.svg)
 ![SqlServer](https://img.shields.io/badge/SqlServer-2008-red.svg)
 ![Postgresql](https://img.shields.io/badge/Postgresql-14-blue.svg)
+![Clickhouse](https://img.shields.io/badge/Clickhouse-yellow.svg)
 
 database-export是一款多线程生成数据库结构文档的开源springboot工程，能支持最新的数据库版本，可以导出docx格式和xlsx的文档，也能直接在网页上预览
+
+
+支持的数据库
+------------
+* MySQL
+* ORACLE
+* SqlServer
+* Postgresql
+* Clickhouse
+
 
 项目使用技术
 ------------
@@ -28,6 +39,8 @@ database-export是一款多线程生成数据库结构文档的开源springboot�
 * Spring Boot
 * Maven
 * [POI-TL](http://deepoove.com/poi-tl)
+
+
 
 
 项目特点
@@ -58,15 +71,16 @@ cmd/shell执行java -jar xxx.jar 即可启动
 
 下载
 
-|            |     WIN_NO_JRE                    |  WIN_WITH_JRE                           
-| -------    |     :-----:                       |     :----:                              |
-| V.1.0.0    | [database-export-1.0.0_noJre8.rar](https://github.com/PomZWJ/database-export/releases/download/1.0.0/database-export-1.0.0_noJre8.rar)  |   [database-export-1.0.0_withJre8.rar](https://github.com/PomZWJ/database-export/releases/download/1.0.0/database-export-1.0.0_withJre8.rar)    |
-| V.2.0.0    | [database-export-2.0.0_noJre8.rar](https://github.com/PomZWJ/database-export/releases/download/2.0.0/database-export-2.0.0_noJre8.rar)      |   [database-export-2.0.0_withJre8.rar](https://github.com/PomZWJ/database-export/releases/download/2.0.0/database-export-2.0.0_withJre8.rar)    |
-| V.2.1.0    | (后续版本都不含jre1.8,win和linux都是同一个包,不再区分)  https://pan.baidu.com/s/1A7EttMBIdVy3oAkFd0zo-w  提取码6gdr |
-| V.2.2.0    | https://pan.baidu.com/s/1geYr9ksIXvf1R_xWiw_KDg  提取码kzmg |
-| V.3.0.0    | https://pan.baidu.com/s/1dKkSHFmRhcjNeF8JJ4CHbg  提取码xf7c |
-| V.3.1.0    | https://pan.baidu.com/s/1cwWkS2I8QYE9mqApRATxYQ  提取码wy18 |
-| V.3.2.0    | https://pan.baidu.com/s/1SRdbH0-DwO9IAFF5jttwbQ  提取码g11i |
+|         |     WIN_NO_JRE                    |  WIN_WITH_JRE                           
+|---------|     :-----:                       |     :----:                              |
+| V.1.0.0 | [database-export-1.0.0_noJre8.rar](https://github.com/PomZWJ/database-export/releases/download/1.0.0/database-export-1.0.0_noJre8.rar)  |   [database-export-1.0.0_withJre8.rar](https://github.com/PomZWJ/database-export/releases/download/1.0.0/database-export-1.0.0_withJre8.rar)    |
+| V.2.0.0 | [database-export-2.0.0_noJre8.rar](https://github.com/PomZWJ/database-export/releases/download/2.0.0/database-export-2.0.0_noJre8.rar)      |   [database-export-2.0.0_withJre8.rar](https://github.com/PomZWJ/database-export/releases/download/2.0.0/database-export-2.0.0_withJre8.rar)    |
+| V.2.1.0 | (后续版本都不含jre1.8,win和linux都是同一个包,不再区分)  https://pan.baidu.com/s/1A7EttMBIdVy3oAkFd0zo-w  提取码6gdr |
+| V.2.2.0 | https://pan.baidu.com/s/1geYr9ksIXvf1R_xWiw_KDg  提取码kzmg |
+| V.3.0.0 | https://pan.baidu.com/s/1dKkSHFmRhcjNeF8JJ4CHbg  提取码xf7c |
+| V.3.1.0 | https://pan.baidu.com/s/1cwWkS2I8QYE9mqApRATxYQ  提取码wy18 |
+| V.3.2.0 | https://pan.baidu.com/s/1SRdbH0-DwO9IAFF5jttwbQ  提取码g11i |
+| V.3.3.0 | https://pan.baidu.com/s/1SRdbH0-DwO9IAFF5jttwbQ  提取码g11i |
 
 
 ## 2.下载最新的源码启动
@@ -104,8 +118,8 @@ cmd/shell执行java -jar xxx.jar 即可启动
 **SQLServer**
 ![](https://img-blog.csdnimg.cn/83bb44a0563d40a19976121e9e5e5240.png?x-oss-process=image/watermark,type_d3F5LXplbmhlaQ,shadow_50,text_Q1NETiBA5oOK5Ye65bCY,size_20,color_FFFFFF,t_70,g_se,x_16)
 
-**postgresql**
-![](https://img-blog.csdnimg.cn/5ae17c36bddc44f9a785486d43dc94ce.png?x-oss-process=image/watermark,type_d3F5LXplbmhlaQ,shadow_50,text_Q1NETiBA5oOK5Ye65bCY,size_20,color_FFFFFF,t_70,g_se,x_16)
+**其他**
+![](https://img-blog.csdnimg.cn/509f9ed6bb8b4fc4b61f06bb8b47340e.png#pic_center)
 
 
 **其他图片**
@@ -116,6 +130,12 @@ cmd/shell执行java -jar xxx.jar 即可启动
 ![](https://img-blog.csdnimg.cn/20210627193227925.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L2h1YW5ndXRhMTE3OA==,size_16,color_FFFFFF,t_70#pic_center)
 
 ## 5.更新日志
+
+**2022-10-27(V3.3.0)**
+
+>1.新增支持ClickHouse
+
+>2.修复已知bug
 
 **2022-03-27(V3.2.0)**
 
