@@ -35,6 +35,10 @@ public class HikariCpPoolUtils implements DbPoolService {
 	String postgresqlJdbc;
 	@Value("${database.driver.postgresql}")
 	String postgresqlDriver;
+	@Value("${database.jdbc.clickhouse}")
+	String clickhouseJdbc;
+	@Value("${database.driver.clickhouse}")
+	String clickhouseDriver;
 
 	@Override
 	public DataSource createDbPool(DbBaseInfo dbBaseInfo) {
@@ -59,6 +63,9 @@ public class HikariCpPoolUtils implements DbPoolService {
 		} else if (dataBaseType.equals(DataBaseType.POSTGRESQL)) {
 			sqlConnectionStr = postgresqlJdbc;
 			driverClassName = postgresqlDriver;
+		} else if(dataBaseType.equals(DataBaseType.CLICKHOUSE)){
+			sqlConnectionStr = clickhouseJdbc;
+			driverClassName = clickhouseDriver;
 		}
 		String jdbcUrl = String.format(sqlConnectionStr, ip, port, dbName);
 		HikariConfig hikariConfig = new HikariConfig();
