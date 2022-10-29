@@ -9,7 +9,6 @@
 
 ![Spring Boot 2.6.3](https://img.shields.io/badge/Spring%20Boot-2.6.3-brightgreen.svg)
 ![Element-UI 2.0](https://img.shields.io/badge/ElementUI-2.0-green.svg)
-![Element-UI 2.0](https://img.shields.io/badge/ElementUI-2.0-green.svg)
 ![POI-TL](https://img.shields.io/badge/POITL-1.12-brightgreen.svg)
 ![MySQL](https://img.shields.io/badge/MySQL-8-blue.svg)
 ![ORACLE](https://img.shields.io/badge/ORACLE-11g-red.svg)
@@ -48,7 +47,7 @@ database-export是一款多线程生成数据库结构文档的开源springboot�
 想加入技术开发群的加我，备注加群即可(定制模板请备注定制模板)
 ----------
 
-<img alt="加群" src="https://github.com/PomZWJ/database-export/blob/master/src/main/resources/static/assetss/images/v2/mywxqr.png?raw=true" width="300" height="300"/>
+<img alt="加群" src="src/main/resources/static/assetss/images/v2/mywxqr.png"/>
 
 
 How to use
