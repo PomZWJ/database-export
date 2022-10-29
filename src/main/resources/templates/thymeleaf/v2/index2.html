@@ -126,10 +126,11 @@
                             </el-col>
                         </el-row>
                         <el-row style="margin: 0 auto;">
-                            <el-popover placement="top" width="200" v-model="oraclePopoverVisible">
+                            <el-popover placement="top" width="340" v-model="oraclePopoverVisible">
                                 <el-row>
                                     <el-button class="el-icon-download" type="primary" plain @click="generateWord('oracle','word')">word</el-button>
                                     <el-button class="el-icon-download" type="primary" plain @click="generateWord('oracle','excel')">excel</el-button>
+                                    <el-button class="el-icon-download" type="primary" plain @click="generateWord('oracle','markdown')">markdown</el-button>
                                 </el-row>
                                 <el-button class="el-icon-download" slot="reference">生成文档</el-button>
                             </el-popover>
@@ -177,10 +178,11 @@
                             </el-col>
                         </el-row>
                         <el-row style="margin: 0 auto">
-                            <el-popover placement="top" width="200" v-model="mysqlPopoverVisible">
+                            <el-popover placement="top" width="340" v-model="mysqlPopoverVisible">
                                 <el-row>
                                     <el-button class="el-icon-download" type="primary" plain @click="generateWord('mysql','word')">word</el-button>
                                     <el-button class="el-icon-download" type="primary" plain @click="generateWord('mysql','excel')">excel</el-button>
+                                    <el-button class="el-icon-download" type="primary" plain @click="generateWord('mysql','markdown')">markdown</el-button>
                                 </el-row>
                                 <el-button class="el-icon-download" slot="reference">生成文档</el-button>
                             </el-popover>
@@ -227,10 +229,11 @@
                             </el-col>
                         </el-row>
                         <el-row style="margin: 0 auto">
-                            <el-popover placement="top" width="200" v-model="sqlserverPopoverVisible">
+                            <el-popover placement="top" width="340" v-model="sqlserverPopoverVisible">
                                 <el-row>
                                     <el-button class="el-icon-download" type="primary" plain @click="generateWord('sqlserver','word')">word</el-button>
                                     <el-button class="el-icon-download" type="primary" plain @click="generateWord('sqlserver','excel')">excel</el-button>
+                                    <el-button class="el-icon-download" type="primary" plain @click="generateWord('sqlserver','markdown')">markdown</el-button>
                                 </el-row>
                                 <el-button class="el-icon-download" slot="reference">生成文档</el-button>
                             </el-popover>
@@ -289,10 +292,11 @@
                             </el-col>
                         </el-row>
                         <el-row style="margin: 0 auto">
-                            <el-popover placement="top" width="200" v-model="postgresqlPopoverVisible">
+                            <el-popover placement="top" width="340" v-model="postgresqlPopoverVisible">
                                 <el-row>
                                     <el-button class="el-icon-download" type="primary" plain @click="generateWord('','word')">word</el-button>
                                     <el-button class="el-icon-download" type="primary" plain @click="generateWord('','excel')">excel</el-button>
+                                    <el-button class="el-icon-download" type="primary" plain @click="generateWord('','markdown')">markdown</el-button>
                                 </el-row>
                                 <el-button class="el-icon-download" slot="reference">生成文档</el-button>
                             </el-popover>
@@ -479,6 +483,8 @@
                     window.open("/dbExport/v2/makeExcel?base64Params="+btoa(JSON.stringify(params)));
                 }else if(exportFileType == 'word'){
                     window.open("/dbExport/v2/makeWord?base64Params="+btoa(JSON.stringify(params)));
+                }else if(exportFileType == 'markdown'){
+                    window.open("/dbExport/v2/makeMarkdown?base64Params="+btoa(JSON.stringify(params)));
                 }
 
             },

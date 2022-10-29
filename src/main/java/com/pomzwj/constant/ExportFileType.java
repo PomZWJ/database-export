@@ -10,7 +10,8 @@ import org.apache.commons.lang3.StringUtils;
  */
 public enum ExportFileType {
     WORD(true),
-    EXCEL(true);
+    EXCEL(true),
+    MARKDOWN(true);
     private boolean isEnable;
 
     public boolean isEnable() {

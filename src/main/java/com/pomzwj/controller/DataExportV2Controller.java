@@ -13,6 +13,7 @@ import com.pomzwj.domain.DbTable;
 import com.pomzwj.domain.ResponseParams;
 import com.pomzwj.exception.DatabaseExportException;
 import com.pomzwj.exception.MessageCode;
+import com.pomzwj.officeframework.md.MarkdownOperatorService;
 import com.pomzwj.officeframework.poi.PoiExcelOperatorService;
 import com.pomzwj.officeframework.poitl.PoitlOperatorService;
 import com.pomzwj.utils.AssertUtils;
@@ -26,6 +27,7 @@ import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.lang.reflect.Field;
@@ -46,6 +48,8 @@ public class DataExportV2Controller {
     private PoitlOperatorService poitlOperatorService;
     @Autowired
     private PoiExcelOperatorService poiExcelOperatorService;
+    @Autowired
+    private MarkdownOperatorService markdownOperatorService;
     @Autowired
     private DbServiceFactory dbServiceFactory;
 
@@ -172,6 +176,58 @@ public class DataExportV2Controller {
             }
         }
     }
+
+    @RequestMapping(value = "/makeMarkdown")
+    @ResponseBody
+    public void makeMarkdown(String base64Params, HttpServletResponse response) {
+        String desc = "生成markdown文档[v2]";
+        response.setHeader("Content-type", "text/html;charset=UTF-8");
+        try {
+            DbBaseInfo info = JSON.parseObject(new String(Base64.getDecoder().decode(base64Params)),DbBaseInfo.class);
+            //参数校验
+            AssertUtils.isNull(info.getDbKind(), MessageCode.DATABASE_KIND_IS_NULL_ERROR);
+            AssertUtils.isNull(info.getIp(), MessageCode.DATABASE_IP_IS_NULL_ERROR);
+            AssertUtils.isNull(info.getPort(), MessageCode.DATABASE_PORT_IS_NULL_ERROR);
+            AssertUtils.isNull(info.getUserName(), MessageCode.DATABASE_USER_IS_NULL_ERROR);
+            AssertUtils.isNull(info.getPassword(), MessageCode.DATABASE_PASSWORD_IS_NULL_ERROR);
+            String exportFileType = info.getExportFileType();
+            if (StringUtils.isEmpty(exportFileType)) {
+                exportFileType = "excel";
+            }
+            ExportFileType exportFileTypeEnum = ExportFileType.matchType(exportFileType);
+            if (exportFileTypeEnum == null) {
+                throw new DatabaseExportException(MessageCode.EXPORT_FILE_TYPE_IS_NOT_MATCH_ERROR);
+            }else if(exportFileTypeEnum.isEnable() == false){
+                throw new DatabaseExportException(MessageCode.EXPORT_FILE_TYPE_IS_NOT_DEVELOP_ERROR);
+            }
+            DataBaseType dataBaseType = DataBaseType.matchType(info.getDbKind());
+            if (dataBaseType == null) {
+                throw new DatabaseExportException(MessageCode.DATABASE_KIND_IS_NOT_MATCH_ERROR);
+            }
+            DbService dbServiceBean = dbServiceFactory.getDbServiceBean(info.getDbKind());
+            //查询表信息
+            List<DbTable> tableDetailInfo = dbServiceBean.getTableDetailInfo(info);
+            //生成word文档
+            String downloadContent = markdownOperatorService.makeMd(info.getDbKind(), tableDetailInfo);
+            response.setContentType("application/octet-stream");
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMddHHmmss");
+            response.setHeader("Content-Disposition", "attachment;fileName=" + info.getDbName() + sdf.format(new Date()) + ".md");
+            //ServletOutputStream out = response.getOutputStream();
+            response.getWriter().println(downloadContent);
+            response.flushBuffer();
+        } catch (Exception e) {
+            try {
+                response.getWriter().println(e.getMessage());
+            } catch (IOException ioException) {
+                log.error("desc={},输出错误信息出错e={}", desc, ioException);
+            }
+            log.error("desc={},获取失败, 原因:{}", desc, e.getMessage(), e);
+        } finally {
+
+        }
+    }
+
+
     @RequestMapping(value = "/getTableData")
     @ResponseBody
     public ResponseParams<Map> getDocData(String base64Params) {

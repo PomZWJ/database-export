@@ -118,6 +118,12 @@ cmd/shell执行java -jar xxx.jar 即可启动
 
 ## 5.更新日志
 
+**2022-10-29(V3.4.0)**
+
+>1.新增支持Sqlite
+
+>2.导出支持Markdown
+
 **2022-10-27(V3.3.0)**
 
 >1.新增支持ClickHouse
