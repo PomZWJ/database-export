@@ -4,17 +4,18 @@
 
 ![](https://img-blog.csdnimg.cn/2021062719254559.png#pic_center)
 
-**database-export V3.3.0**
+**database-export V3.4.0**
 =========================
 
 ![Spring Boot 2.6.3](https://img.shields.io/badge/Spring%20Boot-2.6.3-brightgreen.svg)
 ![Element-UI 2.0](https://img.shields.io/badge/ElementUI-2.0-green.svg)
-![JDK 1.8](https://img.shields.io/badge/JDK-1.8-brightgreen.svg)
+![Element-UI 2.0](https://img.shields.io/badge/ElementUI-2.0-green.svg)
+![POI-TL](https://img.shields.io/badge/POITL-1.12-brightgreen.svg)
 ![MySQL](https://img.shields.io/badge/MySQL-8-blue.svg)
 ![ORACLE](https://img.shields.io/badge/ORACLE-11g-red.svg)
 ![SqlServer](https://img.shields.io/badge/SqlServer-2008-red.svg)
 ![Postgresql](https://img.shields.io/badge/Postgresql-14-blue.svg)
-![Clickhouse](https://img.shields.io/badge/Clickhouse-yellow.svg)
+![Clickhouse](https://img.shields.io/badge/Clickhouse-22-yellow.svg)
 ![Sqlite](https://img.shields.io/badge/sqlite-3-blue.svg)
 
 database-export是一款多线程生成数据库结构文档的开源springboot工程，能支持最新的数据库版本，可以导出docx格式和xlsx的文档，也能直接在网页上预览
@@ -30,28 +31,12 @@ database-export是一款多线程生成数据库结构文档的开源springboot�
 * Sqlite3
 
 
-项目使用技术
-------------
-
-* JDK1.8
-* VUE2.0
-* Element-UI
-* Axios
-* Thymeleaf
-* Spring Boot
-* Maven
-* [POI-TL](http://deepoove.com/poi-tl)
-
-
-
-
 项目特点
 ------------
 
 * 导出sql支持多线程查询，导出速度更快
 * 使用element-ui，界面更美观
 * 支持导出word和excel，更支持网页预览
-* 支持MySQL8.0版本,Oracle 11g,sqlserver以及Postgresql
 * 导出速度高于现在的所有导出工具
 
 想加入技术开发群的加我，备注加群即可(定制模板请备注定制模板)
