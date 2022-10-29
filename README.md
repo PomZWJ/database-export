@@ -31,6 +31,12 @@ database-export是一款多线程生成数据库结构文档的开源springboot�
 * Sqlite3
 
 
+现已支持导出的类型
+------------
+* word
+* excel
+* markdown
+
 项目特点
 ------------
 
