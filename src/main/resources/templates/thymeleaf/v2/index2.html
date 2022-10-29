@@ -314,6 +314,9 @@
             }, {
                 value: 'clickhouse',
                 label: 'clickhouse'
+            }, {
+                value: 'sqlite',
+                label: 'sqlite'
             }],
             dataBaseSelect: '',
             fit: 'fill',
@@ -392,6 +395,15 @@
                 background: "#F2F6FC",
                 width: "100%",
                 height: "100%"
+            }
+        },
+        watch: {
+            dataBaseSelect(val){
+                if(val && val == 'sqlite'){
+                    this.$alert('sqlite在IP地址输入数据库文件地址即可，其他参数随便填', '提示', {
+                        confirmButtonText: '确定'
+                    });
+                }
             }
         },
         methods: {

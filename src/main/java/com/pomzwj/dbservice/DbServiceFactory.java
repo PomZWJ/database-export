@@ -5,6 +5,7 @@ import com.pomzwj.dbservice.clickhouse.ClickhouseDbService;
 import com.pomzwj.dbservice.mysql.MySqlDbService;
 import com.pomzwj.dbservice.oracle.OracleDbService;
 import com.pomzwj.dbservice.postgresql.PostgresqlDbService;
+import com.pomzwj.dbservice.sqlite.SqliteDbService;
 import com.pomzwj.dbservice.sqlserver.SqlServerDbService;
 import com.pomzwj.exception.DatabaseExportException;
 import com.pomzwj.exception.MessageCode;
@@ -29,6 +30,8 @@ public class DbServiceFactory {
     private PostgresqlDbService postgresqlDbService;
     @Autowired
     private ClickhouseDbService clickhouseDbService;
+    @Autowired
+    private SqliteDbService sqliteDbService;
 
     public DbService getDbServiceBean(String dbKind) {
         if (StringUtils.isEmpty(dbKind)) {
@@ -46,6 +49,8 @@ public class DbServiceFactory {
                 return postgresqlDbService;
             } else if(DataBaseType.CLICKHOUSE.name().equals(dbKind.toUpperCase())){
                 return clickhouseDbService;
+            } else if(DataBaseType.SQLITE.name().equals(dbKind.toUpperCase())){
+                return sqliteDbService;
             }
         }
         return null;

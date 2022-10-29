@@ -15,6 +15,7 @@
 ![SqlServer](https://img.shields.io/badge/SqlServer-2008-red.svg)
 ![Postgresql](https://img.shields.io/badge/Postgresql-14-blue.svg)
 ![Clickhouse](https://img.shields.io/badge/Clickhouse-yellow.svg)
+![Sqlite](https://img.shields.io/badge/sqlite-3-blue.svg)
 
 database-export是一款多线程生成数据库结构文档的开源springboot工程，能支持最新的数据库版本，可以导出docx格式和xlsx的文档，也能直接在网页上预览
 
@@ -26,6 +27,7 @@ database-export是一款多线程生成数据库结构文档的开源springboot�
 * SqlServer
 * Postgresql
 * Clickhouse
+* Sqlite3
 
 
 项目使用技术

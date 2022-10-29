@@ -34,7 +34,12 @@ public enum DataBaseType {
     /**
      * clickhouse
      */
-    CLICKHOUSE(Arrays.asList("columnName","dataType","nullAble","defaultVal","comments"));
+    CLICKHOUSE(Arrays.asList("columnName","dataType","nullAble","defaultVal","comments")),
+
+    /**
+     * sqlite
+     */
+    SQLITE(Arrays.asList("columnName","dataType","nullAble","defaultVal","primary","comments"));
     private List<String>columnName;
 
     DataBaseType(List<String> columnName){

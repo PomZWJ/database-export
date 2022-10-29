@@ -39,6 +39,10 @@ public class DruidPoolUtils implements DbPoolService {
 	String clickhouseJdbc;
 	@Value("${database.driver.clickhouse}")
 	String clickhouseDriver;
+	@Value("${database.jdbc.sqlite}")
+	String sqliteJdbc;
+	@Value("${database.driver.sqlite}")
+	String sqliteDriver;
 
 	@Override
 	public DataSource createDbPool(DbBaseInfo dbBaseInfo){
@@ -66,6 +70,9 @@ public class DruidPoolUtils implements DbPoolService {
 		}else if(dataBaseType.equals(DataBaseType.CLICKHOUSE)){
 			sqlConnectionStr = clickhouseJdbc;
 			driverClassName = clickhouseDriver;
+		} else if(dataBaseType.equals(DataBaseType.SQLITE)){
+			sqlConnectionStr = sqliteJdbc;
+			driverClassName = sqliteDriver;
 		}
 		String jdbcUrl = String.format(sqlConnectionStr, ip, port, dbName);
 		DruidDataSource dataSource = new DruidDataSource();

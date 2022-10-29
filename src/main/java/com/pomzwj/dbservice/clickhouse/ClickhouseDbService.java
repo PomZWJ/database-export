@@ -24,7 +24,12 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.*;
-
+/**
+ * clickhouse数据库支持
+ * @author PomZWJ
+ * @email 1513041820@qq.com
+ * @github https://github.com/PomZWJ
+ */
 @Component
 public class ClickhouseDbService extends AbstractDbService implements DbService {
     static final Logger log = LoggerFactory.getLogger(ClickhouseDbService.class);
