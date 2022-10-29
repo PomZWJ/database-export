@@ -74,6 +74,7 @@ cmd/shell执行java -jar xxx.jar 即可启动
 | V.3.1.0 | https://pan.baidu.com/s/1cwWkS2I8QYE9mqApRATxYQ  提取码wy18 |
 | V.3.2.0 | https://pan.baidu.com/s/1SRdbH0-DwO9IAFF5jttwbQ  提取码g11i |
 | V.3.3.0 | https://pan.baidu.com/s/1PdpVZWnQdILgUEwV0FfxNQ  提取码4two |
+| V.3.4.0 | https://pan.baidu.com/s/1tS04c0gWzd9Fq61gnD28eQ  提取码39x3 |
 
 
 ## 2.下载最新的源码启动
