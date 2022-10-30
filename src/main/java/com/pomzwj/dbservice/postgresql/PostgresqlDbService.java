@@ -1,12 +1,9 @@
 package com.pomzwj.dbservice.postgresql;
 
-import com.alibaba.druid.pool.DruidDataSource;
 import com.google.common.util.concurrent.ThreadFactoryBuilder;
 import com.pomzwj.dbpool.DbPoolFactory;
-import com.pomzwj.dbpool.druid.DruidPoolUtils;
 import com.pomzwj.dbservice.AbstractDbService;
 import com.pomzwj.dbservice.DbService;
-import com.pomzwj.dbservice.mysql.MySqlDbService;
 import com.pomzwj.domain.DbBaseInfo;
 import com.pomzwj.domain.DbColumnInfo;
 import com.pomzwj.domain.DbTable;

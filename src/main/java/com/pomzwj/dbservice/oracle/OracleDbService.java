@@ -1,9 +1,7 @@
 package com.pomzwj.dbservice.oracle;
 
-import com.alibaba.druid.pool.DruidDataSource;
 import com.google.common.util.concurrent.ThreadFactoryBuilder;
 import com.pomzwj.dbpool.DbPoolFactory;
-import com.pomzwj.dbpool.druid.DruidPoolUtils;
 import com.pomzwj.dbservice.AbstractDbService;
 import com.pomzwj.dbservice.DbService;
 import com.pomzwj.domain.*;

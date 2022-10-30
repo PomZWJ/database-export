@@ -4,7 +4,6 @@ import com.google.common.util.concurrent.ThreadFactoryBuilder;
 import com.pomzwj.dbpool.DbPoolFactory;
 import com.pomzwj.dbservice.AbstractDbService;
 import com.pomzwj.dbservice.DbService;
-import com.pomzwj.dbservice.postgresql.PostgresqlDbService;
 import com.pomzwj.domain.DbBaseInfo;
 import com.pomzwj.domain.DbColumnInfo;
 import com.pomzwj.domain.DbTable;

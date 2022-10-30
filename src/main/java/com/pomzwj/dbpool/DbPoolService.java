@@ -1,6 +1,5 @@
 package com.pomzwj.dbpool;
 
-import com.alibaba.druid.pool.DruidDataSource;
 import com.pomzwj.domain.DbBaseInfo;
 
 import javax.sql.DataSource;
