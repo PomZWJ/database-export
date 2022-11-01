@@ -77,7 +77,7 @@ public class DataExportV2Controller {
             AssertUtils.isNull(info.getIp(), MessageCode.DATABASE_IP_IS_NULL_ERROR);
             AssertUtils.isNull(info.getPort(), MessageCode.DATABASE_PORT_IS_NULL_ERROR);
             AssertUtils.isNull(info.getUserName(), MessageCode.DATABASE_USER_IS_NULL_ERROR);
-            AssertUtils.isNull(info.getPassword(), MessageCode.DATABASE_PASSWORD_IS_NULL_ERROR);
+            //AssertUtils.isNull(info.getPassword(), MessageCode.DATABASE_PASSWORD_IS_NULL_ERROR);
             String exportFileType = info.getExportFileType();
             if (StringUtils.isEmpty(exportFileType)) {
                 exportFileType = "word";
@@ -133,7 +133,7 @@ public class DataExportV2Controller {
             AssertUtils.isNull(info.getIp(), MessageCode.DATABASE_IP_IS_NULL_ERROR);
             AssertUtils.isNull(info.getPort(), MessageCode.DATABASE_PORT_IS_NULL_ERROR);
             AssertUtils.isNull(info.getUserName(), MessageCode.DATABASE_USER_IS_NULL_ERROR);
-            AssertUtils.isNull(info.getPassword(), MessageCode.DATABASE_PASSWORD_IS_NULL_ERROR);
+            //AssertUtils.isNull(info.getPassword(), MessageCode.DATABASE_PASSWORD_IS_NULL_ERROR);
             String exportFileType = info.getExportFileType();
             if (StringUtils.isEmpty(exportFileType)) {
                 exportFileType = "excel";
@@ -188,7 +188,7 @@ public class DataExportV2Controller {
             AssertUtils.isNull(info.getIp(), MessageCode.DATABASE_IP_IS_NULL_ERROR);
             AssertUtils.isNull(info.getPort(), MessageCode.DATABASE_PORT_IS_NULL_ERROR);
             AssertUtils.isNull(info.getUserName(), MessageCode.DATABASE_USER_IS_NULL_ERROR);
-            AssertUtils.isNull(info.getPassword(), MessageCode.DATABASE_PASSWORD_IS_NULL_ERROR);
+            //AssertUtils.isNull(info.getPassword(), MessageCode.DATABASE_PASSWORD_IS_NULL_ERROR);
             String exportFileType = info.getExportFileType();
             if (StringUtils.isEmpty(exportFileType)) {
                 exportFileType = "excel";
@@ -240,7 +240,7 @@ public class DataExportV2Controller {
             AssertUtils.isNull(info.getIp(), MessageCode.DATABASE_IP_IS_NULL_ERROR);
             AssertUtils.isNull(info.getPort(), MessageCode.DATABASE_PORT_IS_NULL_ERROR);
             AssertUtils.isNull(info.getUserName(), MessageCode.DATABASE_USER_IS_NULL_ERROR);
-            AssertUtils.isNull(info.getPassword(), MessageCode.DATABASE_PASSWORD_IS_NULL_ERROR);
+            //AssertUtils.isNull(info.getPassword(), MessageCode.DATABASE_PASSWORD_IS_NULL_ERROR);
             DataBaseType dataBaseType = DataBaseType.matchType(info.getDbKind());
             if (dataBaseType == null) {
                 throw new DatabaseExportException(MessageCode.DATABASE_KIND_IS_NOT_MATCH_ERROR);

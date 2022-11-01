@@ -474,10 +474,10 @@
                     this.$message.error('用户名不能为空');
                     return;
                 }
-                if (password == '') {
+                /*if (password == '') {
                     this.$message.error('密码不能为空');
                     return;
-                }
+                }*/
                 let params = {"dbKind":sqlKind,"ip":ip,"port":port,"dbName":dataname,"userName":username,"password":password,"exportFileType":exportFileType};
                 if(exportFileType == 'excel'){
                     window.open("/dbExport/v2/makeExcel?base64Params="+btoa(JSON.stringify(params)));
@@ -644,10 +644,10 @@
                     this.$message.error('用户名不能为空');
                     return;
                 }
-                if (password == '') {
+                /*if (password == '') {
                     this.$message.error('密码不能为空');
                     return;
-                }
+                }*/
                 let params = {"dbKind":sqlKind,"ip":ip,"port":port,"dbName":dataname,"userName":username,"password":password};
                 window.open("/dbExport/v2/viewDocHtml?base64Params="+btoa(JSON.stringify(params)));
             }
