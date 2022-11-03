@@ -47,7 +47,7 @@ database-export是一款多线程生成数据库结构文档的开源springboot�
 想加入技术开发群的加我，备注加群即可(定制模板请备注定制模板)
 ----------
 
-<img width="500px" height="500px" alt="加群" src="src/main/resources/static/assetss/images/v2/mywxqr.png"/>
+<img width="300px" height="300px" alt="加群" src="src/main/resources/static/assetss/images/v2/mywxqr.png"/>
 
 
 How to use
