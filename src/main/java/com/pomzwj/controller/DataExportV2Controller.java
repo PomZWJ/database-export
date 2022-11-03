@@ -2,6 +2,7 @@ package com.pomzwj.controller;
 
 import com.alibaba.fastjson2.JSON;
 import com.deepoove.poi.XWPFTemplate;
+import com.google.common.util.concurrent.RateLimiter;
 import com.pomzwj.anno.DataColumnName;
 import com.pomzwj.constant.DataBaseType;
 import com.pomzwj.constant.ExportFileType;
@@ -42,6 +43,7 @@ import java.util.*;
 @Controller
 @RequestMapping("/v2")
 public class DataExportV2Controller {
+    private RateLimiter rateLimiter = RateLimiter.create(20);
     static final Logger log = LoggerFactory.getLogger(DataExportV2Controller.class);
     @Autowired
     private PoitlOperatorService poitlOperatorService;
@@ -71,6 +73,9 @@ public class DataExportV2Controller {
         XWPFTemplate xwpfTemplate = null;
         response.setHeader("Content-type", "text/html;charset=UTF-8");
         try {
+            if(!rateLimiter.tryAcquire()){
+                throw new RuntimeException("目前请求的并发过多，请重试");
+            }
             DbBaseInfo info = JSON.parseObject(new String(Base64.getDecoder().decode(base64Params)),DbBaseInfo.class);
             //参数校验
             AssertUtils.isNull(info.getDbKind(), MessageCode.DATABASE_KIND_IS_NULL_ERROR);
@@ -127,6 +132,9 @@ public class DataExportV2Controller {
         XSSFWorkbook workbook = null;
         response.setHeader("Content-type", "text/html;charset=UTF-8");
         try {
+            if(!rateLimiter.tryAcquire()){
+                throw new RuntimeException("目前请求的并发过多，请重试");
+            }
             DbBaseInfo info = JSON.parseObject(new String(Base64.getDecoder().decode(base64Params)),DbBaseInfo.class);
             //参数校验
             AssertUtils.isNull(info.getDbKind(), MessageCode.DATABASE_KIND_IS_NULL_ERROR);
@@ -182,6 +190,9 @@ public class DataExportV2Controller {
         String desc = "生成markdown文档[v2]";
         response.setHeader("Content-type", "text/html;charset=UTF-8");
         try {
+            if(!rateLimiter.tryAcquire()){
+                throw new RuntimeException("目前请求的并发过多，请重试");
+            }
             DbBaseInfo info = JSON.parseObject(new String(Base64.getDecoder().decode(base64Params)),DbBaseInfo.class);
             //参数校验
             AssertUtils.isNull(info.getDbKind(), MessageCode.DATABASE_KIND_IS_NULL_ERROR);
@@ -230,9 +241,13 @@ public class DataExportV2Controller {
     @RequestMapping(value = "/getTableData")
     @ResponseBody
     public ResponseParams<Map> getDocData(String base64Params) {
+
         String desc = "生成word文档[v2]";
         ResponseParams<Map> responseParams = new ResponseParams();
         try {
+            if(!rateLimiter.tryAcquire()){
+                throw new RuntimeException("目前请求的并发过多，请重试");
+            }
             String s = new String(Base64.getDecoder().decode(base64Params));
             DbBaseInfo info = JSON.parseObject(s,DbBaseInfo.class);
             //参数校验
