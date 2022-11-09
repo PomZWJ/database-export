@@ -61,20 +61,6 @@ How to use
 
 cmd/shell执行java -jar xxx.jar 即可启动
 
-下载
-
-|         |     WIN_NO_JRE                    |  WIN_WITH_JRE                           
-|---------|     :-----:                       |     :----:                              |
-| V.1.0.0 | [database-export-1.0.0_noJre8.rar](https://github.com/PomZWJ/database-export/releases/download/1.0.0/database-export-1.0.0_noJre8.rar)  |   [database-export-1.0.0_withJre8.rar](https://github.com/PomZWJ/database-export/releases/download/1.0.0/database-export-1.0.0_withJre8.rar)    |
-| V.2.0.0 | [database-export-2.0.0_noJre8.rar](https://github.com/PomZWJ/database-export/releases/download/2.0.0/database-export-2.0.0_noJre8.rar)      |   [database-export-2.0.0_withJre8.rar](https://github.com/PomZWJ/database-export/releases/download/2.0.0/database-export-2.0.0_withJre8.rar)    |
-| V.2.1.0 | (后续版本都不含jre1.8,win和linux都是同一个包,不再区分)  https://pan.baidu.com/s/1A7EttMBIdVy3oAkFd0zo-w  提取码6gdr |
-| V.2.2.0 | https://pan.baidu.com/s/1geYr9ksIXvf1R_xWiw_KDg  提取码kzmg |
-| V.3.0.0 | https://pan.baidu.com/s/1dKkSHFmRhcjNeF8JJ4CHbg  提取码xf7c |
-| V.3.1.0 | https://pan.baidu.com/s/1cwWkS2I8QYE9mqApRATxYQ  提取码wy18 |
-| V.3.2.0 | https://pan.baidu.com/s/1SRdbH0-DwO9IAFF5jttwbQ  提取码g11i |
-| V.3.3.0 | https://pan.baidu.com/s/1PdpVZWnQdILgUEwV0FfxNQ  提取码4two |
-| V.3.4.0 | https://pan.baidu.com/s/1tS04c0gWzd9Fq61gnD28eQ  提取码39x3 |
-
 
 ## 2.下载最新的源码启动
 
