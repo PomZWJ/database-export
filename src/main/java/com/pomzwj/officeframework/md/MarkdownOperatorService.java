@@ -24,8 +24,7 @@ import java.util.List;
 @Service
 public class MarkdownOperatorService {
     static final Logger log = LoggerFactory.getLogger(MarkdownOperatorService.class);
-    static final String lineSeparator = java.security.AccessController.doPrivileged(
-            new sun.security.action.GetPropertyAction("line.separator"));
+    static final String lineSeparator = System.getProperty("line.separator");
     public String makeMd(String dbKind, List<DbTable> tableList) {
         DataBaseType dataBaseKind = DataBaseType.matchType(dbKind);
         List<String> columnNames = dataBaseKind.getColumnName();
