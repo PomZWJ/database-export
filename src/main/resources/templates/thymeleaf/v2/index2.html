@@ -81,6 +81,9 @@
                         <a title="微信">
                             <img v-bind:src="weChatIconImg" @click="openMyWxQr" style="width: 108px;height: 88px;margin-left: 30px;"  />
                         </a>
+                        <a title="支持我">
+                            <img v-bind:src="getMoneyIconImg" @click="dialogVisible = true" style="width: 108px;height: 91px;margin-left: 30px;"  />
+                        </a>
                     </div>
                     <div style="margin-top: 60px">
                         <span>Copyright © PomZWJ XiaMen 2018~2022</span>
@@ -190,6 +193,19 @@
                         </el-row>
                     </el-form>
                 </div>
+                <el-dialog
+                        title="感谢您的支持"
+                        :visible.sync="dialogVisible"
+                        width="50%">
+                    <p>
+                        <img v-bind:src="wechatPayIconImg" style="width: 300px;height: 400px;margin-left: 30px;"  />
+                        <img v-bind:src="aliPayIconImg" style="width: 300px;height: 400px;margin-left: 30px;"  />
+                    </p>
+                    <span slot="footer" class="dialog-footer">
+                    <el-button type="primary" @click="dialogVisible = false">确 定</el-button>
+                    </span>
+                </el-dialog>
+
                 <div v-bind:style="contentStyle" v-show="sqlserverDivShow" style="display: none;">
                     <el-image src="sqlserver-bg.png" th:src="@{/assetss/images/v2/sqlserver-bg.png}" :fit="fit" style="width: 306.8px;height:80px;;padding-top: 30px" ></el-image>
                     <el-form label-width="250px" style="width: 90%;padding-left: 10%;padding-top: 20px">
@@ -361,6 +377,7 @@
             mysqlPopoverVisible: false,
             sqlserverPopoverVisible: false,
             postgresqlPopoverVisible: false,
+            dialogVisible: false,
             welcomeIconImg: ctx+"/assetss/images/v2/welcome-icon-click.png",
             oracleIconImg: ctx+"/assetss/images/v2/oracle-icon-unclick.png",
             mysqlIconImg: ctx+"/assetss/images/v2/mysql-icon-unclick.png",
@@ -371,6 +388,9 @@
             giteeIconImg: ctx+"/assetss/images/v2/Gitee-icon.png",
             emailIconImg: ctx+"/assetss/images/v2/email-icon.png",
             weChatIconImg: ctx+"/assetss/images/v2/wechat-icon.png",
+            getMoneyIconImg: ctx+"/assetss/images/v2/get_money.png",
+            wechatPayIconImg: ctx+"/assetss/images/wechat_pay.png",
+            aliPayIconImg: ctx+"/assetss/images/ali_pay.jpg",
             welcomeBarStyle: {
                 borderBottom: "1px solid rgb(235, 233, 233)",
                 background: "#F2F6FC"
