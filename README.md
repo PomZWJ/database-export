@@ -49,6 +49,11 @@ database-export是一款多线程生成数据库结构文档的开源springboot�
 
 <img width="300px" height="300px" alt="加群" src="src/main/resources/static/assetss/images/v2/mywxqr.png"/>
 
+支持一下我
+----------
+<img width="300px" height="400px" alt="加群" src="src/main/resources/static/assetss/images/wechat_pay.png"/>
+<img width="300px" height="400px" alt="加群" src="src/main/resources/static/assetss/images/ali_pay.jpg"/>
+
 
 How to use
 ------------
