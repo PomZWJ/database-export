@@ -499,14 +499,7 @@
                     return;
                 }*/
                 let params = {"dbKind":sqlKind,"ip":ip,"port":port,"dbName":dataname,"userName":username,"password":password,"exportFileType":exportFileType};
-                if(exportFileType == 'excel'){
-                    window.open("/dbExport/v2/makeExcel?base64Params="+btoa(JSON.stringify(params)));
-                }else if(exportFileType == 'word'){
-                    window.open("/dbExport/v2/makeWord?base64Params="+btoa(JSON.stringify(params)));
-                }else if(exportFileType == 'markdown'){
-                    window.open("/dbExport/v2/makeMarkdown?base64Params="+btoa(JSON.stringify(params)));
-                }
-
+                window.open("/dbExport/v2/makeFile?base64Params="+btoa(JSON.stringify(params)));
             },
             barClick(sqlKind) {
                 if (sqlKind == 'welcome') {

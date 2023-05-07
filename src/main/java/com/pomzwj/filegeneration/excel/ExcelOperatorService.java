@@ -1,10 +1,11 @@
-package com.pomzwj.officeframework.poi;
+package com.pomzwj.filegeneration.excel;
 
 import com.pomzwj.anno.DataColumnName;
 import com.pomzwj.constant.DataBaseType;
+import com.pomzwj.domain.DbBaseInfo;
 import com.pomzwj.domain.DbColumnInfo;
 import com.pomzwj.domain.DbTable;
-
+import com.pomzwj.filegeneration.FileGenerationService;
 import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.ss.util.CellRangeAddress;
 import org.apache.poi.ss.util.RegionUtil;
@@ -27,13 +28,23 @@ import java.util.List;
  * @github https://github.com/PomZWJ
  */
 @Service
-public class PoiExcelOperatorService {
-    static final Logger log = LoggerFactory.getLogger(PoiExcelOperatorService.class);
+public class ExcelOperatorService implements FileGenerationService<XSSFWorkbook> {
+    static final Logger log = LoggerFactory.getLogger(ExcelOperatorService.class);
     static final int COLUMN_WIDTH = 5000;
 
-    public XSSFWorkbook makeExcel(String dbKind, String dbName, List<DbTable> tableList) {
+    /**
+     *
+     * @param dbBaseInfo
+     * @param tableList
+     * @return XSSFWorkbook
+     * @throws Exception
+     */
+    @Override
+    public XSSFWorkbook makeFile(DbBaseInfo dbBaseInfo, List<DbTable> tableList) throws Exception {
+        String dbKind = dbBaseInfo.getDbKind();
+        String dbName = dbBaseInfo.getDbName();
         XSSFWorkbook xssfWorkbook = new XSSFWorkbook();
-        Sheet sheet = PoiExcelOperatorService.createSheet(xssfWorkbook, dbName);
+        Sheet sheet = ExcelOperatorService.createSheet(xssfWorkbook, dbName);
         DataBaseType dataBaseKind = DataBaseType.matchType(dbKind);
         List<String> columnNames = dataBaseKind.getColumnName();
         //合并单元格的数量
@@ -191,5 +202,6 @@ public class PoiExcelOperatorService {
         }
         return sheet;
     }
+
 
 }

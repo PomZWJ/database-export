@@ -1,10 +1,12 @@
-package com.pomzwj.officeframework.md;
+package com.pomzwj.filegeneration.md;
 
 import com.google.common.base.Joiner;
 import com.pomzwj.anno.DataColumnName;
 import com.pomzwj.constant.DataBaseType;
+import com.pomzwj.domain.DbBaseInfo;
 import com.pomzwj.domain.DbColumnInfo;
 import com.pomzwj.domain.DbTable;
+import com.pomzwj.filegeneration.FileGenerationService;
 import com.pomzwj.utils.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -22,10 +24,20 @@ import java.util.List;
  * @github https://github.com/PomZWJ
  */
 @Service
-public class MarkdownOperatorService {
+public class MarkdownOperatorService implements FileGenerationService<String> {
     static final Logger log = LoggerFactory.getLogger(MarkdownOperatorService.class);
     static final String lineSeparator = System.getProperty("line.separator");
-    public String makeMd(String dbKind, List<DbTable> tableList) {
+
+    /**
+     *
+     * @param dbBaseInfo
+     * @param tableList
+     * @return String
+     * @throws Exception
+     */
+    @Override
+    public String makeFile(DbBaseInfo dbBaseInfo, List<DbTable> tableList)throws Exception {
+        String dbKind = dbBaseInfo.getDbKind();
         DataBaseType dataBaseKind = DataBaseType.matchType(dbKind);
         List<String> columnNames = dataBaseKind.getColumnName();
         StringBuffer content = new StringBuffer("");
@@ -48,6 +60,7 @@ public class MarkdownOperatorService {
 
         return content.toString();
     }
+
     private void createDataRow(DbTable dbTable,List<String> zhCnColumnName,List<String> columnNames,
                                List<String>tableSpliter,StringBuffer content)throws Exception{
         content.append("|").append(Joiner.on("|").join(zhCnColumnName)).append("|").append(lineSeparator);
@@ -102,4 +115,6 @@ public class MarkdownOperatorService {
         }
         return headerList;
     }
+
+
 }

@@ -1,20 +1,28 @@
-package com.pomzwj.officeframework.poitl;
+package com.pomzwj.filegeneration.word;
 
 import com.deepoove.poi.XWPFTemplate;
-import com.deepoove.poi.data.*;
+import com.deepoove.poi.data.Includes;
+import com.deepoove.poi.data.RowRenderData;
+import com.deepoove.poi.data.Rows;
+import com.deepoove.poi.data.Tables;
 import com.pomzwj.anno.DataColumnName;
 import com.pomzwj.constant.DataBaseType;
 import com.pomzwj.constant.TemplateFileConstants;
+import com.pomzwj.domain.DbBaseInfo;
 import com.pomzwj.domain.DbColumnInfo;
 import com.pomzwj.domain.DbTable;
 import com.pomzwj.domain.SegmentData;
+import com.pomzwj.filegeneration.FileGenerationService;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.io.File;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 
 /**
@@ -26,18 +34,20 @@ import java.util.*;
  * @date 2018/10/29/0029.
  */
 @Service
-public class PoitlOperatorService {
+public class WordOperatorService implements FileGenerationService<XWPFTemplate> {
 	@Value("${export.template-copy-path}")
 	private String templateCopyPath;
 
 	/**
-	 * 生成word，带自定义路径
 	 *
-	 * @param dbKind
+	 * @param dbBaseInfo
 	 * @param tableList
-	 * @return
+	 * @return XWPFTemplate
+	 * @throws Exception
 	 */
-	public XWPFTemplate makeDoc(String dbKind, List<DbTable> tableList) throws Exception {
+	@Override
+	public XWPFTemplate makeFile(DbBaseInfo dbBaseInfo, List<DbTable> tableList) throws Exception{
+		String dbKind  = dbBaseInfo.getDbKind();
 		DataBaseType dataBaseKind = DataBaseType.matchType(dbKind);
 		List<String> columnNames = dataBaseKind.getColumnName();
 
@@ -97,4 +107,6 @@ public class PoitlOperatorService {
 		}
 		return rows;
 	}
+
+
 }

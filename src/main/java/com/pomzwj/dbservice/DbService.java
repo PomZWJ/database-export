@@ -2,6 +2,7 @@ package com.pomzwj.dbservice;
 
 import com.pomzwj.domain.DbBaseInfo;
 import com.pomzwj.domain.DbTable;
+import org.springframework.jdbc.core.JdbcTemplate;
 
 import java.util.List;
 
@@ -21,6 +22,6 @@ public interface DbService {
      * @return
      * @throws Exception
      */
-	List<DbTable> getTableDetailInfo(DbBaseInfo dbBaseInfo) throws Exception;
+	public List<DbTable> getTableDetailInfo(DbBaseInfo dbBaseInfo) throws Exception;
 
 }

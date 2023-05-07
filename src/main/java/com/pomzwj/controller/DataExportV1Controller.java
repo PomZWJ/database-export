@@ -9,6 +9,7 @@ import com.pomzwj.domain.DbBaseInfo;
 import com.pomzwj.domain.DbTable;
 import com.pomzwj.exception.DatabaseExportException;
 import com.pomzwj.exception.MessageCode;
+import com.pomzwj.filegeneration.FileGenerationFactory;
 import com.pomzwj.officeframework.poitl.PoitlOperatorService;
 import com.pomzwj.utils.AssertUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -36,7 +37,7 @@ import java.util.List;
 public class DataExportV1Controller {
     static final Logger log = LoggerFactory.getLogger(DataExportV1Controller.class);
     @Autowired
-    private PoitlOperatorService poitlOperatorService;
+    private FileGenerationFactory fileGenerationFactory;
     @Autowired
     private DbServiceFactory dbServiceFactory;
     @RequestMapping()
@@ -75,10 +76,9 @@ public class DataExportV1Controller {
                 throw new DatabaseExportException(MessageCode.DATABASE_KIND_IS_NOT_MATCH_ERROR);
             }
             //查询表信息
-            DbService dbServiceBean = dbServiceFactory.getDbServiceBean(info.getDbKind());
-            List<DbTable> tableDetailInfo = dbServiceBean.getTableDetailInfo(info);
+            List<DbTable> tableDetailInfo = dbServiceFactory.getDbServiceBean(info.getDbKind()).getTableDetailInfo(info);
             //生成word文档
-            xwpfTemplate = poitlOperatorService.makeDoc(info.getDbKind(),tableDetailInfo);
+            xwpfTemplate = fileGenerationFactory.getFileGenerationBean(exportFileTypeEnum).makeFile(info,tableDetailInfo);
             response.setContentType("application/octet-stream");
             SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMddHHmmss");
             response.setHeader("Content-Disposition", "attachment;fileName="+info.getDbName()+sdf.format(new Date())+".docx");
