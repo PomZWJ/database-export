@@ -6,12 +6,17 @@ import com.pomzwj.constant.DataBaseType;
 import com.pomzwj.domain.DbBaseInfo;
 import com.pomzwj.domain.DbColumnInfo;
 import com.pomzwj.domain.DbTable;
+import com.pomzwj.filegeneration.AbstractFileGenerationService;
 import com.pomzwj.filegeneration.FileGenerationService;
 import com.pomzwj.utils.StringUtils;
+import org.apache.commons.io.FileUtils;
+import org.apache.commons.io.IOUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
+import java.io.File;
+import java.io.FileOutputStream;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
@@ -24,19 +29,12 @@ import java.util.List;
  * @github https://github.com/PomZWJ
  */
 @Service
-public class MarkdownOperatorService implements FileGenerationService<String> {
+public class MarkdownOperatorService extends AbstractFileGenerationService {
     static final Logger log = LoggerFactory.getLogger(MarkdownOperatorService.class);
     static final String lineSeparator = System.getProperty("line.separator");
 
-    /**
-     *
-     * @param dbBaseInfo
-     * @param tableList
-     * @return String
-     * @throws Exception
-     */
     @Override
-    public String makeFile(DbBaseInfo dbBaseInfo, List<DbTable> tableList)throws Exception {
+    protected void makeFileStream(DbBaseInfo dbBaseInfo, List<DbTable> tableList, File targetFile) throws Exception {
         String dbKind = dbBaseInfo.getDbKind();
         DataBaseType dataBaseKind = DataBaseType.matchType(dbKind);
         List<String> columnNames = dataBaseKind.getColumnName();
@@ -45,20 +43,15 @@ public class MarkdownOperatorService implements FileGenerationService<String> {
         for(int i=0;i<columnNames.size();i++){
             tableSpliter.add(":-----:");
         }
-        try{
-            for (int i = 0; i < tableList.size(); i++) {
-                DbTable dbTable = tableList.get(i);
-                //创建表名列
-                this.createTitleRow(dbTable.getTableName() , dbTable.getTableComments() , content);
-                //显示表头
-                List<String> zhCnColumnName = this.getZhCnColumnName(columnNames);
-                this.createDataRow(dbTable,zhCnColumnName, columnNames,tableSpliter,content);
-            }
-        }catch (Exception e){
-            log.error("组装md错误,e={}",e);
+        for (int i = 0; i < tableList.size(); i++) {
+            DbTable dbTable = tableList.get(i);
+            //创建表名列
+            this.createTitleRow(dbTable.getTableName(), dbTable.getTableComments(), content);
+            //显示表头
+            List<String> zhCnColumnName = this.getZhCnColumnName(columnNames);
+            this.createDataRow(dbTable, zhCnColumnName, columnNames, tableSpliter, content);
         }
-
-        return content.toString();
+        FileUtils.write(targetFile,content.toString(),"utf-8");
     }
 
     private void createDataRow(DbTable dbTable,List<String> zhCnColumnName,List<String> columnNames,

@@ -1,5 +1,6 @@
 package com.pomzwj.runner;
 
+import com.pomzwj.constant.SystemConstant;
 import com.pomzwj.constant.TemplateFileConstants;
 import org.apache.commons.io.FileUtils;
 import org.slf4j.Logger;
@@ -20,10 +21,8 @@ import java.net.InetAddress;
  * @date 2020-07-15
  */
 @Component
-public class TemplateEventApplicationRunner implements ApplicationRunner {
-    static final Logger log = LoggerFactory.getLogger(TemplateEventApplicationRunner.class);
-    @Value("${export.template-copy-path}")
-    private String templateCopyPath;
+public class InitSystemApplicationRunner implements ApplicationRunner {
+    static final Logger log = LoggerFactory.getLogger(InitSystemApplicationRunner.class);
     @Value("${server.port}")
     private Integer serverPort;
     @Value("${server.servlet.context-path}")
@@ -31,20 +30,25 @@ public class TemplateEventApplicationRunner implements ApplicationRunner {
 
     @Override
     public void run(ApplicationArguments args) {
+        String templateCopyPath = SystemConstant.SYSTEM_FILE_FIR;
         String[] filePath = new String[]{TemplateFileConstants.IMPORT_TEMPLATE, TemplateFileConstants.SUB_MODEL_TEMPLATE};
-        for (String s : filePath) {
-            try {
+        try{
+            for (String s : filePath) {
                 ClassPathResource classPathResource = new ClassPathResource("docx" + File.separator + s);
                 File file = new File(templateCopyPath + File.separator + s);
-
                 log.info("生成文件的路径是={}", file.getAbsolutePath());
                 FileUtils.copyInputStreamToFile(classPathResource.getInputStream(), file);
-
-            } catch (Exception e) {
-                log.error("创建初始文件失败,系统自动退出,e={}", e);
-                System.exit(0);
             }
+            File fileTempDir = new File(SystemConstant.GENERATION_FILE_TEMP_DIR);
+            if(fileTempDir.exists() && fileTempDir.isDirectory()){
+                FileUtils.deleteDirectory(fileTempDir);
+            }
+            fileTempDir.mkdir();
+        }catch (Exception e){
+            log.error("创建初始文件失败,系统自动退出,e={}", e);
+            System.exit(0);
         }
+
         try {
             InetAddress addr = InetAddress.getLocalHost();
             String url = String.format("http://%s:%s%s", addr.getHostAddress(), serverPort, contextPath);

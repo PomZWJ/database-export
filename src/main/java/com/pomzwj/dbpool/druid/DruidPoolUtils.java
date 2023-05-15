@@ -79,7 +79,7 @@ public class DruidPoolUtils implements DbPoolService {
 		dataSource.setDriverClassName(driverClassName);
 		dataSource.setUsername(userName);
 		dataSource.setPassword(password);
-		dataSource.setInitialSize(20);
+		dataSource.setInitialSize(10);
 		dataSource.setMinIdle(10);
 		dataSource.setMaxWait(60*1000);
 		dataSource.setMaxActive(20);

@@ -1,5 +1,8 @@
 package com.pomzwj.domain;
 
+import com.pomzwj.constant.DataBaseType;
+import com.pomzwj.constant.ExportFileType;
+
 import java.io.Serializable;
 
 /**
@@ -17,6 +20,8 @@ public class DbBaseInfo implements Serializable{
     private String userName;
     private String password;
     private String exportFileType;
+    private ExportFileType exportFileTypeEnum;
+    private DataBaseType dbKindEnum;
 
     public String getDbKind() {
         return dbKind;
@@ -72,5 +77,21 @@ public class DbBaseInfo implements Serializable{
 
     public void setExportFileType(String exportFileType) {
         this.exportFileType = exportFileType;
+    }
+
+    public ExportFileType getExportFileTypeEnum() {
+        return exportFileTypeEnum;
+    }
+
+    public void setExportFileTypeEnum(ExportFileType exportFileTypeEnum) {
+        this.exportFileTypeEnum = exportFileTypeEnum;
+    }
+
+    public DataBaseType getDbKindEnum() {
+        return dbKindEnum;
+    }
+
+    public void setDbKindEnum(DataBaseType dbKindEnum) {
+        this.dbKindEnum = dbKindEnum;
     }
 }

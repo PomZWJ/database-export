@@ -2,7 +2,6 @@ server:
   port: 9999
   servlet:
     context-path: /dbExport
-  index: v2/index2
 spring:
   application:
     name: db-export
@@ -13,8 +12,6 @@ spring:
     suffix: .html
     mode: HTML
     encoding: UTF-8
-export:
-  template-copy-path: .databaseExport
 
 database:
   # 数据库连接池框架 默认druid 可选hikaricp,druid

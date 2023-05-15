@@ -19,9 +19,9 @@ public class FileGenerationFactory {
     public FileGenerationService getFileGenerationBean(ExportFileType exportFileType) {
         if (ExportFileType.MARKDOWN.equals(exportFileType)) {
             return markdownOperatorService;
-        }else if (ExportFileType.WORD.equals(exportFileType)) {
-            return excelOperatorService;
         }else if (ExportFileType.EXCEL.equals(exportFileType)) {
+            return excelOperatorService;
+        }else if (ExportFileType.WORD.equals(exportFileType)) {
             return wordOperatorService;
         }
         return null;

@@ -11,22 +11,23 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook;
  * @github https://github.com/PomZWJ
  */
 public enum ExportFileType {
-    WORD(true),
-    EXCEL(true),
-    MARKDOWN(true);
-    private boolean isEnable;
+    WORD(".docx"),
+    EXCEL(".xlsx"),
+    MARKDOWN(".md");
+    private String fileSuffixName;
 
-    public boolean isEnable() {
-        return isEnable;
+    ExportFileType(String fileSuffixName) {
+        this.fileSuffixName = fileSuffixName;
     }
 
-    public void setEnable(boolean enable) {
-        isEnable = enable;
+    public String getFileSuffixName() {
+        return fileSuffixName;
     }
 
-    ExportFileType(boolean isEnable) {
-        this.isEnable = isEnable;
+    public void setFileSuffixName(String fileSuffixName) {
+        this.fileSuffixName = fileSuffixName;
     }
+
     public static ExportFileType matchType(String value){
         if (StringUtils.isNotEmpty(value)) {
             for (ExportFileType exportFileType: ExportFileType.values()) {

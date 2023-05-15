@@ -5,7 +5,9 @@ import com.pomzwj.constant.DataBaseType;
 import com.pomzwj.domain.DbBaseInfo;
 import com.pomzwj.domain.DbColumnInfo;
 import com.pomzwj.domain.DbTable;
+import com.pomzwj.filegeneration.AbstractFileGenerationService;
 import com.pomzwj.filegeneration.FileGenerationService;
+import org.apache.commons.io.IOUtils;
 import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.ss.util.CellRangeAddress;
 import org.apache.poi.ss.util.RegionUtil;
@@ -15,6 +17,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
+import java.io.File;
+import java.io.FileOutputStream;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
@@ -28,32 +32,26 @@ import java.util.List;
  * @github https://github.com/PomZWJ
  */
 @Service
-public class ExcelOperatorService implements FileGenerationService<XSSFWorkbook> {
+public class ExcelOperatorService extends AbstractFileGenerationService {
     static final Logger log = LoggerFactory.getLogger(ExcelOperatorService.class);
     static final int COLUMN_WIDTH = 5000;
 
-    /**
-     *
-     * @param dbBaseInfo
-     * @param tableList
-     * @return XSSFWorkbook
-     * @throws Exception
-     */
     @Override
-    public XSSFWorkbook makeFile(DbBaseInfo dbBaseInfo, List<DbTable> tableList) throws Exception {
+    protected void makeFileStream(DbBaseInfo dbBaseInfo, List<DbTable> tableList, File targetFile) throws Exception {
         String dbKind = dbBaseInfo.getDbKind();
         String dbName = dbBaseInfo.getDbName();
         XSSFWorkbook xssfWorkbook = new XSSFWorkbook();
         Sheet sheet = ExcelOperatorService.createSheet(xssfWorkbook, dbName);
         DataBaseType dataBaseKind = DataBaseType.matchType(dbKind);
         List<String> columnNames = dataBaseKind.getColumnName();
-        //合并单元格的数量
-        int mergeColumnNum = columnNames.size();
-        //设置每一列的宽度
-        for (int i = 0; i < columnNames.size(); i++) {
-            sheet.setColumnWidth(i, COLUMN_WIDTH);
-        }
-        try {
+        FileOutputStream fileOutputStream = null;
+        try{
+            //合并单元格的数量
+            int mergeColumnNum = columnNames.size();
+            //设置每一列的宽度
+            for (int i = 0; i < columnNames.size(); i++) {
+                sheet.setColumnWidth(i, COLUMN_WIDTH);
+            }
             int rowNum = -1;
             for (int i = 0; i < tableList.size(); i++) {
                 rowNum++;
@@ -69,10 +67,16 @@ public class ExcelOperatorService implements FileGenerationService<XSSFWorkbook>
                 List<List<String>> tableColumnData = this.getTableColumnData(dbTable, columnNames);
                 rowNum = this.createDataRow(sheet, rowNum, tableColumnData);
             }
-        } catch (Exception e) {
-            log.error("创建excel文档失败，原因是={}",e);
+            fileOutputStream = new FileOutputStream(targetFile);
+            xssfWorkbook.write(fileOutputStream);
+            fileOutputStream.flush();
+        }finally {
+            if(xssfWorkbook != null){
+                xssfWorkbook.close();
+            }
+            IOUtils.closeQuietly(fileOutputStream);
         }
-        return xssfWorkbook;
+
     }
 
     private int createDataRow(Sheet sheet, int rowNum, List<List<String>> tableColumnData) {

@@ -7,16 +7,19 @@ import com.deepoove.poi.data.Rows;
 import com.deepoove.poi.data.Tables;
 import com.pomzwj.anno.DataColumnName;
 import com.pomzwj.constant.DataBaseType;
+import com.pomzwj.constant.SystemConstant;
 import com.pomzwj.constant.TemplateFileConstants;
 import com.pomzwj.domain.DbBaseInfo;
 import com.pomzwj.domain.DbColumnInfo;
 import com.pomzwj.domain.DbTable;
 import com.pomzwj.domain.SegmentData;
+import com.pomzwj.filegeneration.AbstractFileGenerationService;
 import com.pomzwj.filegeneration.FileGenerationService;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.io.File;
+import java.io.FileOutputStream;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
@@ -34,19 +37,11 @@ import java.util.Map;
  * @date 2018/10/29/0029.
  */
 @Service
-public class WordOperatorService implements FileGenerationService<XWPFTemplate> {
-	@Value("${export.template-copy-path}")
-	private String templateCopyPath;
+public class WordOperatorService extends AbstractFileGenerationService {
 
-	/**
-	 *
-	 * @param dbBaseInfo
-	 * @param tableList
-	 * @return XWPFTemplate
-	 * @throws Exception
-	 */
 	@Override
-	public XWPFTemplate makeFile(DbBaseInfo dbBaseInfo, List<DbTable> tableList) throws Exception{
+	protected void makeFileStream(DbBaseInfo dbBaseInfo, List<DbTable> tableList,File targetFile)throws Exception {
+		String templateCopyPath = SystemConstant.SYSTEM_FILE_FIR;
 		String dbKind  = dbBaseInfo.getDbKind();
 		DataBaseType dataBaseKind = DataBaseType.matchType(dbKind);
 		List<String> columnNames = dataBaseKind.getColumnName();
@@ -83,7 +78,7 @@ public class WordOperatorService implements FileGenerationService<XWPFTemplate> 
 		File importWordFile = new File(templateCopyPath + "/" + TemplateFileConstants.IMPORT_TEMPLATE);
 		/*1.根据模板生成文档*/
 		XWPFTemplate template = XWPFTemplate.compile(importWordFile).render(tempMap);
-		return template;
+		template.writeToFile(targetFile.getAbsolutePath());
 	}
 
 	public List<RowRenderData> getRow(DbTable dbTable, List<String> columnNames, RowRenderData headerRow) throws Exception {
@@ -107,6 +102,4 @@ public class WordOperatorService implements FileGenerationService<XWPFTemplate> 
 		}
 		return rows;
 	}
-
-
 }
