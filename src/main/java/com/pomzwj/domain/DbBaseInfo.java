@@ -80,6 +80,9 @@ public class DbBaseInfo implements Serializable{
     }
 
     public ExportFileType getExportFileTypeEnum() {
+        if(exportFileTypeEnum == null){
+            this.setExportFileTypeEnum(ExportFileType.matchType(this.getExportFileType()));
+        }
         return exportFileTypeEnum;
     }
 
@@ -88,6 +91,9 @@ public class DbBaseInfo implements Serializable{
     }
 
     public DataBaseType getDbKindEnum() {
+        if(dbKindEnum == null){
+            this.setDbKindEnum(DataBaseType.matchType(this.getDbKind()));
+        }
         return dbKindEnum;
     }
 

@@ -20,6 +20,7 @@ import java.util.Map;
 
 /**
  * postgresql数据库支持
+ *
  * @author PomZWJ
  * @email 1513041820@qq.com
  * @github https://github.com/PomZWJ
@@ -28,26 +29,23 @@ import java.util.Map;
 public class PostgresqlDbService extends AbstractDbService {
     static final Logger log = LoggerFactory.getLogger(PostgresqlDbService.class);
 
-    @Value("${database.getTableNameSql.postgresql}")
-    String postgresqlGetTableNameSql;
-    final static String queryTableDetailSql = "sql/postgresql.sql";
 
     @Override
     public String getQueryTableDetailSql() {
-        return queryTableDetailSql;
+        return "sql/postgresql.sql";
     }
+
     @Override
-    public List<DbTable> getTableName(JdbcTemplate jdbcTemplate,DbBaseInfo dbBaseInfo) {
-        List<Map<String, Object>> resultList = jdbcTemplate.queryForList(postgresqlGetTableNameSql);
-        List<DbTable> tableList = this.getTableNameAndComments(resultList);
-        return tableList;
+    public String getQueryTableInfoSql() {
+        return "SELECT relname AS TABLE_NAME,CAST ( obj_description ( relfilenode, 'pg_class' ) AS VARCHAR ) AS COMMENTS FROM pg_class C WHERE relkind = 'r' AND relname NOT LIKE'pg_%' AND relname NOT LIKE'sql_%' AND relchecks = 0 ORDER BY relname";
     }
+
     @Override
-    public void setColumnDataInfo(JdbcTemplate jdbcTemplate,List<DbTable> list,String executeSql,DbBaseInfo dbBaseInfo){
+    public void setColumnDataInfo(JdbcTemplate jdbcTemplate, List<DbTable> list, String executeSql, DbBaseInfo dbBaseInfo) {
         String dbName = dbBaseInfo.getDbName();
         for (int j = 0; j < list.size(); j++) {
             DbTable dbTable = list.get(j);
-            List<Map<String, Object>> resultList = jdbcTemplate.queryForList(executeSql, dbTable.getTableName(),dbName,dbTable.getTableName());
+            List<Map<String, Object>> resultList = jdbcTemplate.queryForList(executeSql, dbTable.getTableName(), dbName, dbTable.getTableName());
             List<DbColumnInfo> dbColumnInfos = new ArrayList<>();
             if (CollectionUtils.isNotEmpty(resultList)) {
                 for (Map<String, Object> resultSet : resultList) {
@@ -71,6 +69,7 @@ public class PostgresqlDbService extends AbstractDbService {
             }
         }
     }
+
     private static boolean getStringToBoolean(final String val) {
         if (StringUtils.isEmpty(val)) {
             return false;
@@ -82,6 +81,7 @@ public class PostgresqlDbService extends AbstractDbService {
             }
         }
     }
+
     private static boolean getIsPrimary(final String val) {
         if (StringUtils.isEmpty(val)) {
             return false;

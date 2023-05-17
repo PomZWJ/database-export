@@ -28,20 +28,15 @@ import java.util.Map;
 @Component
 public class ClickhouseDbService extends AbstractDbService {
     static final Logger log = LoggerFactory.getLogger(ClickhouseDbService.class);
-    final static String queryTableDetailSql = "sql/postgresql.sql";
-    @Value("${database.getTableNameSql.clickhouse}")
-    String clickhouseGetTableNameSql;
 
     @Override
     public String getQueryTableDetailSql() {
-        return queryTableDetailSql;
+        return "sql/postgresql.sql";
     }
 
     @Override
-    public List<DbTable> getTableName(JdbcTemplate jdbcTemplate, DbBaseInfo dbBaseInfo) {
-        List<Map<String, Object>> resultList = jdbcTemplate.queryForList(String.format(clickhouseGetTableNameSql, dbBaseInfo.getDbName()));
-        List<DbTable> tableList = this.getTableNameAndComments(resultList);
-        return tableList;
+    public String getQueryTableInfoSql() {
+        return "select name as TABLE_NAME,'' as COMMENTS from system.tables where database = '%s'";
     }
 
     @Override

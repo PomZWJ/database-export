@@ -33,23 +33,21 @@ public class DbServiceFactory {
     @Autowired
     private SqliteDbService sqliteDbService;
 
-    public DbService getDbServiceBean(String dbKind) {
-        if (StringUtils.isEmpty(dbKind)) {
+    public DbService getDbServiceBean(DataBaseType dataBaseType) {
+        if (dataBaseType == null) {
             throw new DatabaseExportException(MessageCode.DATABASE_KIND_IS_NULL_ERROR);
-        } else if (DataBaseType.matchType(dbKind) == null) {
-            throw new DatabaseExportException(MessageCode.DATABASE_KIND_IS_NOT_MATCH_ERROR);
-        } else {
-            if (DataBaseType.MYSQL.name().equals(dbKind.toUpperCase())) {
+        }else {
+            if (DataBaseType.MYSQL.equals(dataBaseType)) {
                 return mySqlDbService;
-            } else if (DataBaseType.ORACLE.name().equals(dbKind.toUpperCase())) {
+            } else if (DataBaseType.ORACLE.equals(dataBaseType)) {
                 return oracleDbService;
-            } else if (DataBaseType.SQLSERVER.name().equals(dbKind.toUpperCase())) {
+            } else if (DataBaseType.SQLSERVER.equals(dataBaseType)) {
                 return sqlServerDbService;
-            } else if (DataBaseType.POSTGRESQL.name().equals(dbKind.toUpperCase())) {
+            } else if (DataBaseType.POSTGRESQL.equals(dataBaseType)) {
                 return postgresqlDbService;
-            } else if(DataBaseType.CLICKHOUSE.name().equals(dbKind.toUpperCase())){
+            } else if(DataBaseType.CLICKHOUSE.equals(dataBaseType)){
                 return clickhouseDbService;
-            } else if(DataBaseType.SQLITE.name().equals(dbKind.toUpperCase())){
+            } else if(DataBaseType.SQLITE.equals(dataBaseType)){
                 return sqliteDbService;
             }
         }

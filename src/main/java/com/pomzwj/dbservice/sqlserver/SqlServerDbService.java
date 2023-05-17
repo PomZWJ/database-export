@@ -25,63 +25,57 @@ import java.util.Map;
 @Component
 public class SqlServerDbService extends AbstractDbService {
 
-	static final Logger log = LoggerFactory.getLogger(SqlServerDbService.class);
-	final static String queryTableDetailSql = "sql/sqlserver.sql";
-	@Value("${database.getTableNameSql.sqlServer}")
-	String sqlServerGetTableNameSql;
+    static final Logger log = LoggerFactory.getLogger(SqlServerDbService.class);
 
-	@Override
-	public String getQueryTableDetailSql() {
-		return queryTableDetailSql;
-	}
+    @Override
+    public String getQueryTableDetailSql() {
+        return "sql/sqlserver.sql";
+    }
 
+    @Override
+    public String getQueryTableInfoSql() {
+        return "select TABLE_NAME=d.name,COMMENTS=f.value  from sysobjects d left join sys.extended_properties f on d.id=f.major_id and f.minor_id=0 where d.xtype = 'u' and d.name != 'sysdiagrams'";
+    }
 
-	@Override
-	public List<DbTable> getTableName(JdbcTemplate jdbcTemplate,DbBaseInfo dbBaseInfo) {
-		List<Map<String, Object>> resultList = jdbcTemplate.queryForList(sqlServerGetTableNameSql);
-		List<DbTable> tableList = this.getTableNameAndComments(resultList);
-		return tableList;
-	}
+    @Override
+    public void setColumnDataInfo(JdbcTemplate jdbcTemplate, List<DbTable> list, String executeSql, DbBaseInfo dbBaseInfo) {
+        for (int j = 0; j < list.size(); j++) {
+            DbTable dbTable = list.get(j);
+            List<Map<String, Object>> resultList = jdbcTemplate.queryForList(executeSql, dbTable.getTableName());
+            List<DbColumnInfo> dbColumnInfos = new ArrayList<>();
+            if (CollectionUtils.isNotEmpty(resultList)) {
+                for (Map<String, Object> resultSet : resultList) {
+                    DbColumnInfo dbColumnInfo = new DbColumnInfo();
+                    dbColumnInfo.setColumnName(MapUtils.getString(resultSet, "COLUMN_NAME"));
+                    dbColumnInfo.setDataType(MapUtils.getString(resultSet, "COLUMN_TYPE"));
+                    dbColumnInfo.setDataLength(MapUtils.getString(resultSet, "DATA_LENGTH"));
+                    dbColumnInfo.setNullAble(getStringToBoolean(MapUtils.getString(resultSet, "NULLABLE")));
+                    dbColumnInfo.setDefaultVal(MapUtils.getString(resultSet, "DATA_DEFAULT"));
+                    dbColumnInfo.setDataScale(MapUtils.getString(resultSet, "DATA_SCALE"));
+                    String comments = MapUtils.getString(resultSet, "COMMENTS");
+                    dbColumnInfo.setAutoIncrement(getStringToBoolean(MapUtils.getString(resultSet, "AUTOINCREMENT")));
+                    dbColumnInfo.setPrimary(getStringToBoolean(MapUtils.getString(resultSet, "PRIMARY_KEY")));
+                    if (StringUtils.isEmpty(comments)) {
+                        dbColumnInfo.setComments(FiledDefaultValue.TABLE_FIELD_COMMENTS_DEFAULT);
+                    } else {
+                        dbColumnInfo.setComments(comments);
+                    }
+                    dbColumnInfos.add(dbColumnInfo);
+                }
+                dbTable.setTabsColumn(dbColumnInfos);
+            }
+        }
+    }
 
-	@Override
-	public void setColumnDataInfo(JdbcTemplate jdbcTemplate, List<DbTable> list, String executeSql,DbBaseInfo dbBaseInfo) {
-		for (int j = 0; j < list.size(); j++) {
-			DbTable dbTable = list.get(j);
-			List<Map<String, Object>> resultList = jdbcTemplate.queryForList(executeSql, dbTable.getTableName());
-			List<DbColumnInfo> dbColumnInfos = new ArrayList<>();
-			if (CollectionUtils.isNotEmpty(resultList)) {
-				for (Map<String, Object> resultSet : resultList) {
-					DbColumnInfo dbColumnInfo = new DbColumnInfo();
-					dbColumnInfo.setColumnName(MapUtils.getString(resultSet, "COLUMN_NAME"));
-					dbColumnInfo.setDataType(MapUtils.getString(resultSet, "COLUMN_TYPE"));
-					dbColumnInfo.setDataLength(MapUtils.getString(resultSet, "DATA_LENGTH"));
-					dbColumnInfo.setNullAble(getStringToBoolean(MapUtils.getString(resultSet, "NULLABLE")));
-					dbColumnInfo.setDefaultVal(MapUtils.getString(resultSet, "DATA_DEFAULT"));
-					dbColumnInfo.setDataScale(MapUtils.getString(resultSet, "DATA_SCALE"));
-					String comments = MapUtils.getString(resultSet, "COMMENTS");
-					dbColumnInfo.setAutoIncrement(getStringToBoolean(MapUtils.getString(resultSet, "AUTOINCREMENT")));
-					dbColumnInfo.setPrimary(getStringToBoolean(MapUtils.getString(resultSet, "PRIMARY_KEY")));
-					if (StringUtils.isEmpty(comments)) {
-						dbColumnInfo.setComments(FiledDefaultValue.TABLE_FIELD_COMMENTS_DEFAULT);
-					} else {
-						dbColumnInfo.setComments(comments);
-					}
-					dbColumnInfos.add(dbColumnInfo);
-				}
-				dbTable.setTabsColumn(dbColumnInfos);
-			}
-		}
-	}
-
-	private static boolean getStringToBoolean(final String val) {
-		if (StringUtils.isEmpty(val)) {
-			return false;
-		} else {
-			if ("TRUE".equals(val)) {
-				return true;
-			} else {
-				return false;
-			}
-		}
-	}
+    private static boolean getStringToBoolean(final String val) {
+        if (StringUtils.isEmpty(val)) {
+            return false;
+        } else {
+            if ("TRUE".equals(val)) {
+                return true;
+            } else {
+                return false;
+            }
+        }
+    }
 }

@@ -1,6 +1,7 @@
 package com.pomzwj.dbservice;
 
 import com.google.common.util.concurrent.ThreadFactoryBuilder;
+import com.pomzwj.constant.DataBaseType;
 import com.pomzwj.dbpool.DbPoolFactory;
 import com.pomzwj.domain.DbBaseInfo;
 import com.pomzwj.domain.DbTable;
@@ -40,6 +41,7 @@ public abstract class AbstractDbService implements DbService {
      * @return
      * @throws Exception
      */
+    @Override
     public List<DbTable> getTableDetailInfo(DbBaseInfo dbBaseInfo) throws Exception {
         //获取数据库线程池
         dbPoolFactory = SpringBeanContext.getContext().getBean(DbPoolFactory.class);
@@ -182,6 +184,12 @@ public abstract class AbstractDbService implements DbService {
     public abstract String getQueryTableDetailSql();
 
     /**
+     * 获取查询表信息的sql
+     * @return
+     */
+    public abstract String getQueryTableInfoSql();
+
+    /**
      * 解析表字段
      * @param jdbcTemplate
      * @param list
@@ -196,5 +204,24 @@ public abstract class AbstractDbService implements DbService {
      * @param dbBaseInfo
      * @return
      */
-    public abstract List<DbTable> getTableName(JdbcTemplate jdbcTemplate, DbBaseInfo dbBaseInfo);
+    public List<DbTable> getTableName(JdbcTemplate jdbcTemplate, DbBaseInfo dbBaseInfo){
+        DataBaseType dbKindEnum = dbBaseInfo.getDbKindEnum();
+        if(dbKindEnum.equals(DataBaseType.MYSQL)
+                || dbKindEnum.equals(DataBaseType.CLICKHOUSE)){
+            List<Map<String, Object>> resultList = jdbcTemplate.queryForList(String.format(getQueryTableInfoSql(), dbBaseInfo.getDbName()));
+            List<DbTable> tableList = this.getTableNameAndComments(resultList);
+            return tableList;
+        }else if(dbKindEnum.equals(DataBaseType.ORACLE)
+            || dbKindEnum.equals(DataBaseType.POSTGRESQL)
+            || dbKindEnum.equals(DataBaseType.SQLITE)
+            || dbKindEnum.equals(DataBaseType.SQLSERVER)){
+            List<Map<String, Object>> resultList = jdbcTemplate.queryForList(getQueryTableInfoSql());
+            List<DbTable> tableList = this.getTableNameAndComments(resultList);
+            return tableList;
+        }else{
+            List<Map<String, Object>> resultList = jdbcTemplate.queryForList(getQueryTableInfoSql());
+            List<DbTable> tableList = this.getTableNameAndComments(resultList);
+            return tableList;
+        }
+    }
 }

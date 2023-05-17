@@ -27,7 +27,7 @@ public abstract class AbstractFileGenerationService implements FileGenerationSer
                 file.createNewFile();
             }
             this.makeFileStream(dbBaseInfo,tableList, file);
-            return file.getAbsolutePath();
+            return file.getName();
         }catch (Exception e){
             log.error("makeFile error",e);
         }

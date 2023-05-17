@@ -20,6 +20,7 @@ import java.util.Map;
 
 /**
  * sqlite数据库支持
+ *
  * @author PomZWJ
  * @email 1513041820@qq.com
  * @github https://github.com/PomZWJ
@@ -28,23 +29,20 @@ import java.util.Map;
 public class SqliteDbService extends AbstractDbService {
 
     static final Logger log = LoggerFactory.getLogger(SqliteDbService.class);
-    final static String queryTableDetailSql = "sql/sqlite.sql";
-    @Value("${database.getTableNameSql.sqlite}")
-    String sqliteGetTableNameSql;
+
 
     @Override
     public String getQueryTableDetailSql() {
-        return queryTableDetailSql;
-    }
-    @Override
-    public List<DbTable> getTableName(JdbcTemplate jdbcTemplate,DbBaseInfo dbBaseInfo) {
-        List<Map<String, Object>> resultList = jdbcTemplate.queryForList(sqliteGetTableNameSql);
-        List<DbTable> tableList = this.getTableNameAndComments(resultList);
-        return tableList;
+        return "sql/sqlite.sql";
     }
 
     @Override
-    public void setColumnDataInfo(JdbcTemplate jdbcTemplate,List<DbTable> list,String executeSql,DbBaseInfo dbBaseInfo){
+    public String getQueryTableInfoSql() {
+        return "SELECT name as TABLE_NAME,'' as COMMENTS FROM sqlite_master WHERE type ='table' and name <> 'sqlite_sequence'";
+    }
+
+    @Override
+    public void setColumnDataInfo(JdbcTemplate jdbcTemplate, List<DbTable> list, String executeSql, DbBaseInfo dbBaseInfo) {
         for (int j = 0; j < list.size(); j++) {
             DbTable dbTable = list.get(j);
             List<Map<String, Object>> resultList = jdbcTemplate.queryForList(executeSql, dbTable.getTableName());
@@ -65,6 +63,7 @@ public class SqliteDbService extends AbstractDbService {
             }
         }
     }
+
     private static boolean getStringToBoolean(final String val) {
         if (StringUtils.isEmpty(val)) {
             return false;

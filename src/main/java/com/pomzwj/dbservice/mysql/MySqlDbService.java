@@ -17,33 +17,28 @@ import java.util.Map;
 
 /**
  * mysql数据库操作
+ *
  * @author PomZWJ
  * @email 1513041820@qq.com
  * @github https://github.com/PomZWJ
  */
 @Component
 public class MySqlDbService extends AbstractDbService {
-
     static final Logger log = LoggerFactory.getLogger(MySqlDbService.class);
-    final static String queryTableDetailSql = "sql/mysql.sql";
-    @Value("${database.getTableNameSql.mysql}")
-    String mysqlGetTableNameSql;
+
 
     @Override
     public String getQueryTableDetailSql() {
-        return queryTableDetailSql;
-    }
-
-
-    @Override
-    public List<DbTable> getTableName(JdbcTemplate jdbcTemplate, DbBaseInfo dbBaseInfo) {
-        List<Map<String, Object>> resultList = jdbcTemplate.queryForList(String.format(mysqlGetTableNameSql, dbBaseInfo.getDbName()));
-        List<DbTable> tableList = this.getTableNameAndComments(resultList);
-        return tableList;
+        return "sql/mysql.sql";
     }
 
     @Override
-    public void setColumnDataInfo(JdbcTemplate jdbcTemplate,List<DbTable> list,String executeSql,DbBaseInfo dbBaseInfo){
+    public String getQueryTableInfoSql() {
+        return "select table_name TABLE_NAME, table_comment COMMENTS from information_schema.tables where table_schema='%s' and table_type='BASE TABLE'";
+    }
+
+    @Override
+    public void setColumnDataInfo(JdbcTemplate jdbcTemplate, List<DbTable> list, String executeSql, DbBaseInfo dbBaseInfo) {
         for (int j = 0; j < list.size(); j++) {
             DbTable dbTable = list.get(j);
             List<Map<String, Object>> resultList = jdbcTemplate.queryForList(executeSql, dbTable.getTableName());
