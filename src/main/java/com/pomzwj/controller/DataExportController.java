@@ -58,18 +58,6 @@ public class DataExportController {
         return "index";
     }
 
-    @RequestMapping("/viewDocVue")
-    public String viewDocVue(String base64Params, ModelMap modelMap) {
-        modelMap.put("base64Params", base64Params);
-        return "docView";
-    }
-
-    @RequestMapping("/viewDocHtml")
-    public String docHtml(String base64Params, ModelMap modelMap) {
-        modelMap.put("base64Params", base64Params);
-        return "docHtml";
-    }
-
     @RequestMapping(value = "/makeFile")
     @ResponseBody
     public void makeFile(String base64Params, HttpServletResponse response) {
