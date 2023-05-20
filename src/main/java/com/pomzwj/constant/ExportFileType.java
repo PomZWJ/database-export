@@ -14,6 +14,7 @@ public enum ExportFileType {
     WORD(".docx"),
     EXCEL(".xlsx"),
     MARKDOWN(".md"),
+    PDF(".pdf"),
     HTML(".html");
     private String fileSuffixName;
 
