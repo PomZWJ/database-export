@@ -2,6 +2,8 @@ package com.pomzwj.domain;
 
 import com.pomzwj.constant.DataBaseType;
 import com.pomzwj.constant.ExportFileType;
+import com.pomzwj.exception.MessageCode;
+import com.pomzwj.utils.AssertUtils;
 
 import java.io.Serializable;
 
@@ -86,7 +88,7 @@ public class DbBaseInfo implements Serializable{
         return exportFileTypeEnum;
     }
 
-    public void setExportFileTypeEnum(ExportFileType exportFileTypeEnum) {
+    private void setExportFileTypeEnum(ExportFileType exportFileTypeEnum) {
         this.exportFileTypeEnum = exportFileTypeEnum;
     }
 
@@ -97,7 +99,21 @@ public class DbBaseInfo implements Serializable{
         return dbKindEnum;
     }
 
-    public void setDbKindEnum(DataBaseType dbKindEnum) {
+    private void setDbKindEnum(DataBaseType dbKindEnum) {
         this.dbKindEnum = dbKindEnum;
+    }
+
+    public void fieldCheck(){
+        AssertUtils.isNull(this.getDbKindEnum(), MessageCode.DATABASE_KIND_IS_NULL_ERROR);
+        AssertUtils.isNull(this.getExportFileTypeEnum(), MessageCode.EXPORT_FILE_TYPE_IS_NOT_MATCH_ERROR);
+        if(getDbKindEnum().equals(DataBaseType.SQLITE)){
+            AssertUtils.isNull(this.getDbName(), MessageCode.DATABASE_NAME_IS_NULL_ERROR);
+        }else{
+            //参数校验
+            AssertUtils.isNull(this.getIp(), MessageCode.DATABASE_IP_IS_NULL_ERROR);
+            AssertUtils.isNull(this.getPort(), MessageCode.DATABASE_PORT_IS_NULL_ERROR);
+            AssertUtils.isNull(this.getUserName(), MessageCode.DATABASE_USER_IS_NULL_ERROR);
+            AssertUtils.isNull(this.getPassword(), MessageCode.DATABASE_PASSWORD_IS_NULL_ERROR);
+        }
     }
 }

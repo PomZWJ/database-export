@@ -58,11 +58,7 @@ public class DataExportController {
         ResponseParams<Map> responseParams = new ResponseParams();
         try {
             DbBaseInfo info = JSON.parseObject(new String(Base64.getDecoder().decode(base64Params)), DbBaseInfo.class);
-            //参数校验
-            AssertUtils.isNull(info.getDbKind(), MessageCode.DATABASE_KIND_IS_NULL_ERROR);
-            AssertUtils.isNull(info.getIp(), MessageCode.DATABASE_IP_IS_NULL_ERROR);
-            AssertUtils.isNull(info.getPort(), MessageCode.DATABASE_PORT_IS_NULL_ERROR);
-            AssertUtils.isNull(info.getUserName(), MessageCode.DATABASE_USER_IS_NULL_ERROR);
+            info.fieldCheck();
             //查询表信息
             List<DbTable> tableDetailInfo = dbServiceFactory.getDbServiceBean(info.getDbKindEnum()).getTableDetailInfo(info);
             //生成word文档
@@ -115,16 +111,8 @@ public class DataExportController {
         try {
             String s = new String(Base64.getDecoder().decode(base64Params));
             DbBaseInfo info = JSON.parseObject(s, DbBaseInfo.class);
-            //参数校验
-            AssertUtils.isNull(info.getDbKind(), MessageCode.DATABASE_KIND_IS_NULL_ERROR);
-            AssertUtils.isNull(info.getIp(), MessageCode.DATABASE_IP_IS_NULL_ERROR);
-            AssertUtils.isNull(info.getPort(), MessageCode.DATABASE_PORT_IS_NULL_ERROR);
-            AssertUtils.isNull(info.getUserName(), MessageCode.DATABASE_USER_IS_NULL_ERROR);
-            //AssertUtils.isNull(info.getPassword(), MessageCode.DATABASE_PASSWORD_IS_NULL_ERROR);
-            DataBaseType dataBaseType = DataBaseType.matchType(info.getDbKind());
-            if (dataBaseType == null) {
-                throw new DatabaseExportException(MessageCode.DATABASE_KIND_IS_NOT_MATCH_ERROR);
-            }
+            info.fieldCheck();
+            DataBaseType dataBaseType = info.getDbKindEnum();
             List<String> columnNames = dataBaseType.getColumnName();
             //查询表信息
             List<DbTable> tableDetailInfo = dbServiceFactory.getDbServiceBean(info.getDbKindEnum()).getTableDetailInfo(info);

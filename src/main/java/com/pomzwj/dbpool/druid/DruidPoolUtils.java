@@ -74,6 +74,10 @@ public class DruidPoolUtils implements DbPoolService {
 			driverClassName = sqliteDriver;
 		}
 		String jdbcUrl = String.format(sqlConnectionStr, ip, port, dbName);
+		if(dataBaseType.equals(DataBaseType.SQLITE)){
+			jdbcUrl = String.format(sqlConnectionStr, dbName);
+		}
+
 		DruidDataSource dataSource = new DruidDataSource();
 		dataSource.setUrl(jdbcUrl);
 		dataSource.setDriverClassName(driverClassName);

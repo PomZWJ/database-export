@@ -13,7 +13,8 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 public enum ExportFileType {
     WORD(".docx"),
     EXCEL(".xlsx"),
-    MARKDOWN(".md");
+    MARKDOWN(".md"),
+    HTML(".html");
     private String fileSuffixName;
 
     ExportFileType(String fileSuffixName) {
