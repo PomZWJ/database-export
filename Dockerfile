@@ -6,7 +6,7 @@ MAINTAINER PomZWJ
 ENV MYPATH /home/pomzwj/database-export
 WORKDIR $MYPATH
 # 将当前目录下的jar包复制到docker容器的/目录下
-COPY target/database-export-3.4.0.jar database-export.jar
+COPY target/database-export-3.5.0.jar database-export.jar
 # 对外端口号 jar包运行的端口号
 EXPOSE 9999
 # 运行cmd命令，会在启动容器时运行。
