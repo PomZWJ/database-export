@@ -9,4 +9,5 @@ package com.pomzwj.constant;
 public class TemplateFileConstants {
     public final static String IMPORT_TEMPLATE = "import.docx";
     public final static String SUB_MODEL_TEMPLATE = "sub_model.docx";
+    public final static String HTML_TEMPLATE = "html_template.html";
 }

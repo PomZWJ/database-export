@@ -67,7 +67,7 @@ public class WordOperatorService extends AbstractFileGenerationService {
 			List<RowRenderData> rowList = this.getRow(dbTable, columnNames, headerRow);
 			SegmentData segmentData = new SegmentData();
 			segmentData.setTable(Tables.create(rowList.toArray(new RowRenderData[rowList.size()])));
-			segmentData.setTableName(dbTable.getTableName());
+			segmentData.setTableName((i+1)+"."+dbTable.getTableName());
 			segmentData.setTableComments("(" + dbTable.getTableComments() + ")");
 			segmentDataList.add(segmentData);
 		}

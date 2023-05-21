@@ -32,6 +32,6 @@ database:
     sqlServer: com.microsoft.sqlserver.jdbc.SQLServerDriver
     postgresql: org.postgresql.Driver
     clickhouse: com.clickhouse.jdbc.ClickHouseDriver
-    sqlite: org.sqlite.JDBC,
+    sqlite: org.sqlite.JDBC
     dm: dm.jdbc.driver.DmDriver
     db2: com.ibm.db2.jcc.DB2Driver

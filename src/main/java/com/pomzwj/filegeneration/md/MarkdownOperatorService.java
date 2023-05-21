@@ -46,7 +46,7 @@ public class MarkdownOperatorService extends AbstractFileGenerationService {
         for (int i = 0; i < tableList.size(); i++) {
             DbTable dbTable = tableList.get(i);
             //创建表名列
-            this.createTitleRow(dbTable.getTableName(), dbTable.getTableComments(), content);
+            this.createTitleRow(i,dbTable.getTableName(), dbTable.getTableComments(), content);
             //显示表头
             List<String> zhCnColumnName = this.getZhCnColumnName(columnNames);
             this.createDataRow(dbTable, zhCnColumnName, columnNames, tableSpliter, content);
@@ -65,8 +65,8 @@ public class MarkdownOperatorService extends AbstractFileGenerationService {
         }
 
     }
-    private void createTitleRow(String tableName,String tableComments,StringBuffer content){
-        content.append(lineSeparator).append("### ").append(tableName);
+    private void createTitleRow(int index,String tableName,String tableComments,StringBuffer content){
+        content.append(lineSeparator).append("### ").append(index+1).append(".").append(tableName);
         if(StringUtils.isNotEmpty(tableComments)){
             content.append("(").append(tableComments).append(")").append(lineSeparator);
         }

@@ -2,6 +2,7 @@ package com.pomzwj.filegeneration;
 
 import com.pomzwj.constant.ExportFileType;
 import com.pomzwj.filegeneration.excel.ExcelOperatorService;
+import com.pomzwj.filegeneration.html.HtmlOperatorService;
 import com.pomzwj.filegeneration.md.MarkdownOperatorService;
 import com.pomzwj.filegeneration.pdf.PdfOperatorService;
 import com.pomzwj.filegeneration.word.WordOperatorService;
@@ -18,6 +19,8 @@ public class FileGenerationFactory {
     private WordOperatorService wordOperatorService;
     @Autowired
     private PdfOperatorService pdfOperatorService;
+    @Autowired
+    private HtmlOperatorService htmlOperatorService;
 
     public FileGenerationService getFileGenerationBean(ExportFileType exportFileType) {
         if (ExportFileType.MARKDOWN.equals(exportFileType)) {
@@ -28,6 +31,8 @@ public class FileGenerationFactory {
             return wordOperatorService;
         }else if(ExportFileType.PDF.equals(exportFileType)){
             return pdfOperatorService;
+        }else if(ExportFileType.HTML.equals(exportFileType)){
+            return htmlOperatorService;
         }
         return null;
     }

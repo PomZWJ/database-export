@@ -31,7 +31,7 @@ public class InitSystemApplicationRunner implements ApplicationRunner {
     @Override
     public void run(ApplicationArguments args) {
         String templateCopyPath = SystemConstant.SYSTEM_FILE_FIR;
-        String[] filePath = new String[]{TemplateFileConstants.IMPORT_TEMPLATE, TemplateFileConstants.SUB_MODEL_TEMPLATE};
+        String[] filePath = new String[]{TemplateFileConstants.IMPORT_TEMPLATE, TemplateFileConstants.SUB_MODEL_TEMPLATE,TemplateFileConstants.HTML_TEMPLATE};
         try{
             for (String s : filePath) {
                 ClassPathResource classPathResource = new ClassPathResource("docx" + File.separator + s);
@@ -54,7 +54,7 @@ public class InitSystemApplicationRunner implements ApplicationRunner {
             String url = String.format("http://%s:%s%s", addr.getHostAddress(), serverPort, contextPath);
             String property = System.getProperty("os.name");
             if(property.startsWith("Windows")){
-                //Runtime.getRuntime().exec(String.format("rundll32 url.dll,FileProtocolHandler %s",url));
+                Runtime.getRuntime().exec(String.format("rundll32 url.dll,FileProtocolHandler %s",url));
                 log.info("检测到系统为windows，将自动打开主页");
             }else{
                 log.info("检测到系统不是windows，请手动打开主页,{}",url);

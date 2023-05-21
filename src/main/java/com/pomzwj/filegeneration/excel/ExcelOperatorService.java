@@ -57,7 +57,7 @@ public class ExcelOperatorService extends AbstractFileGenerationService {
                 rowNum++;
                 DbTable dbTable = tableList.get(i);
                 //创建表名列
-                this.createTitleRow(sheet, mergeColumnNum, rowNum, dbTable.getTableName() + "(" + dbTable.getTableComments() + ")");
+                this.createTitleRow(sheet, mergeColumnNum, rowNum, (i+1)+"."+dbTable.getTableName() + "(" + dbTable.getTableComments() + ")");
                 //显示表头
                 List<String> zhCnColumnName = this.getZhCnColumnName(columnNames);
                 rowNum++;

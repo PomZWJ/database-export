@@ -2,7 +2,7 @@
 
 **[转到Github](https://github.com/PomZWJ/database-export)**
 
-![](https://img-blog.csdnimg.cn/2021062719254559.png#pic_center)
+<img width="100px" height="100px" alt="加群" src="img/logo.png"/>
 
 **database-export V4.0.0**
 =========================
@@ -16,8 +16,10 @@
 ![Postgresql](https://img.shields.io/badge/Postgresql-14-blue.svg)
 ![Clickhouse](https://img.shields.io/badge/Clickhouse-22-yellow.svg)
 ![Sqlite](https://img.shields.io/badge/sqlite-3-blue.svg)
+![DB2](https://img.shields.io/badge/db2-11-blue.svg)
+![DM](https://img.shields.io/badge/dm-8-blue.svg)
 
-database-export是一款多线程生成数据库结构文档的开源springboot工程，能支持最新的数据库版本，可以导出docx格式和xlsx的文档，也能直接在网页上预览
+database-export是一款多线程生成数据库结构文档的开源springboot工程，能支持最新的数据库版本，支持导出多种格式的文件，也能直接在网页上预览
 
 
 现已支持的数据库
@@ -28,6 +30,8 @@ database-export是一款多线程生成数据库结构文档的开源springboot�
 * Postgresql
 * Clickhouse
 * Sqlite3
+* DB2
+* 达梦
 
 
 现已支持导出的类型
@@ -35,24 +39,25 @@ database-export是一款多线程生成数据库结构文档的开源springboot�
 * word
 * excel
 * markdown
+* pdf
+* html
 
 项目特点
 ------------
 
 * 导出sql支持多线程查询，导出速度更快
 * 使用element-ui，界面更美观
-* 支持导出word和excel，更支持网页预览
+* 支持导出word、excel、markdown、pdf、html，更支持网页预览
 * 导出速度高于现在的所有导出工具
 
 想加入技术开发群的加我，备注加群即可(定制模板请备注定制模板)
 ----------
 
-<img width="300px" height="300px" alt="加群" src="src/main/resources/static/assetss/images/v2/mywxqr.png"/>
+<img width="200px" height="300px" alt="加群" src="img/mywxqr.png"/>
 
 支持一下我
 ----------
-<img width="300px" height="400px" alt="加群" src="src/main/resources/static/assetss/images/wechat_pay.png"/>
-<img width="300px" height="400px" alt="加群" src="src/main/resources/static/assetss/images/ali_pay.jpg"/>
+<img width="300px" height="300px" alt="加群" src="img/wechat_pay.png"/>
 
 
 How to use
@@ -72,48 +77,50 @@ cmd/shell执行java -jar xxx.jar 即可启动
 ------------
 
 **源码运行方法**
->执行DatabaseExportApplication.java即可
+>执行DatabaseExportApplication.java即可,然后浏览器输入:http://localhost:9999
+
+如果想修改前端，前端项目在 https://github.com/PomZWJ/database-export-vue
+
+* 1.前端打包后，会出现dist文件夹，把index.html替换到database-export\src\main\resources\templates文件夹
+
+* 2.database-export\src\main\resources\static\static文件夹删除(一定要先删除)，然后在把dist中的static文件夹复制过来
+
+* 3.重启工程即可生效
 
 
 
 
+## 3.首页截图
 
-## 3.运行访问的地址
-
-
-> http://localhost:9999/dbExport/
-
-> 旧的界面访问 http://localhost:9999/dbExport/v1
-> (支持IE)
+<img width="600px" height="400px" src="img/cut/index-cut.png"/>
 
 
+## 4.操作页面截图
 
-## 4.项目截图
-
-**首页**
-![](https://img-blog.csdnimg.cn/73b2f2a8c7484bcca3b596d307240ca5.png?x-oss-process=image/watermark,type_d3F5LXplbmhlaQ,shadow_50,text_Q1NETiBA5oOK5Ye65bCY,size_20,color_FFFFFF,t_70,g_se,x_16)
-
-**ORACLE**
-![](https://img-blog.csdnimg.cn/8a2df0c45c994b6b93926f1c39c1b7df.png?x-oss-process=image/watermark,type_d3F5LXplbmhlaQ,shadow_50,text_Q1NETiBA5oOK5Ye65bCY,size_20,color_FFFFFF,t_70,g_se,x_16)
-
-**MySQL**
-![](https://img-blog.csdnimg.cn/f285524f4ef749e4a8a6dc495d698a09.png?x-oss-process=image/watermark,type_d3F5LXplbmhlaQ,shadow_50,text_Q1NETiBA5oOK5Ye65bCY,size_20,color_FFFFFF,t_70,g_se,x_16)
-
-**SQLServer**
-![](https://img-blog.csdnimg.cn/83bb44a0563d40a19976121e9e5e5240.png?x-oss-process=image/watermark,type_d3F5LXplbmhlaQ,shadow_50,text_Q1NETiBA5oOK5Ye65bCY,size_20,color_FFFFFF,t_70,g_se,x_16)
-
-**其他**
-![](https://img-blog.csdnimg.cn/509f9ed6bb8b4fc4b61f06bb8b47340e.png#pic_center)
+<img width="600px" height="400px" src="img/cut/oper-cut.png"/>
 
 
-**其他图片**
-![](https://img-blog.csdnimg.cn/2021062719315467.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L2h1YW5ndXRhMTE3OA==,size_16,color_FFFFFF,t_70#pic_center)
+## 5.html预览页面截图
 
-![](https://img-blog.csdnimg.cn/202106271932216.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L2h1YW5ndXRhMTE3OA==,size_16,color_FFFFFF,t_70#pic_center)
+<img width="600px" height="400px" src="img/cut/html-view.png"/>
 
-![](https://img-blog.csdnimg.cn/20210627193227925.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L2h1YW5ndXRhMTE3OA==,size_16,color_FFFFFF,t_70#pic_center)
+## 6.word页面截图
 
-## 5.更新日志
+<img width="600px" height="400px" src="img/cut/word.png"/>
+
+
+
+## 7.更新日志
+
+
+**2023-05-21(V4.0.0)**
+
+>1.前端工程单独开发,不再使用之前thymeleaf引入vue.js的做法
+
+>2.新增支持DB2和达梦数据库
+
+>3.新增导出支持pdf,html
+
 
 **2022-10-29(V3.4.0)**
 
@@ -184,7 +191,7 @@ cmd/shell执行java -jar xxx.jar 即可启动
 
 >2.能导出docx类型的文档,支持mysql,oracle,sql server
 
-Discussing
+## 8.Discussing
 ----------
 - [CSDN](https://blog.csdn.net/huanguta1178/article/details/83690318)
 - [submit issue](https://github.com/PomZWJ/database-export/issues/new)
