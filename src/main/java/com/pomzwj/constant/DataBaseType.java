@@ -43,7 +43,12 @@ public enum DataBaseType {
     /**
      * DM
      */
-    DM(Arrays.asList("columnName", "dataType","dataLength","dataScale","nullAble", "defaultVal", "comments"));
+    DM(Arrays.asList("columnName", "dataType","dataLength","dataScale","nullAble", "defaultVal", "comments")),
+
+    /**
+     * DB2
+     */
+    DB2(Arrays.asList("columnName", "dataType","dataLength","dataScale","nullAble", "defaultVal", "comments"));
     private List<String>columnName;
 
     DataBaseType(List<String> columnName){

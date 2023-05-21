@@ -25,6 +25,7 @@ database:
     clickhouse: jdbc:clickhouse://%s:%s/%s
     sqlite: jdbc:sqlite:%s
     dm: jdbc:dm://%s:%s/%s
+    db2: jdbc:db2://%s:%s/%s
   driver:
     mysql: com.mysql.cj.jdbc.Driver
     oracle: oracle.jdbc.OracleDriver
@@ -33,3 +34,4 @@ database:
     clickhouse: com.clickhouse.jdbc.ClickHouseDriver
     sqlite: org.sqlite.JDBC,
     dm: dm.jdbc.driver.DmDriver
+    db2: com.ibm.db2.jcc.DB2Driver

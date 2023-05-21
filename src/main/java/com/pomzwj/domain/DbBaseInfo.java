@@ -22,6 +22,10 @@ public class DbBaseInfo implements Serializable{
     private String userName;
     private String password;
     private String exportFileType;
+    /**
+     * db2使用
+     */
+    private String dbSchema;
     private ExportFileType exportFileTypeEnum;
     private DataBaseType dbKindEnum;
 
@@ -97,6 +101,14 @@ public class DbBaseInfo implements Serializable{
         this.dbKindEnum = dbKindEnum;
     }
 
+    public String getDbSchema() {
+        return dbSchema;
+    }
+
+    public void setDbSchema(String dbSchema) {
+        this.dbSchema = dbSchema;
+    }
+
     public void fieldCheck(){
         AssertUtils.isNull(this.getDbKindEnum(), MessageCode.DATABASE_KIND_IS_NULL_ERROR);
         AssertUtils.isNull(this.getExportFileTypeEnum(), MessageCode.EXPORT_FILE_TYPE_IS_NOT_MATCH_ERROR);
@@ -108,6 +120,9 @@ public class DbBaseInfo implements Serializable{
             AssertUtils.isNull(this.getPort(), MessageCode.DATABASE_PORT_IS_NULL_ERROR);
             AssertUtils.isNull(this.getUserName(), MessageCode.DATABASE_USER_IS_NULL_ERROR);
             AssertUtils.isNull(this.getPassword(), MessageCode.DATABASE_PASSWORD_IS_NULL_ERROR);
+            if(getDbKindEnum().equals(DataBaseType.DB2)){
+                AssertUtils.isNull(this.getDbSchema(), MessageCode.DATABASE_SCHEMA_IS_NULL_ERROR);
+            }
         }
     }
 }

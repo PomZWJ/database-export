@@ -212,7 +212,11 @@ public abstract class AbstractDbService implements DbService {
             List<Map<String, Object>> resultList = jdbcTemplate.queryForList(String.format(getQueryTableInfoSql(), dbBaseInfo.getDbName()));
             List<DbTable> tableList = this.getTableNameAndComments(resultList);
             return tableList;
-        }else if(dbKindEnum.equals(DataBaseType.ORACLE)
+        }else if(dbKindEnum.equals(DataBaseType.DB2)){
+            List<Map<String, Object>> resultList = jdbcTemplate.queryForList(String.format(getQueryTableInfoSql(), dbBaseInfo.getDbSchema()));
+            List<DbTable> tableList = this.getTableNameAndComments(resultList);
+            return tableList;
+        } else if(dbKindEnum.equals(DataBaseType.ORACLE)
             || dbKindEnum.equals(DataBaseType.POSTGRESQL)
             || dbKindEnum.equals(DataBaseType.SQLITE)
             || dbKindEnum.equals(DataBaseType.SQLSERVER)){

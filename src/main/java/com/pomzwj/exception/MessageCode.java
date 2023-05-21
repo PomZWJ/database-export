@@ -25,7 +25,8 @@ public enum MessageCode {
     DATABASE_KIND_IS_NULL_ERROR("000012","数据库类型不能为空"),
     DATABASE_KIND_IS_NOT_MATCH_ERROR("000013","数据库类型不支持"),
     EXPORT_FILE_TYPE_IS_NOT_MATCH_ERROR("000014","导出文件类型类型不支持"),
-    EXPORT_FILE_TYPE_IS_NOT_DEVELOP_ERROR("000015","导出文件类型类型暂时还未开发");
+    EXPORT_FILE_TYPE_IS_NOT_DEVELOP_ERROR("000015","导出文件类型类型暂时还未开发"),
+    DATABASE_SCHEMA_IS_NULL_ERROR("000003","数据库schema不能为空");
     String code;
     String msg;
     MessageCode(String code,String msg){
