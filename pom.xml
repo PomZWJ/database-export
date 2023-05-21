@@ -161,6 +161,14 @@
 			<!-- 添加第三方jar包 -->
 			<systemPath>${pom.basedir}/src/main/resources/lib/aspose-words-19.5.jar</systemPath>
 		</dependency>
+		<!-- 达梦驱动 -->
+		<dependency>
+			<groupId>com</groupId>
+			<artifactId>dm.jdbc</artifactId>
+			<version>18</version>
+			<scope>system</scope>
+			<systemPath>${basedir}/src/main/resources/lib/DmJdbcDriver18.jar</systemPath>
+		</dependency>
 	</dependencies>
 
 	<build>

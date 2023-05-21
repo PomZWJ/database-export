@@ -39,7 +39,11 @@ public enum DataBaseType {
     /**
      * sqlite
      */
-    SQLITE(Arrays.asList("columnName","dataType","nullAble","defaultVal","primary","comments"));
+    SQLITE(Arrays.asList("columnName","dataType","nullAble","defaultVal","primary","comments")),
+    /**
+     * DM
+     */
+    DM(Arrays.asList("columnName", "dataType","dataLength","dataScale","nullAble", "defaultVal", "comments"));
     private List<String>columnName;
 
     DataBaseType(List<String> columnName){

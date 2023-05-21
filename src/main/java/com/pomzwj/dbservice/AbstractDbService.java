@@ -207,7 +207,8 @@ public abstract class AbstractDbService implements DbService {
     public List<DbTable> getTableName(JdbcTemplate jdbcTemplate, DbBaseInfo dbBaseInfo){
         DataBaseType dbKindEnum = dbBaseInfo.getDbKindEnum();
         if(dbKindEnum.equals(DataBaseType.MYSQL)
-                || dbKindEnum.equals(DataBaseType.CLICKHOUSE)){
+                || dbKindEnum.equals(DataBaseType.CLICKHOUSE)
+                || dbKindEnum.equals(DataBaseType.DM)){
             List<Map<String, Object>> resultList = jdbcTemplate.queryForList(String.format(getQueryTableInfoSql(), dbBaseInfo.getDbName()));
             List<DbTable> tableList = this.getTableNameAndComments(resultList);
             return tableList;

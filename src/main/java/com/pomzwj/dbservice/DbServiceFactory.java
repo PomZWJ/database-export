@@ -2,6 +2,7 @@ package com.pomzwj.dbservice;
 
 import com.pomzwj.constant.DataBaseType;
 import com.pomzwj.dbservice.clickhouse.ClickhouseDbService;
+import com.pomzwj.dbservice.dm.DmDbService;
 import com.pomzwj.dbservice.mysql.MySqlDbService;
 import com.pomzwj.dbservice.oracle.OracleDbService;
 import com.pomzwj.dbservice.postgresql.PostgresqlDbService;
@@ -32,6 +33,8 @@ public class DbServiceFactory {
     private ClickhouseDbService clickhouseDbService;
     @Autowired
     private SqliteDbService sqliteDbService;
+    @Autowired
+    private DmDbService dmDbService;
 
     public DbService getDbServiceBean(DataBaseType dataBaseType) {
         if (dataBaseType == null) {
@@ -49,6 +52,8 @@ public class DbServiceFactory {
                 return clickhouseDbService;
             } else if(DataBaseType.SQLITE.equals(dataBaseType)){
                 return sqliteDbService;
+            }else if(DataBaseType.DM.equals(dataBaseType)){
+                return dmDbService;
             }
         }
         return null;

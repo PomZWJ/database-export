@@ -24,10 +24,12 @@ database:
     postgresql: jdbc:postgresql://%s:%s/%s
     clickhouse: jdbc:clickhouse://%s:%s/%s
     sqlite: jdbc:sqlite:%s
+    dm: jdbc:dm://%s:%s/%s
   driver:
     mysql: com.mysql.cj.jdbc.Driver
     oracle: oracle.jdbc.OracleDriver
     sqlServer: com.microsoft.sqlserver.jdbc.SQLServerDriver
     postgresql: org.postgresql.Driver
     clickhouse: com.clickhouse.jdbc.ClickHouseDriver
-    sqlite: org.sqlite.JDBC
+    sqlite: org.sqlite.JDBC,
+    dm: dm.jdbc.driver.DmDriver

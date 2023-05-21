@@ -42,6 +42,10 @@ public class DruidPoolUtils implements DbPoolService {
 	String sqliteJdbc;
 	@Value("${database.driver.sqlite}")
 	String sqliteDriver;
+	@Value("${database.jdbc.dm}")
+	String dmJdbc;
+	@Value("${database.driver.dm}")
+	String dmDriver;
 
 	@Override
 	public DataSource createDbPool(DbBaseInfo dbBaseInfo){
@@ -72,6 +76,9 @@ public class DruidPoolUtils implements DbPoolService {
 		} else if(dataBaseType.equals(DataBaseType.SQLITE)){
 			sqlConnectionStr = sqliteJdbc;
 			driverClassName = sqliteDriver;
+		} else if(dataBaseType.equals(DataBaseType.DM)){
+			sqlConnectionStr = dmJdbc;
+			driverClassName = dmDriver;
 		}
 		String jdbcUrl = String.format(sqlConnectionStr, ip, port, dbName);
 		if(dataBaseType.equals(DataBaseType.SQLITE)){
