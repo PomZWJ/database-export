@@ -174,7 +174,7 @@
 			<artifactId>dm.jdbc</artifactId>
 			<version>18</version>
 			<scope>system</scope>
-			<systemPath>${basedir}/src/main/resources/lib/DmJdbcDriver18.jar</systemPath>
+			<systemPath>${pom.basedir}/src/main/resources/lib/DmJdbcDriver18.jar</systemPath>
 		</dependency>
 	</dependencies>
 
@@ -186,11 +186,18 @@
 				<configuration>
 					<source>1.8</source>
 					<target>1.8</target>
+					<!--加入需要打包的jar路径-->
+					<compilerArguments>
+						<extdirs>${basedir}/src/main/resources/lib</extdirs>
+					</compilerArguments>
 				</configuration>
 			</plugin>
 			<plugin>
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
+				<configuration>
+					<includeSystemScope>true</includeSystemScope>
+				</configuration>
 			</plugin>
 			<plugin>
 				<artifactId>maven-surefire-plugin</artifactId>
