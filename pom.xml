@@ -38,7 +38,7 @@
 		<orai18n.version>12.1.0.2.0</orai18n.version>
 		<fastjson.version>2.0.32</fastjson.version>
 		<druid.version>1.2.14</druid.version>
-		<guava.version>31.1-jre</guava.version>
+		<guava.version>32.0.0-jre</guava.version>
 		<clickhouse.version>0.4.6</clickhouse.version>
 		<sqlite.version>3.39.3.0</sqlite.version>
 		<db2.version>11.5.7.0</db2.version>
