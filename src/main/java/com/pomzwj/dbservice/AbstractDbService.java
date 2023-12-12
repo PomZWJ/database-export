@@ -1,5 +1,6 @@
 package com.pomzwj.dbservice;
 
+import com.google.common.base.Splitter;
 import com.google.common.util.concurrent.ThreadFactoryBuilder;
 import com.pomzwj.constant.DataBaseType;
 import com.pomzwj.dbpool.DbPoolFactory;
@@ -55,6 +56,26 @@ public abstract class AbstractDbService implements DbService {
             List[] listArray = this.listToPageArray(tableName);
             //2.2进行表列的数据获取
             this.getTableColumnInfoByMultiThread(jdbcTemplate, listArray,dbBaseInfo);
+            return tableName;
+        } catch (Exception e) {
+            log.error("获取表信息失败e={}",e);
+            throw e;
+        } finally {
+            //关闭线程池
+            dbPoolFactory.getDbPoolServiceBean().closeDbPool(dbPool);
+        }
+    }
+
+    @Override
+    public List<DbTable> getTableList(DbBaseInfo dbBaseInfo) throws Exception {
+        //获取数据库线程池
+        dbPoolFactory = SpringBeanContext.getContext().getBean(DbPoolFactory.class);
+        DataSource dbPool = null;
+        try {
+            dbPool = dbPoolFactory.getDbPoolServiceBean().createDbPool(dbBaseInfo);
+            JdbcTemplate jdbcTemplate = new JdbcTemplate(dbPool);
+            //1.获取所有表基本信息
+            List<DbTable> tableName = this.getTableName(jdbcTemplate, dbBaseInfo);
             return tableName;
         } catch (Exception e) {
             log.error("获取表信息失败e={}",e);
@@ -206,27 +227,36 @@ public abstract class AbstractDbService implements DbService {
      */
     public List<DbTable> getTableName(JdbcTemplate jdbcTemplate, DbBaseInfo dbBaseInfo){
         DataBaseType dbKindEnum = dbBaseInfo.getDbKindEnum();
+        List<DbTable> tableList = null;
         if(dbKindEnum.equals(DataBaseType.MYSQL)
                 || dbKindEnum.equals(DataBaseType.CLICKHOUSE)
                 || dbKindEnum.equals(DataBaseType.DM)){
             List<Map<String, Object>> resultList = jdbcTemplate.queryForList(String.format(getQueryTableInfoSql(), dbBaseInfo.getDbName()));
-            List<DbTable> tableList = this.getTableNameAndComments(resultList);
-            return tableList;
+            tableList = this.getTableNameAndComments(resultList);
         }else if(dbKindEnum.equals(DataBaseType.DB2)){
             List<Map<String, Object>> resultList = jdbcTemplate.queryForList(String.format(getQueryTableInfoSql(), dbBaseInfo.getDbSchema()));
-            List<DbTable> tableList = this.getTableNameAndComments(resultList);
-            return tableList;
+            tableList = this.getTableNameAndComments(resultList);
         } else if(dbKindEnum.equals(DataBaseType.ORACLE)
-            || dbKindEnum.equals(DataBaseType.POSTGRESQL)
-            || dbKindEnum.equals(DataBaseType.SQLITE)
-            || dbKindEnum.equals(DataBaseType.SQLSERVER)){
+                || dbKindEnum.equals(DataBaseType.POSTGRESQL)
+                || dbKindEnum.equals(DataBaseType.SQLITE)
+                || dbKindEnum.equals(DataBaseType.SQLSERVER)){
             List<Map<String, Object>> resultList = jdbcTemplate.queryForList(getQueryTableInfoSql());
-            List<DbTable> tableList = this.getTableNameAndComments(resultList);
-            return tableList;
+            tableList = this.getTableNameAndComments(resultList);
         }else{
             List<Map<String, Object>> resultList = jdbcTemplate.queryForList(getQueryTableInfoSql());
-            List<DbTable> tableList = this.getTableNameAndComments(resultList);
+            tableList = this.getTableNameAndComments(resultList);
+
+        }
+        if(StringUtils.isBlank(dbBaseInfo.getSelectTableStr())){
             return tableList;
         }
+        List<DbTable> tableListTarget = new ArrayList<>(tableList.size());
+        List<String> selectedTabelNameList = Splitter.on(",").splitToList(dbBaseInfo.getSelectTableStr());
+        for(DbTable item : tableList){
+            if(selectedTabelNameList.contains(item.getTableName())){
+                tableListTarget.add(item);
+            }
+        }
+        return tableListTarget;
     }
 }

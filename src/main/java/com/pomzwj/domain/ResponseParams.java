@@ -5,7 +5,9 @@ import com.pomzwj.utils.DateUtils;
 import com.pomzwj.utils.StringUtils;
 
 import java.io.Serializable;
+import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 /**
  * Description:Service返回说明
@@ -35,7 +37,7 @@ public class ResponseParams<T> implements Serializable {
     /**
      * 操作结束的时间
      */
-    private String resultTime;
+    private Long resultTime;
 
     /**
      * 返回参数
@@ -80,14 +82,14 @@ public class ResponseParams<T> implements Serializable {
         this.resultDate = resultDate;
     }
 
-    public String getResultTime() {
-        if(StringUtils.isEmpty(resultTime)){
-            resultTime = DateUtils.getCurrentTime();
+    public long getResultTime() {
+        if(Objects.isNull(resultTime)){
+            resultTime = System.currentTimeMillis();
         }
         return resultTime;
     }
 
-    public void setResultTime(String resultTime) {
+    public void setResultTime(Long resultTime) {
         this.resultTime = resultTime;
     }
 
@@ -105,5 +107,20 @@ public class ResponseParams<T> implements Serializable {
 
     public void setExtenalParams(Map<String, Object> extenalParams) {
         this.extenalParams = extenalParams;
+    }
+
+    public ResponseParams<T> success(MessageCode code,T data){
+        this.setResultCode(code.getCode());
+        this.setResultMsg(code.getMsg());
+        this.setResultTime(System.currentTimeMillis());
+        this.setParams(data);
+        return this;
+    }
+    public ResponseParams<T> fail(String msg){
+        this.setResultCode(MessageCode.UNKNOWN_ERROR.getCode());
+        this.setResultMsg(msg);
+        this.setResultTime(System.currentTimeMillis());
+        this.setParams(null);
+        return this;
     }
 }

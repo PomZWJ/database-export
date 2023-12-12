@@ -22,6 +22,7 @@ public class DbBaseInfo implements Serializable{
     private String userName;
     private String password;
     private String exportFileType;
+    private String selectTableStr;
     /**
      * db2使用
      */
@@ -107,6 +108,14 @@ public class DbBaseInfo implements Serializable{
 
     public void setDbSchema(String dbSchema) {
         this.dbSchema = dbSchema;
+    }
+
+    public String getSelectTableStr() {
+        return selectTableStr;
+    }
+
+    public void setSelectTableStr(String selectTableStr) {
+        this.selectTableStr = selectTableStr;
     }
 
     public void fieldCheck(){

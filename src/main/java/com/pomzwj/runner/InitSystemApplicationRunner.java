@@ -27,6 +27,8 @@ public class InitSystemApplicationRunner implements ApplicationRunner {
     private Integer serverPort;
     @Value("${server.servlet.context-path}")
     private String contextPath;
+    @Value("${databaseExport.startWeb}")
+    private boolean startWebFlag;
 
     @Override
     public void run(ApplicationArguments args) {
@@ -48,7 +50,9 @@ public class InitSystemApplicationRunner implements ApplicationRunner {
             log.error("创建初始文件失败,系统自动退出,e={}", e);
             System.exit(0);
         }
-
+        if(!startWebFlag){
+            return;
+        }
         try {
             InetAddress addr = InetAddress.getLocalHost();
             String url = String.format("http://%s:%s%s", addr.getHostAddress(), serverPort, contextPath);

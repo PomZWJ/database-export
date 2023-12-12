@@ -14,6 +14,9 @@ spring:
     resources:
       static-locations: classpath:/static/
 
+databaseExport:
+  startWeb: true
+
 database:
   # 数据库连接池框架 默认druid 可选hikaricp,druid
   pool: druid

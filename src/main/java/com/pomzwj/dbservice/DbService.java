@@ -22,6 +22,16 @@ public interface DbService {
      * @return
      * @throws Exception
      */
-	public List<DbTable> getTableDetailInfo(DbBaseInfo dbBaseInfo) throws Exception;
+	List<DbTable> getTableDetailInfo(DbBaseInfo dbBaseInfo) throws Exception;
+
+	/**
+	 * 获取所有表信息(表名+备注)
+	 * @param dbBaseInfo
+	 * @return
+	 * @throws Exception
+	 */
+	List<DbTable> getTableList(DbBaseInfo dbBaseInfo)throws Exception;
+
+
 
 }
