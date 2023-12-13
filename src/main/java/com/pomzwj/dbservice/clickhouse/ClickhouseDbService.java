@@ -31,12 +31,12 @@ public class ClickhouseDbService extends AbstractDbService {
 
     @Override
     public String getQueryTableDetailSql() {
-        return "sql/postgresql.sql";
+        return null;
     }
 
     @Override
     public String getQueryTableInfoSql() {
-        return "select name as TABLE_NAME,'' as COMMENTS from system.tables where database = '%s'";
+        return "select name as TABLE_NAME,'' as COMMENTS from system.tables where database = '%s' and engine != 'Distributed'";
     }
 
     @Override
