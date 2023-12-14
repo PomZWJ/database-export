@@ -64,6 +64,15 @@ How to use
 ------------
 
 
+## docker运行
+
+```shell
+docker pull pomzwj/database-export:4.1.0
+```
+
+```shell
+docker run -d --name database-export -p 9999:9999 pomzwj/database-export:4.1.0
+```
 
 
 ## 1.下载release下的最新打包的压缩包(推荐)

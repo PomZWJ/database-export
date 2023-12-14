@@ -60,8 +60,6 @@ public class InitSystemApplicationRunner implements ApplicationRunner {
             if(property.startsWith("Windows")){
                 Runtime.getRuntime().exec(String.format("rundll32 url.dll,FileProtocolHandler %s",url));
                 log.info("检测到系统为windows，将自动打开主页");
-            }else{
-                log.info("检测到系统不是windows，请手动打开主页,{}",url);
             }
         } catch (Exception e) {
             log.error("获取主机IP错误,e={}", e);

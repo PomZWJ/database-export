@@ -5,7 +5,7 @@
 
 	<groupId>com.pomzwj</groupId>
 	<artifactId>database-export</artifactId>
-	<version>4.0.0</version>
+	<version>4.1.0</version>
 	<packaging>jar</packaging>
 
 	<name>database-export</name>
