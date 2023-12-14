@@ -4,7 +4,7 @@
 
 <img width="100px" height="100px" alt="加群" src="img/logo.png"/>
 
-**database-export V4.0.0**
+**database-export V4.1.0**
 =========================
 
 ![Spring Boot 2.6.3](https://img.shields.io/badge/Spring%20Boot-2.6.3-brightgreen.svg)
@@ -120,6 +120,16 @@ cmd/shell执行java -jar xxx.jar 即可启动
 
 
 ## 7.更新日志
+
+
+**2023-12-14(V4.1.0)**
+
+>1.封装docker镜像
+
+>2.导出可以选择表导出
+
+>3.修复已知bug
+
 
 
 **2023-05-21(V4.0.0)**
