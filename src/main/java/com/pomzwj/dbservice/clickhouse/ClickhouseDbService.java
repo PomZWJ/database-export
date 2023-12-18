@@ -31,7 +31,7 @@ public class ClickhouseDbService extends AbstractDbService {
 
     @Override
     public String getQueryTableDetailSql() {
-        return null;
+        return "sql/clickhouse.sql";
     }
 
     @Override
