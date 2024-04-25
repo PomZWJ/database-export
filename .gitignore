@@ -16,3 +16,8 @@ database-export.iml
 log/
 .databaseExport
 
+database-export-core/.databaseExport
+database-export-core/target/
+database-export-web/target/
+database-export-web/.databaseExport
+

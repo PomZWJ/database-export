@@ -1,0 +1,35 @@
+﻿<configuration>
+	<appender name="CONSOLELOG" class="ch.qos.logback.core.ConsoleAppender">
+		<encoder>
+			<pattern>
+				%d{yyyy-MM-dd HH:mm:ss.SSS} %p [%t] %m%n
+			</pattern>
+			<charset>UTF-8</charset>
+		</encoder>
+	</appender>
+	<appender name="SYSLOG" class="ch.qos.logback.core.rolling.RollingFileAppender">
+		<File>./.databaseExport/log/spring.log</File>
+		<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+			<fileNamePattern>./.databaseExport/log/dblog.%d.%i.gz</fileNamePattern>
+			<maxHistory>15</maxHistory>
+			<timeBasedFileNamingAndTriggeringPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
+				<maxFileSize>100MB</maxFileSize>
+			</timeBasedFileNamingAndTriggeringPolicy>
+		</rollingPolicy>
+		<encoder>
+			<pattern>
+				%d{yyyy-MM-dd HH:mm:ss.SSS} %-5p [%t] %c %m%n
+			</pattern>
+			<charset>UTF-8</charset>
+		</encoder>
+	</appender>
+
+	<!-- project default level -->
+	<logger name="com.pomzwj" level="debug"/>
+
+	<!-- 控制台输出日志级别 -->
+	<root level="INFO">
+		<appender-ref ref="CONSOLELOG"/>
+		<appender-ref ref="SYSLOG"/>
+	</root>
+</configuration>

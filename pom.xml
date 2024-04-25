@@ -3,10 +3,10 @@
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 
-	<groupId>com.pomzwj</groupId>
+	<groupId>io.github.pomzwj</groupId>
 	<artifactId>database-export</artifactId>
-	<version>4.1.0</version>
-	<packaging>jar</packaging>
+	<version>5.0.0</version>
+	<packaging>pom</packaging>
 
 	<name>database-export</name>
 	<description>database export project for PomZWJ</description>
@@ -17,196 +17,183 @@
 			<url>https://github.com/PomZWJ/database-export</url>
 		</developer>
 	</developers>
-	<parent>
-		<groupId>org.springframework.boot</groupId>
-		<artifactId>spring-boot-starter-parent</artifactId>
-		<version>2.6.3</version>
-		<relativePath/>
-	</parent>
+    <modules>
+        <module>database-export-core</module>
+		<module>database-export-web</module>
+	</modules>
 
 	<properties>
-		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-		<java.version>1.8</java.version>
+		<database.core>5.0.0</database.core>
+		<dbutils.version>1.8.1</dbutils.version>
+		<spring.boot.version>2.6.3</spring.boot.version>
+		<druid.version>1.2.22</druid.version>
+		<slf4j.version>1.7.33</slf4j.version>
+		<junit-jupiter.version>5.8.2</junit-jupiter.version>
+		<logback.version>1.2.10</logback.version>
 		<oracle.version>19.7.0.0</oracle.version>
-		<mysql.version>8.0.28</mysql.version>
-		<sqlserver.version>7.4.0.jre8</sqlserver.version>
-		<postgresql.version>42.3.4</postgresql.version>
+		<mysql.version>8.3.0</mysql.version>
+		<sqlserver.version>12.6.0.jre8</sqlserver.version>
+		<postgresql.version>42.7.3</postgresql.version>
 		<poitl.version>1.12.0</poitl.version>
 		<common-io.version>2.11.0</common-io.version>
 		<common-lang3.version>3.12.0</common-lang3.version>
 		<orai18n.version>12.1.0.2.0</orai18n.version>
-		<fastjson.version>2.0.32</fastjson.version>
-		<druid.version>1.2.14</druid.version>
-		<guava.version>31.1-jre</guava.version>
-		<clickhouse.version>0.4.6</clickhouse.version>
-		<sqlite.version>3.39.3.0</sqlite.version>
+		<gson.version>2.10.1</gson.version>
+		<guava.version>33.1.0-jre</guava.version>
+		<clickhouse.version>0.6.0</clickhouse.version>
+		<sqlite.version>3.45.0.0</sqlite.version>
 		<db2.version>11.5.7.0</db2.version>
+		<database-export-core.verion>5.0.0</database-export-core.verion>
+		<dm.version>8.1.3.140</dm.version>
+		<buddy.version>1.14.15</buddy.version>
+		<httpclient5.version>5.3</httpclient5.version>
+		<itext.version>7.2.6</itext.version>
 	</properties>
 
-	<dependencies>
-		<dependency>
-			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-starter</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-starter-web</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-starter-thymeleaf</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-starter-jdbc</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>com.oracle.database.jdbc</groupId>
-			<artifactId>ojdbc8</artifactId>
-			<version>${oracle.version}</version>
-		</dependency>
+	<dependencyManagement>
+		<dependencies>
+			<!--工具类-->
+			<dependency>
+				<groupId>com.deepoove</groupId>
+				<artifactId>poi-tl</artifactId>
+				<version>${poitl.version}</version>
+				<exclusions>
+					<exclusion>
+						<groupId>commons-logging</groupId>
+						<artifactId>commons-logging</artifactId>
+					</exclusion>
+					<exclusion>
+						<groupId>commons-io</groupId>
+						<artifactId>commons-io</artifactId>
+					</exclusion>
+				</exclusions>
+			</dependency>
+			<dependency>
+				<groupId>com.alibaba</groupId>
+				<artifactId>druid</artifactId>
+				<version>${druid.version}</version>
+			</dependency>
 
-		<dependency>
-			<groupId>com.deepoove</groupId>
-			<artifactId>poi-tl</artifactId>
-			<version>${poitl.version}</version>
-			<exclusions>
-				<exclusion>
-					<groupId>commons-logging</groupId>
-					<artifactId>commons-logging</artifactId>
-				</exclusion>
-				<exclusion>
-					<groupId>commons-io</groupId>
-					<artifactId>commons-io</artifactId>
-				</exclusion>
-			</exclusions>
-		</dependency>
-		<dependency>
-			<groupId>mysql</groupId>
-			<artifactId>mysql-connector-java</artifactId>
-			<version>${mysql.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>com.microsoft.sqlserver</groupId>
-			<artifactId>mssql-jdbc</artifactId>
-			<version>${sqlserver.version}</version>
-		</dependency>
+			<dependency>
+				<groupId>commons-io</groupId>
+				<artifactId>commons-io</artifactId>
+				<version>${common-io.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.apache.commons</groupId>
+				<artifactId>commons-lang3</artifactId>
+				<version>${common-lang3.version}</version>
+			</dependency>
 
-		<dependency>
-			<groupId>org.postgresql</groupId>
-			<artifactId>postgresql</artifactId>
-			<version>${postgresql.version}</version>
-			<exclusions>
-				<exclusion>
-					<groupId>org.checkerframework</groupId>
-					<artifactId>checker-qual</artifactId>
-				</exclusion>
-			</exclusions>
-		</dependency>
+			<dependency>
+				<groupId>com.google.code.gson</groupId>
+				<artifactId>gson</artifactId>
+				<version>${gson.version}</version>
+			</dependency>
 
+			<dependency>
+				<groupId>com.google.guava</groupId>
+				<artifactId>guava</artifactId>
+				<version>${guava.version}</version>
+			</dependency>
 
-		<dependency>
-			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-starter-test</artifactId>
-			<scope>test</scope>
-		</dependency>
+			<dependency>
+				<groupId>com.dameng</groupId>
+				<artifactId>DmJdbcDriver18</artifactId>
+				<version>${dm.version}</version>
+			</dependency>
 
-		<dependency>
-			<groupId>commons-io</groupId>
-			<artifactId>commons-io</artifactId>
-			<version>${common-io.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>org.apache.commons</groupId>
-			<artifactId>commons-lang3</artifactId>
-			<version>${common-lang3.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>cn.easyproject</groupId>
-			<artifactId>orai18n</artifactId>
-			<version>${orai18n.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>com.alibaba.fastjson2</groupId>
-			<artifactId>fastjson2</artifactId>
-			<version>${fastjson.version}</version>
-		</dependency>
+			<!--数据库驱动-->
+			<dependency>
+				<groupId>com.oracle.database.jdbc</groupId>
+				<artifactId>ojdbc8</artifactId>
+				<version>${oracle.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>cn.easyproject</groupId>
+				<artifactId>orai18n</artifactId>
+				<version>${orai18n.version}</version>
+			</dependency>
 
-		<dependency>
-			<groupId>com.alibaba</groupId>
-			<artifactId>druid</artifactId>
-			<version>${druid.version}</version>
-		</dependency>
+			<dependency>
+				<groupId>com.mysql</groupId>
+				<artifactId>mysql-connector-j</artifactId>
+				<version>${mysql.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>com.microsoft.sqlserver</groupId>
+				<artifactId>mssql-jdbc</artifactId>
+				<version>${sqlserver.version}</version>
+			</dependency>
 
-		<dependency>
-			<groupId>com.google.guava</groupId>
-			<artifactId>guava</artifactId>
-			<version>${guava.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>com.clickhouse</groupId>
-			<artifactId>clickhouse-jdbc</artifactId>
-			<version>${clickhouse.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>org.xerial</groupId>
-			<artifactId>sqlite-jdbc</artifactId>
-			<version>${sqlite.version}</version>
-		</dependency>
-		<!-- DB2驱动 -->
-		<dependency>
-			<groupId>com.ibm.db2</groupId>
-			<artifactId>jcc</artifactId>
-			<version>${db2.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>com.aspose</groupId>
-			<artifactId>aspose-words</artifactId>
-			<version>19.5</version>
-			<scope>system</scope>
-			<!-- 添加第三方jar包 -->
-			<systemPath>${pom.basedir}/src/main/resources/lib/aspose-words-19.5.jar</systemPath>
-		</dependency>
-		<!-- 达梦驱动 -->
-		<dependency>
-			<groupId>com</groupId>
-			<artifactId>dm.jdbc</artifactId>
-			<version>18</version>
-			<scope>system</scope>
-			<systemPath>${pom.basedir}/src/main/resources/lib/DmJdbcDriver18.jar</systemPath>
-		</dependency>
-	</dependencies>
+			<dependency>
+				<groupId>org.postgresql</groupId>
+				<artifactId>postgresql</artifactId>
+				<version>${postgresql.version}</version>
+				<exclusions>
+					<exclusion>
+						<groupId>org.checkerframework</groupId>
+						<artifactId>checker-qual</artifactId>
+					</exclusion>
+				</exclusions>
+			</dependency>
 
-	<build>
-		<plugins>
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-compiler-plugin</artifactId>
-				<configuration>
-					<source>1.8</source>
-					<target>1.8</target>
-					<!--加入需要打包的jar路径-->
-					<compilerArguments>
-						<extdirs>${basedir}/src/main/resources/lib</extdirs>
-					</compilerArguments>
-				</configuration>
-			</plugin>
-			<plugin>
-				<groupId>org.springframework.boot</groupId>
-				<artifactId>spring-boot-maven-plugin</artifactId>
-				<configuration>
-					<includeSystemScope>true</includeSystemScope>
-				</configuration>
-			</plugin>
-			<plugin>
-				<artifactId>maven-surefire-plugin</artifactId>
-				<configuration>
-					<skip>true</skip>
-				</configuration>
-			</plugin>
-		</plugins>
-	</build>
+			<dependency>
+				<groupId>com.clickhouse</groupId>
+				<artifactId>clickhouse-jdbc</artifactId>
+				<version>${clickhouse.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.xerial</groupId>
+				<artifactId>sqlite-jdbc</artifactId>
+				<version>${sqlite.version}</version>
+			</dependency>
+			<!-- DB2驱动 -->
+			<dependency>
+				<groupId>com.ibm.db2</groupId>
+				<artifactId>jcc</artifactId>
+				<version>${db2.version}</version>
+			</dependency>
+			<!-- https://mvnrepository.com/artifact/org.apache.httpcomponents.client5/httpclient5 -->
+			<dependency>
+				<groupId>org.apache.httpcomponents.client5</groupId>
+				<artifactId>httpclient5</artifactId>
+				<version>${httpclient5.version}</version>
+			</dependency>
+			<!--itext相关-->
+			<dependency>
+				<groupId>com.itextpdf</groupId>
+				<artifactId>kernel</artifactId>
+				<version>${itext.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>com.itextpdf</groupId>
+				<artifactId>io</artifactId>
+				<version>${itext.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>com.itextpdf</groupId>
+				<artifactId>layout</artifactId>
+				<version>${itext.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>com.itextpdf</groupId>
+				<artifactId>font-asian</artifactId>
+				<version>${itext.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>com.itextpdf</groupId>
+				<artifactId>pdfa</artifactId>
+				<version>${itext.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>io.github.pomzwj</groupId>
+				<artifactId>database-export-core</artifactId>
+				<version>${database.core}</version>
+			</dependency>
+		</dependencies>
+	</dependencyManagement>
+
 	<repositories>
 		<repository>
 			<id>public</id>
