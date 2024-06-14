@@ -91,7 +91,7 @@ public class DmDbService extends AbstractDbService {
                 } else {
                     dbColumnInfo.setComments(StringUtils.trimLineBreak(comments));
                 }
-                dbColumnInfos.add(dbColumnInfo);
+                dbColumnInfos.add(ClassUtils.copyDbColumnTarget(dbColumBean,dbColumnInfo));
             }
         }
         return dbColumnInfos;

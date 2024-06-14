@@ -11,7 +11,7 @@ FROM
             system.tables
         WHERE
             database = '%s'
-          AND name = '%s'
+          AND name = '%s' AND partition_key is not null AND partition_key <> ''
         UNION ALL
         SELECT
             'primary_key' AS TYPE,
@@ -21,7 +21,7 @@ FROM
             system.tables
         WHERE
             database = '%s'
-          AND name = '%s'
+          AND name = '%s' AND primary_key is not null AND primary_key <> ''
         UNION ALL
         SELECT
             'sorting_key' AS TYPE,
@@ -31,7 +31,7 @@ FROM
             system.tables
         WHERE
             database = '%s'
-          AND name = '%s'
+          AND name = '%s' AND sorting_key is not null AND sorting_key <> ''
         UNION ALL
         SELECT
             'sampling_key' AS TYPE,
@@ -41,6 +41,6 @@ FROM
             system.tables
         WHERE
             database = '%s'
-          AND name = '%s')
+          AND name = '%s' AND sampling_key is not null AND sampling_key <> '')
 ORDER BY
     indexOrder ASC

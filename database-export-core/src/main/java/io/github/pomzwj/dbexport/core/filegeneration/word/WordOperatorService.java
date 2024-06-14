@@ -62,8 +62,8 @@ public class WordOperatorService extends AbstractFileGenerationService {
 			SegmentData segmentData = new SegmentData();
 			if(CollectionUtils.isNotEmpty(dbTable.getTabsIndex())){
 				segmentData.setIndexTitle("索引信息");
+				segmentData.setIndexTable(Tables.create(rowIndexList.toArray(new RowRenderData[rowIndexList.size()])));
 			}
-			segmentData.setIndexTable(Tables.create(rowIndexList.toArray(new RowRenderData[rowIndexList.size()])));
 			segmentData.setTable(Tables.create(rowList.toArray(new RowRenderData[rowList.size()])));
 			segmentData.setTableName((i+1)+"."+dbTable.getTableName());
 			segmentData.setTableComments("(" + dbTable.getTableComments() + ")");
