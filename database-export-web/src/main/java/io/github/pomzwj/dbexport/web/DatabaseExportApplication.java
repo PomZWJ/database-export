@@ -1,10 +1,8 @@
 package io.github.pomzwj.dbexport.web;
 
-import io.github.pomzwj.dbexport.core.DataBaseExportExecute;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration;
-import org.springframework.context.annotation.Bean;
 
 /**
  * @author PomZWJ
@@ -18,9 +16,4 @@ public class DatabaseExportApplication {
 	public static void main(String[] args) {
         SpringApplication.run(DatabaseExportApplication.class, args);
 	}
-
-    @Bean
-    public DataBaseExportExecute dataBaseExportExecute(){
-        return new DataBaseExportExecute();
-    }
 }

@@ -2,18 +2,14 @@ package io.github.pomzwj.dbexport.web.controller;
 
 import com.google.common.base.Splitter;
 import com.google.common.collect.ImmutableMap;
-import com.google.gson.Gson;
 import io.github.pomzwj.dbexport.core.DataBaseExportExecute;
 import io.github.pomzwj.dbexport.core.anno.DataColumnName;
 import io.github.pomzwj.dbexport.core.anno.DbIndexName;
-import io.github.pomzwj.dbexport.core.constant.DataBaseConfigConstant;
 import io.github.pomzwj.dbexport.core.domain.DbExportConfig;
 import io.github.pomzwj.dbexport.core.exception.MessageCode;
 import io.github.pomzwj.dbexport.core.type.DataBaseType;
 import io.github.pomzwj.dbexport.core.type.ExportFileType;
 import io.github.pomzwj.dbexport.core.utils.ClassUtils;
-import io.github.pomzwj.dbexport.core.domain.DbBaseInfo;
-import io.github.pomzwj.dbexport.core.domain.DbColumnInfo;
 import io.github.pomzwj.dbexport.core.domain.DbTable;
 import io.github.pomzwj.dbexport.core.utils.StringUtils;
 import io.github.pomzwj.dbexport.web.domain.DownloadFile;
@@ -54,8 +50,6 @@ import static io.github.pomzwj.dbexport.core.constant.DataBaseConfigConstant.SYS
 public class DataExportController {
     public final static String GENERATION_FILE_TEMP_DIR = SYSTEM_FILE_DIR + File.separator + "fileTemp";
     static final Logger log = LoggerFactory.getLogger(DataExportController.class);
-    @Autowired
-    DataBaseExportExecute dataBaseExportExecute;
     @Autowired
     DruidPoolUtils druidPoolUtils;
 
@@ -113,7 +107,7 @@ public class DataExportController {
             dbExportConfig.setSelectTableList(Splitter.on(",").splitToList(selectTableStr));
         }
         try {
-            String executeFile = dataBaseExportExecute.executeFile(dbPool, dbExportConfig);
+            String executeFile = DataBaseExportExecute.executeFile(dbPool, dbExportConfig);
             String fileName = new File(executeFile).getName();
             return new ResponseParams<Map<String, Object>>().success(MessageCode.SUCCESS, ImmutableMap.of("fileName", fileName, "dbName", dbBaseInfoVo.getDbName()));
         } finally {
@@ -160,7 +154,7 @@ public class DataExportController {
             if(StringUtils.isNotEmpty(selectTableStr)){
                 dbExportConfig.setSelectTableList(Splitter.on(",").splitToList(selectTableStr));
             }
-            List<DbTable> tableDetailInfo = dataBaseExportExecute.executeGetTableDataAll(dbPool, dbExportConfig);
+            List<DbTable> tableDetailInfo = DataBaseExportExecute.executeGetTableDataAll(dbPool, dbExportConfig);
             List<Map<String, String>> columnMap = new ArrayList<>();
             for (Field declaredField : ClassUtils.sortColumnField(dbExportConfig.getDbColumnInfoDynamicClazz())) {
                 declaredField.setAccessible(true);
@@ -196,7 +190,7 @@ public class DataExportController {
         DataSource dbPool = druidPoolUtils.createDbPool(infoVo);
         DbExportConfig dbExportConfig = new DbExportConfig().setSearchIndex(true);
         try {
-            List<DbTable> tableDetailInfo = dataBaseExportExecute.executeGetTableAndComments(dbPool, dbExportConfig);
+            List<DbTable> tableDetailInfo = DataBaseExportExecute.executeGetTableAndComments(dbPool, dbExportConfig);
             return new ResponseParams<List<DbTable>>().success(MessageCode.SUCCESS, tableDetailInfo);
         } finally {
             druidPoolUtils.closeDbPool(dbPool);
