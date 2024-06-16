@@ -4,11 +4,12 @@
 
 <img width="100px" height="100px" alt="加群" src="img/logo.png"/>
 
-**database-export V4.1.0**
+**database-export V5.0.0**
 =========================
 
 ![Spring Boot 2.6.3](https://img.shields.io/badge/Spring%20Boot-2.6.3-brightgreen.svg)
-![Element-UI 2.0](https://img.shields.io/badge/ElementUI-2.0-green.svg)
+![Element-UI](https://img.shields.io/badge/ElementUI-PLUS-green.svg)
+![VUE3](https://img.shields.io/badge/VUE-3-green.svg)
 ![POI-TL](https://img.shields.io/badge/POITL-1.12-brightgreen.svg)
 ![MySQL](https://img.shields.io/badge/MySQL-8-blue.svg)
 ![ORACLE](https://img.shields.io/badge/ORACLE-11g-red.svg)
@@ -37,7 +38,6 @@ database-export是一款多线程生成数据库结构文档的开源springboot�
 现已支持导出的类型
 ------------
 * word
-* excel
 * markdown
 * pdf
 * html
@@ -46,8 +46,8 @@ database-export是一款多线程生成数据库结构文档的开源springboot�
 ------------
 
 * 导出sql支持多线程查询，导出速度更快
-* 使用element-ui，界面更美观
-* 支持导出word、excel、markdown、pdf、html，更支持网页预览
+* 使用element-ui-plus，界面更美观
+* 支持导出word、markdown、pdf、html，更支持网页预览
 * 导出速度高于现在的所有导出工具
 
 想加入技术开发群的加我，备注加群即可(定制模板请备注定制模板)
@@ -64,31 +64,39 @@ How to use
 ------------
 
 
-## docker运行
+#### 1.docker运行(推荐)
 
 ```shell
-docker pull pomzwj/database-export:4.1.0
+docker pull pomzwj/database-export:5.0.0
 ```
 
 ```shell
-docker run -d --name database-export -p 9999:9999 pomzwj/database-export:4.1.0
+docker run -d --name database-export -p 9999:9999 pomzwj/database-export:5.0.0
 ```
 
 
-## 1.下载release下的最新打包的压缩包(推荐)
+#### 2.下载release下的最新打包的压缩包
 
 
 cmd/shell执行java -jar xxx.jar 即可启动
 
 
-## 2.下载最新的源码启动
+#### 3.下载最新的源码启动
 
 ------------
 
 **源码运行方法**
->执行DatabaseExportApplication.java即可,然后浏览器输入:http://localhost:9999
+>执行database-export-web下的DatabaseExportApplication.java即可,然后浏览器输入:http://localhost:9999
 
-如果想修改前端，前端项目在 https://github.com/PomZWJ/database-export-vue
+如果想修改前端，前端项目在 
+
+vue2(database-export < 5.0.0)
+
+https://github.com/PomZWJ/database-export-vue
+
+vue3(database-export >= 5.0.0)
+
+https://github.com/PomZWJ/database-export-web-vue3
 
 * 1.前端打包后，会出现dist文件夹，把index.html替换到database-export\src\main\resources\templates文件夹
 
@@ -97,30 +105,79 @@ cmd/shell执行java -jar xxx.jar 即可启动
 * 3.重启工程即可生效
 
 
+#### 4.用户自行开发
+
+> 参考模块[database-export-core-demo]
+
+在pom.xml文件中引入
+
+```xml
+
+<dependency>
+    <groupId>io.github.pomzwj</groupId>
+    <artifactId>database-export-core</artifactId>
+</dependency>
+
+```
+JAVA代码中的使用
+
+```java
+protected static DataSource getDataSource() {
+    //自行定义数据源
+}
+public static void main(String[] args){
+    DataSource dataSource = getMySqlDataSource();
+    try {
+        DataBaseExportExecute.executeFile(dataSource, new DbExportConfig()
+                .setSearchIndex(true)
+                .setExportFileTypeEnum(ExportFileType.WORD)
+                .setGenerationFileTempDir("生成文件的位置"));
+    }catch (Exception e){
+        e.printStackTrace();
+    }finally {
+        if (dataSource != null) {
+            ((DruidDataSource) dataSource).close();
+        }
+    }
+}
+```
 
 
-## 3.首页截图
+
+
+## 首页截图
 
 <img width="600px" height="400px" src="img/cut/index-cut.png"/>
 
 
-## 4.操作页面截图
+## 操作页面截图
 
 <img width="600px" height="400px" src="img/cut/oper-cut.png"/>
 
 
-## 5.html预览页面截图
+## html预览页面截图
 
 <img width="600px" height="400px" src="img/cut/html-view.png"/>
 
-## 6.word页面截图
+## word页面截图
 
 <img width="600px" height="400px" src="img/cut/word.png"/>
 
 
 
-## 7.更新日志
+## 更新日志
 
+**2024-06-16(V5.0.0)**
+
+>1.从vue2升级到vue3
+
+>2.element-ui 升级 element-ui-plus
+
+>3.UI改版
+
+>4.后台JAVA架构改造，改造成可以用户使用的第三方SDK，供用户自行开发
+
+>5.修复已知BUG
 
 **2023-12-14(V4.1.0)**
 
@@ -210,7 +267,6 @@ cmd/shell执行java -jar xxx.jar 即可启动
 
 >2.能导出docx类型的文档,支持mysql,oracle,sql server
 
-## 8.Discussing
 ----------
 - [CSDN](https://blog.csdn.net/huanguta1178/article/details/83690318)
 - [submit issue](https://github.com/PomZWJ/database-export/issues/new)
