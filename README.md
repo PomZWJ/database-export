@@ -98,9 +98,9 @@ vue3(database-export >= 5.0.0)
 
 https://github.com/PomZWJ/database-export-web-vue3
 
-* 1.前端打包后，会出现dist文件夹，把index.html替换到database-export\src\main\resources\templates文件夹
+* 1.前端打包后，会出现dist文件夹，把index.html,logo.png,vite.svg替换到database-export\src\main\resources\templates文件夹
 
-* 2.database-export\src\main\resources\static\static文件夹删除(一定要先删除)，然后在把dist中的static文件夹复制过来
+* 2.database-export\src\main\resources\static\static文件夹删除(一定要先删除)，然后在把dist中的assets文件夹复制过来
 
 * 3.重启工程即可生效
 

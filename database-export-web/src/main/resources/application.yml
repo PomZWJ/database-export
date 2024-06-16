@@ -15,7 +15,7 @@ spring:
       static-locations: classpath:/static/
 
 databaseExport:
-  startWeb: false
+  startWeb: true
 
 database:
   jdbc:
