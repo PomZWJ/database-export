@@ -1,8 +1,8 @@
 package io.github.pomzwj.dbexport.core.constant;
 
-import java.io.File;
-
 public final class DataBaseConfigConstant {
+
+    public final static String DEFAULT_ENCODE = "utf-8";
 
     //默认系统缓存文件夹
     public final static String SYSTEM_FILE_DIR = ".databaseExport";

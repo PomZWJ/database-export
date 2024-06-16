@@ -115,15 +115,13 @@ public class ClassUtils {
     }
 
     public static DynamicType.Unloaded<DbColumnInfo> createDbColumBean(Class<? extends DbColumnInfo>clazz, List<String>showColumnName){
+        boolean showColumnFlag = CollectionUtils.isNotEmpty(showColumnName);
         List<String> baseColumnList = ClassUtils.sortColumnField(DbColumnInfo.class).stream().map(Field::getName).collect(Collectors.toList());
         List<Field> fields = ClassUtils.sortColumnField(clazz);
         ClassUtils.excludeBaseColumnField(showColumnName);
         DynamicType.Builder<DbColumnInfo> subclass = new ByteBuddy().subclass(DbColumnInfo.class);
         for(Field field : fields){
-            if(CollectionUtils.isEmpty(showColumnName)){
-                break;
-            }
-            if(CollectionUtils.isNotEmpty(showColumnName) && !showColumnName.contains(field.getName())){
+            if(showColumnFlag && !showColumnName.contains(field.getName())){
                 continue;
             }
             if(baseColumnList.contains(field.getName())){
@@ -148,25 +146,17 @@ public class ClassUtils {
                     // 按照bean方法实现
                     .intercept(FieldAccessor.ofBeanProperty());
         }
-        try {
-            //subclass.make().saveIn(new File("D://"));
-            return subclass.make();
-        } catch (Exception e) {
-            log.error("createDbColumBean error",e);
-        }
-        return null;
+        return subclass.make();
     }
 
     public static DynamicType.Unloaded<DbIndexInfo> createDbIndexBean(Class<? extends DbIndexInfo>clazz, List<String>showIndexName){
+        boolean showIndexFlag = CollectionUtils.isNotEmpty(showIndexName);
         List<String> baseIndexList = ClassUtils.sortIndexField(DbIndexInfo.class).stream().map(Field::getName).collect(Collectors.toList());
         List<Field> fields = ClassUtils.sortIndexField(clazz);
         ClassUtils.excludeBaseIndexField(showIndexName);
         DynamicType.Builder<DbIndexInfo> subclass = new ByteBuddy().subclass(DbIndexInfo.class);
         for(Field field : fields){
-            if(CollectionUtils.isEmpty(showIndexName)){
-                break;
-            }
-            if(CollectionUtils.isNotEmpty(showIndexName) && !showIndexName.contains(field.getName())){
+            if(showIndexFlag && !showIndexName.contains(field.getName())){
                 continue;
             }
             if(baseIndexList.contains(field.getName())){
@@ -191,12 +181,6 @@ public class ClassUtils {
                     // 按照bean方法实现
                     .intercept(FieldAccessor.ofBeanProperty());
         }
-        try {
-            //subclass.make().saveIn(new File("D://"));
-            return subclass.make();
-        } catch (Exception e) {
-            log.error("createDbColumBean error",e);
-        }
-        return null;
+        return subclass.make();
     }
 }

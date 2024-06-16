@@ -16,7 +16,6 @@ import java.util.List;
  * @github https://github.com/PomZWJ
  */
 public interface DbService {
-    String DEFAULT_CHARSET_NAME = "UTF-8";
     ThreadLocal<DbBaseInfo> dbBaseInfoThreadLocal = new ThreadLocal<>();
     ThreadLocal<DataSource> dataSourceThreadLocal = new ThreadLocal<>();
     ThreadLocal<DbExportConfig> dbExportConfigThreadLocal = new ThreadLocal<>();
@@ -29,7 +28,7 @@ public interface DbService {
      * @return List
      * @throws Exception
      */
-    List<DbTable> getTableDetailInfo(DataSource dataSource, DbExportConfig dbExportConfig) throws Exception;
+    List<DbTable> getTableDetailInfo(DataSource dataSource, DbExportConfig dbExportConfig);
 
     /**
      * 获取所有表信息(表名+备注)(自定义数据源)

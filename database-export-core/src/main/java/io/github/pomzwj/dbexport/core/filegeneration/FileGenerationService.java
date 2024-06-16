@@ -21,5 +21,4 @@ public interface FileGenerationService {
      * @throws Exception
      */
     File makeFile(DataSource dataSource, DbExportConfig dbExportConfig, List<DbTable> tableList) throws Exception;
-
 }

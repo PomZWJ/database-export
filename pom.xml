@@ -20,7 +20,8 @@
     <modules>
         <module>database-export-core</module>
 		<module>database-export-web</module>
-	</modules>
+        <module>database-export-core-demo</module>
+    </modules>
 
 	<properties>
 		<database.core>5.0.0</database.core>
@@ -34,9 +35,10 @@
 		<mysql.version>8.3.0</mysql.version>
 		<sqlserver.version>12.6.0.jre8</sqlserver.version>
 		<postgresql.version>42.7.3</postgresql.version>
-		<poitl.version>1.12.0</poitl.version>
+		<poitl.version>1.12.2</poitl.version>
 		<common-io.version>2.11.0</common-io.version>
 		<common-lang3.version>3.12.0</common-lang3.version>
+		<commons-beanutils.version>1.9.4</commons-beanutils.version>
 		<orai18n.version>12.1.0.2.0</orai18n.version>
 		<gson.version>2.10.1</gson.version>
 		<guava.version>33.1.0-jre</guava.version>
@@ -68,6 +70,30 @@
 					</exclusion>
 				</exclusions>
 			</dependency>
+
+			<!--slf4j 自带的简单日志实现 -->
+			<dependency>
+				<groupId>org.slf4j</groupId>
+				<artifactId>slf4j-api</artifactId>
+				<version>${slf4j.version}</version>
+			</dependency>
+			<!--logback-->
+			<dependency>
+				<groupId>ch.qos.logback</groupId>
+				<artifactId>logback-classic</artifactId>
+				<version>${logback.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>ch.qos.logback</groupId>
+				<artifactId>logback-core</artifactId>
+				<version>${logback.version}</version>
+			</dependency>
+			<!--测试框架-->
+			<dependency>
+				<groupId>org.junit.jupiter</groupId>
+				<artifactId>junit-jupiter</artifactId>
+				<version>${junit-jupiter.version}</version>
+			</dependency>
 			<dependency>
 				<groupId>com.alibaba</groupId>
 				<artifactId>druid</artifactId>
@@ -84,7 +110,16 @@
 				<artifactId>commons-lang3</artifactId>
 				<version>${common-lang3.version}</version>
 			</dependency>
-
+			<dependency>
+				<groupId>commons-beanutils</groupId>
+				<artifactId>commons-beanutils</artifactId>
+				<version>${commons-beanutils.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>commons-dbutils</groupId>
+				<artifactId>commons-dbutils</artifactId>
+				<version>${dbutils.version}</version>
+			</dependency>
 			<dependency>
 				<groupId>com.google.code.gson</groupId>
 				<artifactId>gson</artifactId>
@@ -95,6 +130,12 @@
 				<groupId>com.google.guava</groupId>
 				<artifactId>guava</artifactId>
 				<version>${guava.version}</version>
+			</dependency>
+
+			<dependency>
+				<groupId>net.bytebuddy</groupId>
+				<artifactId>byte-buddy</artifactId>
+				<version>${buddy.version}</version>
 			</dependency>
 
 			<dependency>

@@ -1,24 +1,24 @@
 package io.github.pomzwj.dbexport.core.utils;
 
+import io.github.pomzwj.dbexport.core.constant.DataBaseConfigConstant;
 import org.apache.commons.io.IOUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.io.InputStream;
 
 public class FileReaderUtils {
-
-    public static String getSqlFile(String path){
+    static final Logger log = LoggerFactory.getLogger(FileReaderUtils.class);
+    public static String getSqlFile(String path) {
         try{
             InputStream inputStream = getDefaultClassLoader().getResource(path).openStream();
-            String executeSql = IOUtils.toString(inputStream, "utf-8");
-            return executeSql;
-        }catch (NullPointerException | IOException e){
-            throw new RuntimeException(e);
+            return IOUtils.toString(inputStream, DataBaseConfigConstant.DEFAULT_ENCODE);
+        }catch (IOException e){
+            log.error("path={},read file error",path,e);
         }
+        return "";
     }
-
-
-
 
     static ClassLoader getDefaultClassLoader() {
         ClassLoader cl = null;
@@ -37,7 +37,6 @@ public class FileReaderUtils {
                 }
             }
         }
-
         return cl;
     }
 

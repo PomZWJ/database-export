@@ -46,7 +46,6 @@ public class InitDataBaseExportRunner {
                 }
             }
         }
-
         return cl;
     }
 }

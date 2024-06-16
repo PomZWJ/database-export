@@ -158,7 +158,7 @@ public class MySqlTest {
     protected static DbExportConfig getConfig() {
         return new DbExportConfig()
                 .setSearchIndex(true)
-                .setExportFileTypeEnum(ExportFileType.MARKDOWN)
+                .setExportFileTypeEnum(ExportFileType.WORD)
                 .setGenerationFileTempDir(GENERATION_FILE_TEMP_DIR)
                 //.setShowColumnList(Lists.newArrayList("columnName","dataType","autoIncrement"))
                 //.setShowIndexList(Lists.newArrayList("name","seqIndex"))
@@ -194,7 +194,7 @@ public class MySqlTest {
 
     @Test
     public void makeFile()throws Exception{
-        DataSource dataSource = getOracleDataSource();
+        DataSource dataSource = getMySqlDataSource();
         try {
             DataBaseExportExecute.executeFile(dataSource, getConfig());
         } finally {

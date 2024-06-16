@@ -1,5 +1,6 @@
 package io.github.pomzwj.dbexport.core.utils;
 
+import io.github.pomzwj.dbexport.core.constant.DataBaseConfigConstant;
 import io.github.pomzwj.dbexport.core.domain.DbBaseInfo;
 import io.github.pomzwj.dbexport.core.type.DataBaseType;
 
@@ -90,8 +91,8 @@ public class JdbcUrlParseUtils {
         String[] pairs = query.split("&");
         for (String pair : pairs) {
             int idx = pair.indexOf("=");
-            String key = URLDecoder.decode(pair.substring(0, idx), "UTF-8");
-            String value = URLDecoder.decode(pair.substring(idx + 1), "UTF-8");
+            String key = URLDecoder.decode(pair.substring(0, idx), DataBaseConfigConstant.DEFAULT_ENCODE);
+            String value = URLDecoder.decode(pair.substring(idx + 1), DataBaseConfigConstant.DEFAULT_ENCODE);
             queryPairs.put(key.toUpperCase(), value);
         }
         return queryPairs;

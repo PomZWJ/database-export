@@ -27,8 +27,7 @@ public class DataBaseExportExecute {
             dbServiceFactory = new DbServiceFactory();
             fileGenerationFactory = new FileGenerationFactory();
         } catch (IOException e) {
-            log.error("DataBase Export init fail", e);
-            throw new RuntimeException(e);
+            log.error("DataBaseExport init fail,reason is {}", e.getMessage(),e);
         }
     }
 
@@ -40,7 +39,7 @@ public class DataBaseExportExecute {
         return tableList;
     }
 
-    public static List<DbTable> executeGetTableDataAll(DataSource dataSource, DbExportConfig dbExportConfig) throws Exception {
+    public static List<DbTable> executeGetTableDataAll(DataSource dataSource, DbExportConfig dbExportConfig) {
         dbExportConfig.checkAndInitConfig(dataSource);
         DbService dbServiceBean = dbServiceFactory.getDbServiceBean(dataSource);
         List<DbTable> tableList = dbServiceBean.getTableDetailInfo(dataSource, dbExportConfig);

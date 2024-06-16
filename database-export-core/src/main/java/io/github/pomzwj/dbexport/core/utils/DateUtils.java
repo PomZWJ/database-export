@@ -31,16 +31,4 @@ public class DateUtils {
     public static String getCurrentDate() {
         return DateUtils.getCurrentDate("yyyyMMdd");
     }
-
-    /**
-     * 获取当前时间
-     *
-     * @return 当前时间字符串 HHmmss
-     */
-    public static String getCurrentTime() {
-        Date date = new Date();
-        SimpleDateFormat sim = new SimpleDateFormat("HHmmss");
-        String dateChar = sim.format(date);
-        return dateChar;
-    }
 }

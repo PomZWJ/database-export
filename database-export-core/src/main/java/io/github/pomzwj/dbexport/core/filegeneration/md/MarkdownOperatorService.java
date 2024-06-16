@@ -1,6 +1,7 @@
 package io.github.pomzwj.dbexport.core.filegeneration.md;
 
 import com.google.common.base.Joiner;
+import io.github.pomzwj.dbexport.core.constant.DataBaseConfigConstant;
 import io.github.pomzwj.dbexport.core.filegeneration.AbstractFileGenerationService;
 import io.github.pomzwj.dbexport.core.utils.ClassUtils;
 import io.github.pomzwj.dbexport.core.utils.StringUtils;
@@ -62,7 +63,7 @@ public class MarkdownOperatorService extends AbstractFileGenerationService {
 
             this.createDataRow(dbTable, columnInfoClazz,indexInfoClazz, tableSpliter,tableIndexSpliter, content);
         }
-        FileUtils.write(targetFile, content.toString(), "utf-8");
+        FileUtils.write(targetFile, content.toString(), DataBaseConfigConstant.DEFAULT_ENCODE);
     }
 
     private void createTableRow(DbTable dbTable, Class<? extends DbColumnInfo> columnInfoClazz,

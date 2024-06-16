@@ -1,16 +1,12 @@
 package io.github.pomzwj.dbexport.core.dbservice;
 
-import com.google.common.base.Splitter;
 import com.google.common.util.concurrent.ThreadFactoryBuilder;
-import io.github.pomzwj.dbexport.core.dbservice.mysql.MySqlColumnInfo;
 import io.github.pomzwj.dbexport.core.domain.*;
 import io.github.pomzwj.dbexport.core.exception.DatabaseExportException;
 import io.github.pomzwj.dbexport.core.exception.MessageCode;
-import io.github.pomzwj.dbexport.core.utils.ClassUtils;
 import io.github.pomzwj.dbexport.core.utils.JdbcUrlParseUtils;
 import io.github.pomzwj.dbexport.core.utils.JdbcUtils;
 import io.github.pomzwj.dbexport.core.utils.StringUtils;
-import net.bytebuddy.dynamic.DynamicType;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.collections4.MapUtils;
 import org.apache.commons.dbutils.QueryRunner;
@@ -44,20 +40,15 @@ public abstract class AbstractDbService implements DbService {
      * @throws Exception
      */
     @Override
-    public List<DbTable> getTableDetailInfo(DataSource dataSource, DbExportConfig dbExportConfig) throws Exception {
-        try {
-            this.initThreadLocalData(dataSource,dbExportConfig);
-            //1.获取所有表基本信息
-            List<DbTable> tableName = this.getTableName();
-            //2.1 把List进行分页
-            List[] listArray = this.listToPageArray(tableName);
-            //2.2进行表列的数据获取
-            this.getTableColumnInfoByMultiThread(listArray);
-            return tableName;
-        } catch (Exception e) {
-            log.error("getTableDetailInfo error", e);
-            throw e;
-        }
+    public List<DbTable> getTableDetailInfo(DataSource dataSource, DbExportConfig dbExportConfig){
+        this.initThreadLocalData(dataSource, dbExportConfig);
+        //1.获取所有表基本信息
+        List<DbTable> tableName = this.getTableName();
+        //2.1 把List进行分页
+        List[] listArray = this.listToPageArray(tableName);
+        //2.2进行表列的数据获取
+        this.getTableColumnInfoByMultiThread(listArray);
+        return tableName;
     }
 
     @Override
@@ -65,8 +56,7 @@ public abstract class AbstractDbService implements DbService {
         this.initThreadLocalData(dataSource,dbExportConfig);
         try {
             //1.获取所有表基本信息
-            List<DbTable> tableName = this.getTableName();
-            return tableName;
+            return this.getTableName();
         } catch (Exception e) {
             log.error("getTableList error", e);
             throw e;
@@ -166,7 +156,7 @@ public abstract class AbstractDbService implements DbService {
      * @param listArray
      * @throws Exception
      */
-    private void getTableColumnInfoByMultiThread(List[] listArray) throws Exception {
+    private void getTableColumnInfoByMultiThread(List[] listArray) {
         DbExportConfig dbExportConfig = dbExportConfigThreadLocal.get();
         DataSource dataSource = dataSourceThreadLocal.get();
         DbBaseInfo dbBaseInfo = dbBaseInfoThreadLocal.get();
@@ -198,9 +188,14 @@ public abstract class AbstractDbService implements DbService {
                 resultFuture.add(submit);
             }
             for (int i = 0; i < resultFuture.size(); i++) {
-                Boolean o = (Boolean) resultFuture.get(i).get();
+                boolean o = false;
+                try {
+                    o = (Boolean) resultFuture.get(i).get();
+                } catch (InterruptedException|ExecutionException e) {
+                    throw new RuntimeException(e);
+                }
                 if (!o) {
-                    throw new DatabaseExportException("export error");
+                    throw new DatabaseExportException("getTableColumnInfoByMultiThread fail");
                 }
             }
         } finally {

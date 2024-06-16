@@ -1,6 +1,5 @@
 package io.github.pomzwj.dbexport.core.filegeneration.html;
 
-import io.github.pomzwj.dbexport.core.type.DataBaseType;
 import io.github.pomzwj.dbexport.core.constant.DataBaseConfigConstant;
 import io.github.pomzwj.dbexport.core.filegeneration.AbstractFileGenerationService;
 import io.github.pomzwj.dbexport.core.domain.*;
@@ -49,10 +48,8 @@ public class HtmlOperatorService extends AbstractFileGenerationService {
             }
             String str = result.toString(StandardCharsets.UTF_8.name());
             str = str.replace("${data}", content.toString()).replace("${catalogue}", title.toString());
-            FileUtils.write(targetFile, str, "utf-8");
-        }catch (Exception e){
-            throw e;
-        }finally {
+            FileUtils.write(targetFile, str, DataBaseConfigConstant.DEFAULT_ENCODE);
+        } finally {
             if(inputStream != null){
                 inputStream.close();
             }
