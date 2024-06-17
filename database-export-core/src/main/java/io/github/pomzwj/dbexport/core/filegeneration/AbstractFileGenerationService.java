@@ -53,8 +53,8 @@ public abstract class AbstractFileGenerationService implements FileGenerationSer
     /**
      * 获取表头的中文名称
      *
-     * @param columnInfoClazz
-     * @return
+     * @param columnInfoClazz 列信息
+     * @return 获取表头的中文名称
      */
     protected List<String> getColumnHeaderName(Class<? extends DbColumnInfo> columnInfoClazz) {
         //获取表头
@@ -71,8 +71,8 @@ public abstract class AbstractFileGenerationService implements FileGenerationSer
     /**
      * 获取表索引的中文名称
      *
-     * @param indexInfoClazz
-     * @return
+     * @param indexInfoClazz 索引class
+     * @return 表索引的中文名称
      */
     protected List<String> getIndexHeaderName(Class<? extends DbIndexInfo> indexInfoClazz) {
         //获取表头
@@ -88,11 +88,10 @@ public abstract class AbstractFileGenerationService implements FileGenerationSer
 
     /**
      * 根据表头获取表格数据
-     *
-     * @param dbTable
-     * @param columnInfoClazz
-     * @return
-     * @throws Exception
+     * @param dbTable 表信息
+     * @param columnInfoClazz  columnInfoClazz
+     * @return 根据表头获取表格数据
+     * @throws Exception 抛出异常信息
      */
     protected List<List<String>> getTableColumnData(DbTable dbTable, Class<? extends DbColumnInfo> columnInfoClazz) throws Exception {
         List<DbColumnInfo> tabsColumn = dbTable.getTabsColumn();
@@ -106,12 +105,11 @@ public abstract class AbstractFileGenerationService implements FileGenerationSer
 
 
     /**
-     * 根据表索引获取数据
-     *
-     * @param dbTable
-     * @param indexInfoClazz
-     * @return
-     * @throws Exception
+     * 根据表索引获取表格数据
+     * @param dbTable 表信息
+     * @param indexInfoClazz  indexInfoClazz
+     * @return 根据表头获取表格数据
+     * @throws Exception 抛出异常信息
      */
     protected List<List<String>> getTableIndexData(DbTable dbTable, Class<? extends DbIndexInfo> indexInfoClazz) throws Exception {
         List<DbIndexInfo> tabsColumnIndexs = dbTable.getTabsIndex();

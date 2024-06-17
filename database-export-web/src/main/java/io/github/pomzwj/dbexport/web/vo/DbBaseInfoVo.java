@@ -13,13 +13,8 @@ public class DbBaseInfoVo {
     private String exportFileType;
     private String dbKind;
 
-    /**
-     * db2使用
-     */
     private String schemas;
-    /**
-     * 选中的表,用于选择性导出
-     */
+
     private String selectTableStr;
     private String indexSetList;
     private String columnSetList;

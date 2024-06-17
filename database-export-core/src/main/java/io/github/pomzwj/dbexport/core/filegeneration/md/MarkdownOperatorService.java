@@ -19,8 +19,6 @@ import java.util.List;
  * 导出MD
  *
  * @author PomZWJ
- * @email 1513041820@qq.com
- * @github https://github.com/PomZWJ
  */
 public class MarkdownOperatorService extends AbstractFileGenerationService {
     static final Logger log = LoggerFactory.getLogger(MarkdownOperatorService.class);

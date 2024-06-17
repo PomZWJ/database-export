@@ -16,8 +16,6 @@ import java.util.*;
  * oracle数据库操作
  *
  * @author PomZWJ
- * @email 1513041820@qq.com
- * @github https://github.com/PomZWJ
  */
 public class OracleDbService extends AbstractDbService {
     static final Logger log = LoggerFactory.getLogger(OracleDbService.class);

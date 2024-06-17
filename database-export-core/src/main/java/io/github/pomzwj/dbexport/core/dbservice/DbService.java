@@ -12,8 +12,6 @@ import java.util.List;
  * 数据库服务接口
  *
  * @author PomZWJ
- * @email 1513041820@qq.com
- * @github https://github.com/PomZWJ
  */
 public interface DbService {
     ThreadLocal<DbBaseInfo> dbBaseInfoThreadLocal = new ThreadLocal<>();
@@ -26,7 +24,6 @@ public interface DbService {
      * @param dataSource     数据源
      * @param dbExportConfig 导出配置
      * @return List
-     * @throws Exception
      */
     List<DbTable> getTableDetailInfo(DataSource dataSource, DbExportConfig dbExportConfig);
 
@@ -36,7 +33,6 @@ public interface DbService {
      * @param dataSource     数据源
      * @param dbExportConfig 导出配置
      * @return List
-     * @throws Exception
      */
     List<DbTable> getTableList(DataSource dataSource, DbExportConfig dbExportConfig);
 }

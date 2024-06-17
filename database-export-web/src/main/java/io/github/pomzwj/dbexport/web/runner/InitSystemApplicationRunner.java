@@ -11,9 +11,6 @@ import java.net.InetAddress;
 
 /**
  * @author PomZWJ
- * @email 1513041820@qq.com
- * @github https://github.com/PomZWJ
- * @date 2020-07-15
  */
 @Component
 public class InitSystemApplicationRunner implements ApplicationRunner {

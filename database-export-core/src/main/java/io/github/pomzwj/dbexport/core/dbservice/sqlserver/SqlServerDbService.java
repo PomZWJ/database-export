@@ -18,8 +18,6 @@ import java.util.Map;
  * sqlserver数据库
  *
  * @author PomZWJ
- * @email 1513041820@qq.com
- * @github https://github.com/PomZWJ
  */
 public class SqlServerDbService extends AbstractDbService {
     static final Logger log = LoggerFactory.getLogger(SqlServerDbService.class);

@@ -21,9 +21,6 @@ import java.util.Map;
  * 类说明:POI-TL操作服务
  *
  * @author PomZWJ
- * @email 1513041820@qq.com
- * @github https://github.com/PomZWJ
- * @date 2018/10/29/0029.
  */
 public class WordOperatorService extends AbstractFileGenerationService {
 

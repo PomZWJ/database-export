@@ -10,9 +10,6 @@ import java.io.Serializable;
  * 类说明:数据库基础信息
  *
  * @author PomZWJ
- * @email 1513041820@qq.com
- * @github https://github.com/PomZWJ
- * @date 2018/10/30/0030.
  */
 public class DbBaseInfo implements Serializable {
     private String ip;

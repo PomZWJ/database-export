@@ -4,9 +4,6 @@ package io.github.pomzwj.dbexport.web.exception;
  * 类说明:信息代码
  *
  * @author PomZWJ
- * @email 1513041820@qq.com
- * @github https://github.com/PomZWJ
- * @date 2019/09/12
  */
 public enum MessageCode {
     SUCCESS("000000","处理成功"),

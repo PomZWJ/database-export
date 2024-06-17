@@ -26,18 +26,14 @@ import java.util.concurrent.*;
  * dbService中间类
  *
  * @author PomZWJ
- * @email 1513041820@qq.com
- * @github https://github.com/PomZWJ
  */
 public abstract class AbstractDbService implements DbService {
     static final Logger log = LoggerFactory.getLogger(AbstractDbService.class);
 
     /**
      * 获取表详情
-     *
-     * @param dataSource
-     * @return
-     * @throws Exception
+     * @param dataSource     数据源
+     * @param dbExportConfig 导出配置
      */
     @Override
     public List<DbTable> getTableDetailInfo(DataSource dataSource, DbExportConfig dbExportConfig){
@@ -87,9 +83,7 @@ public abstract class AbstractDbService implements DbService {
 
     /**
      * 把List进行分页
-     *
-     * @param dbTableList
-     * @return
+     * @param dbTableList 获取的表集合
      */
     private List[] listToPageArray(List<DbTable> dbTableList) {
         if (CollectionUtils.isEmpty(dbTableList)) {
@@ -127,9 +121,8 @@ public abstract class AbstractDbService implements DbService {
 
     /**
      * 获取表名和注释
-     *
-     * @param resultList
-     * @return
+     * @param resultList 结果集
+     * @return 表的表名和备注列表
      */
     public List<DbTable> getTableNameAndComments(List<Map<String, Object>> resultList) {
         List<DbTable> tableList = new ArrayList<>();
@@ -153,8 +146,7 @@ public abstract class AbstractDbService implements DbService {
 
     /**
      * 获取详细的表信息
-     * @param listArray
-     * @throws Exception
+     * @param listArray 分页表
      */
     private void getTableColumnInfoByMultiThread(List[] listArray) {
         DbExportConfig dbExportConfig = dbExportConfigThreadLocal.get();
@@ -207,7 +199,7 @@ public abstract class AbstractDbService implements DbService {
 
     /**
      * 获取所有的表名称
-     * @return
+     * @return 获取表信息
      */
     public List<DbTable> getTableName() {
         DbExportConfig dbExportConfig = dbExportConfigThreadLocal.get();
@@ -227,37 +219,39 @@ public abstract class AbstractDbService implements DbService {
 
     /**
      * 查询表详细信息的sql位置
-     *
-     * @return
+     * @param dbBaseInfo 数据源基本信息
+     * @param tableName 表名
+     * @return 查询表详细信息的sql
      */
     public abstract String getQueryTableDetailSql(DbBaseInfo dbBaseInfo,String tableName);
 
     /**
      * 获取查询表信息的sql
-     *
-     * @return
+     * @return 查询表信息的sql,获取表名和备注
      */
     public abstract List<DbTable> getQueryTableInfoSql();
 
     /**
      * 获取索引SQL
-     * @return
+     * @param dbBaseInfo 数据源基本信息
+     * @param tableName 表名
+     * @return 获取索引SQL
      */
     public abstract String getIndexSql(DbBaseInfo dbBaseInfo,String tableName);
 
     /**
      * 解析表字段
-     * @param resultList
-     * @param dbColumBean
-     * @return
+     * @param resultList 结果集
+     * @param dbColumBean 解析对象
+     * @return 解析表字段
      */
     public abstract List<DbColumnInfo> setColumnDataInfo(List<Map<String, Object>> resultList,Class<? extends DbColumnInfo> dbColumBean);
 
     /**
      * 解析表索引
-     * @param resultList
-     * @param dbIndexBean
-     * @return
+     * @param resultList 结果集
+     * @param dbIndexBean 解析对象
+     * @return 解析表索引
      */
     public abstract List<DbIndexInfo> setIndexDataInfo(List<Map<String, Object>> resultList,Class<? extends DbIndexInfo> dbIndexBean);
 }

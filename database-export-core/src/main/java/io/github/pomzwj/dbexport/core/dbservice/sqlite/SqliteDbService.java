@@ -17,8 +17,6 @@ import java.util.Map;
  * sqlite数据库支持
  *
  * @author PomZWJ
- * @email 1513041820@qq.com
- * @github https://github.com/PomZWJ
  */
 public class SqliteDbService extends AbstractDbService {
     static final Logger log = LoggerFactory.getLogger(SqliteDbService.class);

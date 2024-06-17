@@ -4,9 +4,6 @@ package io.github.pomzwj.dbexport.core.exception;
  * 类说明:异常类
  *
  * @author PomZWJ
- * @email 1513041820@qq.com
- * @github https://github.com/PomZWJ
- * @date 2019/09/12
  */
 public class DatabaseExportException extends RuntimeException {
     private String errorCode;

@@ -19,8 +19,6 @@ import java.util.Map;
  * mysql数据库操作
  *
  * @author PomZWJ
- * @email 1513041820@qq.com
- * @github https://github.com/PomZWJ
  */
 public class MySqlDbService extends AbstractDbService {
     static final Logger log = LoggerFactory.getLogger(MySqlDbService.class);
