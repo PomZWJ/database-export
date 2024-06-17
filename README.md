@@ -110,6 +110,7 @@ https://github.com/PomZWJ/database-export-web-vue3
 <dependency>
     <groupId>io.github.pomzwj</groupId>
     <artifactId>database-export-core</artifactId>
+    <version>5.0.0</version>
 </dependency>
 
 ```
