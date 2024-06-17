@@ -34,8 +34,8 @@
 		<url>https://github.com/PomZWJ/database-export</url>
 	</scm>
     <modules>
-        <module>database-export-core</module>
-		<module>database-export-web</module>
+		<module>database-export-core</module>
+        <module>database-export-web</module>
         <module>database-export-core-demo</module>
     </modules>
 
