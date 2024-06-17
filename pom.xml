@@ -10,13 +10,29 @@
 
 	<name>database-export</name>
 	<description>database export project for PomZWJ</description>
+	<url>https://github.com/PomZWJ/database-export</url>
+	<licenses>
+		<license>
+			<name>MIT License</name>
+			<url>https://opensource.org/license/MIT</url>
+		</license>
+	</licenses>
 	<developers>
 		<developer>
-			<name>PomZWJ</name>
+			<id>pomzwj</id>
+			<name>pomzwj</name>
 			<email>1513041820@qq.com</email>
+			<roles>
+				<role>Project Manager</role>
+			</roles>
 			<url>https://github.com/PomZWJ/database-export</url>
 		</developer>
 	</developers>
+	<scm>
+		<connection>https://github.com/PomZWJ/database-export.git</connection>
+		<developerConnection>scm:git:ssh://git@github.com:PomZWJ/database-export.git</developerConnection>
+		<url>https://github.com/PomZWJ/database-export</url>
+	</scm>
     <modules>
         <module>database-export-core</module>
 		<module>database-export-web</module>
@@ -50,6 +66,11 @@
 		<buddy.version>1.14.15</buddy.version>
 		<httpclient5.version>5.3</httpclient5.version>
 		<itext.version>7.2.6</itext.version>
+
+		<maven-source-plugin.version>2.2.1</maven-source-plugin.version>
+		<maven-javadoc-plugin.version>2.9.1</maven-javadoc-plugin.version>
+		<maven-gpg-plugin.version>1.5</maven-gpg-plugin.version>
+		<central-publishing-maven-plugin.version>0.4.0</central-publishing-maven-plugin.version>
 	</properties>
 
 	<dependencyManagement>
@@ -243,6 +264,64 @@
 				<configuration>
 					<skip>true</skip>
 				</configuration>
+			</plugin>
+			<!--   central发布插件    -->
+			<plugin>
+				<groupId>org.sonatype.central</groupId>
+				<artifactId>central-publishing-maven-plugin</artifactId>
+				<version>${central-publishing-maven-plugin.version}</version>
+				<extensions>true</extensions>
+				<configuration>
+					<publishingServerId>pomzwj</publishingServerId>
+					<tokenAuth>true</tokenAuth>
+				</configuration>
+			</plugin>
+			<!-- Source -->
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-source-plugin</artifactId>
+				<version>${maven-source-plugin.version}</version>
+				<executions>
+					<execution>
+						<id>attach-sources</id>
+						<goals>
+							<goal>jar-no-fork</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+			<!-- Javadoc -->
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-javadoc-plugin</artifactId>
+				<version>${maven-javadoc-plugin.version}</version>
+				<executions>
+					<execution>
+						<id>attach-javadocs</id>
+						<goals>
+							<goal>jar</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+			<!-- GPG -->
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-gpg-plugin</artifactId>
+				<version>${maven-gpg-plugin.version}</version>
+				<configuration>
+					<executable>C:\Program Files (x86)\GnuPG\bin\gpg.exe</executable>
+					<keyname>pomzwj</keyname>
+				</configuration>
+				<executions>
+					<execution>
+						<id>sign-artifacts</id>
+						<phase>verify</phase>
+						<goals>
+							<goal>sign</goal>
+						</goals>
+					</execution>
+				</executions>
 			</plugin>
 		</plugins>
 	</build>

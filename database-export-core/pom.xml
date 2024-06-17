@@ -10,81 +10,119 @@
     </parent>
 
     <artifactId>database-export-core</artifactId>
-
+    <description>database export project for PomZWJ</description>
+    <url>https://github.com/PomZWJ/database-export</url>
     <properties>
         <maven.compiler.source>8</maven.compiler.source>
         <maven.compiler.target>8</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
+    <licenses>
+        <license>
+            <name>MIT License</name>
+            <url>https://opensource.org/license/MIT</url>
+        </license>
+    </licenses>
+    <developers>
+        <developer>
+            <id>pomzwj</id>
+            <name>pomzwj</name>
+            <email>1513041820@qq.com</email>
+            <roles>
+                <role>Project Manager</role>
+            </roles>
+            <url>https://github.com/PomZWJ/database-export</url>
+        </developer>
+    </developers>
+    <scm>
+        <connection>https://github.com/PomZWJ/database-export.git</connection>
+        <developerConnection>scm:git:ssh://git@github.com:PomZWJ/database-export.git</developerConnection>
+        <url>https://github.com/PomZWJ/database-export</url>
+    </scm>
     <dependencies>
         <dependency>
             <groupId>commons-dbutils</groupId>
             <artifactId>commons-dbutils</artifactId>
+            <version>${dbutils.version}</version>
         </dependency>
         <dependency>
             <groupId>commons-beanutils</groupId>
             <artifactId>commons-beanutils</artifactId>
+            <version>${commons-beanutils.version}</version>
         </dependency>
         <dependency>
             <groupId>net.bytebuddy</groupId>
             <artifactId>byte-buddy</artifactId>
+            <version>${buddy.version}</version>
         </dependency>
 
         <!--deepoove相关-->
         <dependency>
             <groupId>com.deepoove</groupId>
             <artifactId>poi-tl</artifactId>
+            <version>${poitl.version}</version>
         </dependency>
         <!--工具包-->
         <dependency>
             <groupId>commons-io</groupId>
             <artifactId>commons-io</artifactId>
+            <version>${common-io.version}</version>
         </dependency>
         <dependency>
             <groupId>org.apache.commons</groupId>
             <artifactId>commons-lang3</artifactId>
+            <version>${common-lang3.version}</version>
         </dependency>
         <dependency>
             <groupId>com.google.guava</groupId>
             <artifactId>guava</artifactId>
+            <version>${guava.version}</version>
         </dependency>
         <!--itext相关-->
         <dependency>
             <groupId>com.itextpdf</groupId>
             <artifactId>kernel</artifactId>
+            <version>${itext.version}</version>
         </dependency>
         <dependency>
             <groupId>com.itextpdf</groupId>
             <artifactId>io</artifactId>
+            <version>${itext.version}</version>
         </dependency>
         <dependency>
             <groupId>com.itextpdf</groupId>
             <artifactId>layout</artifactId>
+            <version>${itext.version}</version>
         </dependency>
         <dependency>
             <groupId>com.itextpdf</groupId>
             <artifactId>font-asian</artifactId>
+            <version>${itext.version}</version>
         </dependency>
         <dependency>
             <groupId>com.itextpdf</groupId>
             <artifactId>pdfa</artifactId>
+            <version>${itext.version}</version>
         </dependency>
 
         <!--slf4j 自带的简单日志实现 -->
         <dependency>
             <groupId>org.slf4j</groupId>
             <artifactId>slf4j-api</artifactId>
+            <version>${slf4j.version}</version>
         </dependency>
         <!--logback-->
         <dependency>
             <groupId>ch.qos.logback</groupId>
             <artifactId>logback-classic</artifactId>
             <scope>test</scope>
+            <version>${logback.version}</version>
         </dependency>
         <dependency>
             <groupId>ch.qos.logback</groupId>
             <artifactId>logback-core</artifactId>
             <scope>test</scope>
+            <version>${logback.version}</version>
         </dependency>
 
         <!--测试依赖-->
@@ -92,17 +130,20 @@
             <groupId>com.alibaba</groupId>
             <artifactId>druid</artifactId>
             <scope>test</scope>
+            <version>${druid.version}</version>
         </dependency>
         <dependency>
             <groupId>com.google.code.gson</groupId>
             <artifactId>gson</artifactId>
             <scope>test</scope>
+            <version>${gson.version}</version>
         </dependency>
 
         <dependency>
             <groupId>org.junit.jupiter</groupId>
             <artifactId>junit-jupiter</artifactId>
             <scope>test</scope>
+            <version>${junit-jupiter.version}</version>
         </dependency>
 
         <!--oracle驱动-->
@@ -110,11 +151,13 @@
             <groupId>com.oracle.database.jdbc</groupId>
             <artifactId>ojdbc8</artifactId>
             <scope>provided</scope>
+            <version>${oracle.version}</version>
         </dependency>
         <dependency>
             <groupId>cn.easyproject</groupId>
             <artifactId>orai18n</artifactId>
             <scope>provided</scope>
+            <version>${orai18n.version}</version>
         </dependency>
 
         <!--mysql驱动-->
@@ -122,18 +165,21 @@
             <groupId>com.mysql</groupId>
             <artifactId>mysql-connector-j</artifactId>
             <scope>provided</scope>
+            <version>${mysql.version}</version>
         </dependency>
         <!--sqlserver驱动-->
         <dependency>
             <groupId>com.microsoft.sqlserver</groupId>
             <artifactId>mssql-jdbc</artifactId>
             <scope>provided</scope>
+            <version>${sqlserver.version}</version>
         </dependency>
         <!--postgresql驱动-->
         <dependency>
             <groupId>org.postgresql</groupId>
             <artifactId>postgresql</artifactId>
             <scope>provided</scope>
+            <version>${postgresql.version}</version>
         </dependency>
 
         <!--clickhouse驱动-->
@@ -141,10 +187,13 @@
             <groupId>com.clickhouse</groupId>
             <artifactId>clickhouse-jdbc</artifactId>
             <scope>provided</scope>
+            <version>${clickhouse.version}</version>
         </dependency>
         <dependency>
             <groupId>org.apache.httpcomponents.client5</groupId>
             <artifactId>httpclient5</artifactId>
+            <scope>provided</scope>
+            <version>${httpclient5.version}</version>
         </dependency>
 
         <!-- sqlite 驱动-->
@@ -152,12 +201,14 @@
             <groupId>org.xerial</groupId>
             <artifactId>sqlite-jdbc</artifactId>
             <scope>provided</scope>
+            <version>${sqlite.version}</version>
         </dependency>
         <!-- DB2驱动 -->
         <dependency>
             <groupId>com.ibm.db2</groupId>
             <artifactId>jcc</artifactId>
             <scope>provided</scope>
+            <version>${db2.version}</version>
         </dependency>
         <!-- 达梦驱动 -->
         <!-- 达梦驱动 -->
@@ -165,6 +216,7 @@
             <groupId>com.dameng</groupId>
             <artifactId>DmJdbcDriver18</artifactId>
             <scope>provided</scope>
+            <version>${dm.version}</version>
         </dependency>
     </dependencies>
 </project>

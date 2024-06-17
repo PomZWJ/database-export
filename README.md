@@ -131,6 +131,11 @@ public static void main(String[] args){
         DataBaseExportExecute.executeFile(dataSource, new DbExportConfig()
                 .setSearchIndex(true)
                 .setExportFileTypeEnum(ExportFileType.WORD)
+                //详情见DataBaseType,以下的为字段名,自定字段名导出
+                //表字段
+                .setShowColumnList(Lists.newArrayList("columnName","dataType","autoIncrement"))
+                //索引字段
+                .setShowIndexList(Lists.newArrayList("name","seqIndex"))
                 .setGenerationFileTempDir("生成文件的位置"));
     }catch (Exception e){
         e.printStackTrace();

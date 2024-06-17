@@ -1,6 +1,7 @@
 package io.github.pomzwj.dbexport.core.demo;
 
 import com.alibaba.druid.pool.DruidDataSource;
+import com.google.common.collect.Lists;
 import io.github.pomzwj.dbexport.core.DataBaseExportExecute;
 import io.github.pomzwj.dbexport.core.domain.DbExportConfig;
 import io.github.pomzwj.dbexport.core.type.ExportFileType;
@@ -36,8 +37,8 @@ public class Main {
                 .setSearchIndex(true)
                 .setExportFileTypeEnum(ExportFileType.WORD)
                 .setGenerationFileTempDir(GENERATION_FILE_TEMP_DIR)
-                //.setShowColumnList(Lists.newArrayList("columnName","dataType","autoIncrement"))
-                //.setShowIndexList(Lists.newArrayList("name","seqIndex"))
+                .setShowColumnList(Lists.newArrayList("columnName","dataType","autoIncrement"))
+                .setShowIndexList(Lists.newArrayList("name","seqIndex"))
                 ;
     }
 
