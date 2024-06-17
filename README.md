@@ -7,18 +7,12 @@
 **database-export V5.0.0**
 =========================
 
-![Spring Boot 2.6.3](https://img.shields.io/badge/Spring%20Boot-2.6.3-brightgreen.svg)
+![Spring Boot 2](https://img.shields.io/badge/Spring%20Boot-2-brightgreen.svg)
 ![Element-UI](https://img.shields.io/badge/ElementUI-PLUS-green.svg)
 ![VUE3](https://img.shields.io/badge/VUE-3-green.svg)
-![POI-TL](https://img.shields.io/badge/POITL-1.12-brightgreen.svg)
-![MySQL](https://img.shields.io/badge/MySQL-8-blue.svg)
-![ORACLE](https://img.shields.io/badge/ORACLE-11g-red.svg)
-![SqlServer](https://img.shields.io/badge/SqlServer-2008-red.svg)
-![Postgresql](https://img.shields.io/badge/Postgresql-14-blue.svg)
-![Clickhouse](https://img.shields.io/badge/Clickhouse-22-yellow.svg)
-![Sqlite](https://img.shields.io/badge/sqlite-3-blue.svg)
-![DB2](https://img.shields.io/badge/db2-11-blue.svg)
-![DM](https://img.shields.io/badge/dm-8-blue.svg)
+![Docker](https://img.shields.io/docker/pulls/pomzwj/database-export)
+![Github](https://img.shields.io/github/stars/pomzwj/database-export)
+![Gitee](https://gitee.com/pomz/database-export/badge/star.svg?theme=dark)
 
 database-export是一款多线程生成数据库结构文档的开源springboot工程，能支持最新的数据库版本，支持导出多种格式的文件，也能直接在网页上预览
 
