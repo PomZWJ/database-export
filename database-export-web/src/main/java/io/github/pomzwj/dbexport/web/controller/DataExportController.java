@@ -92,7 +92,7 @@ public class DataExportController {
     public ResponseParams<Map<String, Object>> makeFile(@RequestBody DbBaseInfoVo dbBaseInfoVo) throws Exception {
         DataSource dbPool = druidPoolUtils.createDbPool(dbBaseInfoVo);
         //查询表信息
-        DbExportConfig dbExportConfig = new DbExportConfig().setSearchIndex(dbBaseInfoVo.getShowIndex() == 1 ? true:false);
+        DbExportConfig dbExportConfig = new DbExportConfig().setSearchIndex(dbBaseInfoVo.getShowIndex() == 1);
         dbExportConfig.setShowColumnList(Stream.of(dbBaseInfoVo.getColumnSetList().split(","))
                 .collect(Collectors.toList()));
         dbExportConfig.setShowIndexList(Stream.of(dbBaseInfoVo.getIndexSetList().split(","))
