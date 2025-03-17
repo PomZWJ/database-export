@@ -44,7 +44,7 @@ database-export是一款多线程生成数据库结构文档的开源springboot�
 * 支持导出word、markdown、pdf、html，更支持网页预览
 * 导出速度高于现在的所有导出工具
 
-想加入技术开发群的加我，备注加群即可(定制模板请备注定制模板)
+想加入技术开发群的加我(项目、毕业设计开发请备注项目，加群备注加群即可)
 ----------
 
 <img width="200px" height="300px" alt="加群" src="img/mywxqr.png"/>
