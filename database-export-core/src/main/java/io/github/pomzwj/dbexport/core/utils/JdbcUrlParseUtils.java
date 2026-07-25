@@ -5,7 +5,6 @@ import io.github.pomzwj.dbexport.core.domain.DbBaseInfo;
 import io.github.pomzwj.dbexport.core.type.DataBaseType;
 
 import javax.sql.DataSource;
-import java.io.File;
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 import java.sql.Connection;
@@ -13,10 +12,20 @@ import java.sql.DatabaseMetaData;
 import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.regex.Matcher;
 
+/**
+ * JDBC连接URL解析工具类，从数据源或连接中解析出数据库基础信息
+ *
+ * @author PomZWJ
+ */
 public class JdbcUrlParseUtils {
 
+    /**
+     * 从数据源解析连接URL为数据库基础信息
+     *
+     * @param dataSource 数据源
+     * @return 数据库基础信息
+     */
     public static DbBaseInfo parseConnectionUrlToBaseInfo(DataSource dataSource){
         try {
             return parseConnectionUrlToBaseInfo(dataSource.getConnection());
@@ -25,6 +34,12 @@ public class JdbcUrlParseUtils {
         }
     }
 
+    /**
+     * 从连接中解析连接URL为数据库基础信息
+     *
+     * @param connection 数据库连接
+     * @return 数据库基础信息
+     */
     public static DbBaseInfo parseConnectionUrlToBaseInfo(Connection connection){
         try {
             DatabaseMetaData metaData = connection.getMetaData();
@@ -44,6 +59,13 @@ public class JdbcUrlParseUtils {
         }
     }
 
+    /**
+     * 解析JDBC连接字符串为数据库基础信息
+     *
+     * @param url JDBC连接字符串
+     * @return 数据库基础信息
+     * @throws UnsupportedEncodingException 当URL解码编码不支持时抛出
+     */
     public static DbBaseInfo parseJdbcUrlStringToBaseInfo(String url) throws UnsupportedEncodingException {
         DbBaseInfo dbBaseInfo = new DbBaseInfo();
         String[] split = url.split(":");
@@ -51,7 +73,7 @@ public class JdbcUrlParseUtils {
         dbBaseInfo.setDbKindEnum(DataBaseType.matchType(dbType));
 
         if(dbBaseInfo.getDbKindEnum() == DataBaseType.SQLITE){
-            String[] slashSplit = url.split(Matcher.quoteReplacement(File.separator));
+            String[] slashSplit = url.split("[/\\\\]");
             dbBaseInfo.setDbName(slashSplit[slashSplit.length-1]);
         }else if(dbBaseInfo.getDbKindEnum() == DataBaseType.SQLSERVER){
             Map<String, String> queryPramsMap = parseSqlServerParamsToMap(url);
@@ -128,6 +150,12 @@ public class JdbcUrlParseUtils {
         }
         return params;
     }
+    /**
+     * 解析DB2连接字符串中的参数为键值对Map
+     *
+     * @param url DB2连接字符串
+     * @return 参数键值对Map，键已转换为大写
+     */
     public static Map<String, String> parseDb2ParamsToMap(String url){
         Map<String, String> params = new HashMap<>();
         if (url != null && url.contains(":")) {

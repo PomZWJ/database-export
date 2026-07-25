@@ -15,7 +15,7 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * clickhouse数据库支持
+ * clickhouse数据库支持服务
  *
  * @author PomZWJ
  */
@@ -26,17 +26,27 @@ public class ClickhouseDbService extends AbstractDbService {
 
     }
 
-    private static volatile ClickhouseDbService siglegle;
+    private static volatile ClickhouseDbService instance;
 
+    /**
+     * 获取ClickhouseDbService单例实例
+     *
+     * @return ClickhouseDbService单例实例
+     */
     public static ClickhouseDbService getInstance() {
-        if(siglegle == null)
+        if(instance == null)
             synchronized(ClickhouseDbService.class) {
-                if (siglegle == null)
-                    siglegle = new ClickhouseDbService();
+                if (instance == null)
+                    instance = new ClickhouseDbService();
             }
-        return siglegle;
+        return instance;
     }
 
+    /**
+     * 获取查询表信息的sql
+     *
+     * @return 查询表信息的sql,获取表名和备注
+     */
     @Override
     public List<DbTable> getQueryTableInfoSql() {
         String sql = FileReaderUtils.getSqlFile("sql/clickhouse/query-table.sql");
@@ -44,22 +54,42 @@ public class ClickhouseDbService extends AbstractDbService {
         return this.getTableNameAndComments(resultList);
     }
 
+    /**
+     * 查询表详细信息的sql位置
+     *
+     * @param dbBaseInfo 数据源基本信息
+     * @param tableName  表名
+     * @return 查询表详细信息的sql
+     */
     @Override
     public String getQueryTableDetailSql(DbBaseInfo dbBaseInfo,String tableName) {
         String sql = FileReaderUtils.getSqlFile("sql/clickhouse/query-table-detail.sql");
         return String.format(sql,tableName,dbBaseInfo.getDbName());
     }
 
+    /**
+     * 获取索引SQL
+     *
+     * @param dbBaseInfo 数据源基本信息
+     * @param tableName  表名
+     * @return 获取索引SQL
+     */
     @Override
     public String getIndexSql(DbBaseInfo dbBaseInfo,String tableName) {
         String sql = FileReaderUtils.getSqlFile("sql/clickhouse/query-index.sql");
-        System.out.println(sql);
         return String.format(sql,dbBaseInfo.getDbName(),tableName
                 ,dbBaseInfo.getDbName(),tableName
                 ,dbBaseInfo.getDbName(),tableName
                 ,dbBaseInfo.getDbName(),tableName);
     }
 
+    /**
+     * 解析表字段
+     *
+     * @param resultList  结果集
+     * @param dbColumBean 解析对象
+     * @return 解析表字段
+     */
     @Override
     public List<DbColumnInfo> setColumnDataInfo(List<Map<String, Object>> resultList,Class<? extends DbColumnInfo> dbColumBean) {
         List<DbColumnInfo> dbColumnInfos = new ArrayList<>();
@@ -84,6 +114,13 @@ public class ClickhouseDbService extends AbstractDbService {
         return dbColumnInfos;
     }
 
+    /**
+     * 解析表索引
+     *
+     * @param resultList  结果集
+     * @param dbIndexBean 解析对象
+     * @return 解析表索引
+     */
     @Override
     public List<DbIndexInfo> setIndexDataInfo(List<Map<String, Object>> resultList, Class<? extends DbIndexInfo> dbIndexBean) {
         List<DbIndexInfo> dbIndexInfos = new ArrayList<>();

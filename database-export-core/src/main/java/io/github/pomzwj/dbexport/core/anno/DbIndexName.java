@@ -7,12 +7,31 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
+ * 数据库索引名注解，用于标注字段对应的索引名及显示配置
+ *
  * @author PomZWJ
  */
 @Target({ElementType.FIELD})
 @Retention(RetentionPolicy.RUNTIME)
 public @interface DbIndexName {
+    /**
+     * 获取字段对应的索引名
+     *
+     * @return 索引名，默认为空字符串
+     */
     String name() default "";
+
+    /**
+     * 获取字段的排序顺序
+     *
+     * @return 排序顺序，默认为0
+     */
     int order() default 0;
+
+    /**
+     * 判断该字段是否在导出结果中显示
+     *
+     * @return 是否显示，默认为true
+     */
     boolean show() default true;
 }

@@ -32,21 +32,34 @@ public abstract class AbstractDbService implements DbService {
 
     /**
      * 获取表详情
+     *
      * @param dataSource     数据源
      * @param dbExportConfig 导出配置
+     * @return 数据库表详细信息列表
      */
     @Override
     public List<DbTable> getTableDetailInfo(DataSource dataSource, DbExportConfig dbExportConfig){
         this.initThreadLocalData(dataSource, dbExportConfig);
-        //1.获取所有表基本信息
-        List<DbTable> tableName = this.getTableName();
-        //2.1 把List进行分页
-        List[] listArray = this.listToPageArray(tableName);
-        //2.2进行表列的数据获取
-        this.getTableColumnInfoByMultiThread(listArray);
-        return tableName;
+        try {
+            //1.获取所有表基本信息
+            List<DbTable> tableName = this.getTableName();
+            //2.1 把List进行分页
+            List[] listArray = this.listToPageArray(tableName);
+            //2.2进行表列的数据获取
+            this.getTableColumnInfoByMultiThread(listArray);
+            return tableName;
+        } finally {
+            this.clearThreadLocalData();
+        }
     }
 
+    /**
+     * 获取所有表信息(表名+备注)(自定义数据源)
+     *
+     * @param dataSource     数据源
+     * @param dbExportConfig 导出配置
+     * @return 数据库表列表
+     */
     @Override
     public List<DbTable> getTableList(DataSource dataSource, DbExportConfig dbExportConfig){
         this.initThreadLocalData(dataSource,dbExportConfig);
@@ -56,15 +69,36 @@ public abstract class AbstractDbService implements DbService {
         } catch (Exception e) {
             log.error("getTableList error", e);
             throw e;
+        } finally {
+            this.clearThreadLocalData();
         }
     }
 
     private void initThreadLocalData(DataSource dataSource, DbExportConfig dbExportConfig){
-        dbBaseInfoThreadLocal.set(JdbcUrlParseUtils.parseConnectionUrlToBaseInfo(dataSource));
+        //复用 checkAndInitConfig 中已解析的 dbBaseInfo，避免重复解析
+        DbBaseInfo dbBaseInfo = dbExportConfig.getDbBaseInfo();
+        if(dbBaseInfo == null){
+            dbBaseInfo = JdbcUrlParseUtils.parseConnectionUrlToBaseInfo(dataSource);
+        }
+        dbBaseInfoThreadLocal.set(dbBaseInfo);
         dataSourceThreadLocal.set(dataSource);
         dbExportConfigThreadLocal.set(dbExportConfig);
     }
 
+    private void clearThreadLocalData(){
+        dbBaseInfoThreadLocal.remove();
+        dataSourceThreadLocal.remove();
+        dbExportConfigThreadLocal.remove();
+    }
+
+    /**
+     * 查询数据库返回List Map结果集
+     *
+     * @param dataSource 数据源
+     * @param sql        SQL语句
+     * @param params     SQL参数
+     * @return 查询结果列表
+     */
     public List<Map<String, Object>> queryListMapDataBase(DataSource dataSource,String sql,Object...params){
         QueryRunner runner = new QueryRunner();
         Connection connection = null;
@@ -121,6 +155,7 @@ public abstract class AbstractDbService implements DbService {
 
     /**
      * 获取表名和注释
+     *
      * @param resultList 结果集
      * @return 表的表名和备注列表
      */
@@ -153,7 +188,10 @@ public abstract class AbstractDbService implements DbService {
         DataSource dataSource = dataSourceThreadLocal.get();
         DbBaseInfo dbBaseInfo = dbBaseInfoThreadLocal.get();
         ThreadFactory namedThreadFactory = new ThreadFactoryBuilder().setNameFormat("thread-call-runner-%d").build();
-        ExecutorService es = new ThreadPoolExecutor(5, 10, 200L, TimeUnit.SECONDS, new LinkedBlockingQueue<Runnable>(), namedThreadFactory);
+        //使用有界队列，确保核心线程满后能扩容到最大线程数；拒绝策略由调用方通过 future.get() 抛出异常感知
+        ExecutorService es = new ThreadPoolExecutor(5, 10, 200L, TimeUnit.SECONDS,
+                new LinkedBlockingQueue<Runnable>(listArray.length), namedThreadFactory,
+                new ThreadPoolExecutor.CallerRunsPolicy());
         try {
             List<Future> resultFuture = new ArrayList<>();
             for (int i = 0; i < listArray.length; i++) {
@@ -199,6 +237,7 @@ public abstract class AbstractDbService implements DbService {
 
     /**
      * 获取所有的表名称
+     *
      * @return 获取表信息
      */
     public List<DbTable> getTableName() {
@@ -219,29 +258,33 @@ public abstract class AbstractDbService implements DbService {
 
     /**
      * 查询表详细信息的sql位置
+     *
      * @param dbBaseInfo 数据源基本信息
-     * @param tableName 表名
+     * @param tableName  表名
      * @return 查询表详细信息的sql
      */
     public abstract String getQueryTableDetailSql(DbBaseInfo dbBaseInfo,String tableName);
 
     /**
      * 获取查询表信息的sql
+     *
      * @return 查询表信息的sql,获取表名和备注
      */
     public abstract List<DbTable> getQueryTableInfoSql();
 
     /**
      * 获取索引SQL
+     *
      * @param dbBaseInfo 数据源基本信息
-     * @param tableName 表名
+     * @param tableName  表名
      * @return 获取索引SQL
      */
     public abstract String getIndexSql(DbBaseInfo dbBaseInfo,String tableName);
 
     /**
      * 解析表字段
-     * @param resultList 结果集
+     *
+     * @param resultList  结果集
      * @param dbColumBean 解析对象
      * @return 解析表字段
      */
@@ -249,7 +292,8 @@ public abstract class AbstractDbService implements DbService {
 
     /**
      * 解析表索引
-     * @param resultList 结果集
+     *
+     * @param resultList  结果集
      * @param dbIndexBean 解析对象
      * @return 解析表索引
      */

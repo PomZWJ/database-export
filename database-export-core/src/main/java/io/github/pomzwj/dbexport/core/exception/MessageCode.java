@@ -35,23 +35,50 @@ public enum MessageCode {
     OUTPUT_FILE_FORMAT_IS_NULL_ERROR("000025","no output file format is configured");
     String code;
     String msg;
+
+    /**
+     * 构造方法
+     *
+     * @param code 信息代码
+     * @param msg  信息内容
+     */
     MessageCode(String code, String msg){
         this.code = code;
         this.msg = msg;
     }
 
+    /**
+     * 获取信息代码
+     *
+     * @return 信息代码
+     */
     public String getCode() {
         return code;
     }
 
+    /**
+     * 设置信息代码
+     *
+     * @param code 信息代码
+     */
     public void setCode(String code) {
         this.code = code;
     }
 
+    /**
+     * 获取信息内容
+     *
+     * @return 信息内容
+     */
     public String getMsg() {
         return msg;
     }
 
+    /**
+     * 设置信息内容
+     *
+     * @param msg 信息内容
+     */
     public void setMsg(String msg) {
         this.msg = msg;
     }}

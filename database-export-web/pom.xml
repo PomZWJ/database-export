@@ -6,11 +6,14 @@
     <parent>
         <groupId>io.github.pomzwj</groupId>
         <artifactId>database-export</artifactId>
-        <version>5.0.0</version>
+        <version>6.0.0</version>
     </parent>
     <packaging>jar</packaging>
 
     <artifactId>database-export-web</artifactId>
+    <name>database-export-web</name>
+    <description>database export web module</description>
+    <url>https://github.com/PomZWJ/database-export</url>
 
     <properties>
         <maven.compiler.source>8</maven.compiler.source>

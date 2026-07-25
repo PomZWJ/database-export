@@ -4,7 +4,7 @@
 
 <img width="100px" height="100px" alt="加群" src="img/logo.png"/>
 
-**database-export V5.0.0**
+**database-export V6.0.0**
 =========================
 
 ![Spring Boot 2](https://img.shields.io/badge/Spring%20Boot-2-brightgreen.svg)
@@ -35,6 +35,7 @@ database-export是一款多线程生成数据库结构文档的开源springboot�
 * markdown
 * pdf
 * html
+* excel
 
 项目特点
 ------------
@@ -61,11 +62,11 @@ How to use
 #### 1.docker运行(推荐)
 
 ```shell
-docker pull pomzwj/database-export:5.0.0
+docker pull pomzwj/database-export:6.0.0
 ```
 
 ```shell
-docker run -d --name database-export -p 9999:9999 pomzwj/database-export:5.0.0
+docker run -d --name database-export -p 9999:9999 pomzwj/database-export:6.0.0
 ```
 
 
@@ -110,7 +111,7 @@ https://github.com/PomZWJ/database-export-web-vue3
 <dependency>
     <groupId>io.github.pomzwj</groupId>
     <artifactId>database-export-core</artifactId>
-    <version>5.0.0</version>
+    <version>6.0.0</version>
 </dependency>
 
 ```
@@ -166,6 +167,12 @@ public static void main(String[] args){
 
 
 ## 更新日志
+
+**2026-07-26(V6.0.0)**
+
+>1.架构优化和页面美化
+
+>增加excel导出
 
 **2024-06-16(V5.0.0)**
 

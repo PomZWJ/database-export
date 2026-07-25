@@ -18,35 +18,57 @@ import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * 文件生成服务抽象基类，封装生成文件的通用流程，包括目录创建、文件命名、
+ * 线程本地变量管理及表头/表体数据获取等通用方法，子类只需实现具体的文件流写入逻辑。
+ *
+ * @author PomZWJ
+ */
 public abstract class AbstractFileGenerationService implements FileGenerationService {
     static final Logger log = LoggerFactory.getLogger(AbstractFileGenerationService.class);
 
+    /**
+     * {@inheritDoc}
+     *
+     * <p>解析数据库基本信息并写入线程本地变量，创建目标文件目录与文件，
+     * 调用 {@link #makeFileStream(List, File)} 写入文件流，最后清理线程本地变量。</p>
+     */
     @Override
     public File makeFile(DataSource dataSource, DbExportConfig dbExportConfig, List<DbTable> tableList) throws Exception {
-        DbBaseInfo dbBaseInfo = JdbcUrlParseUtils.parseConnectionUrlToBaseInfo(dataSource);
+        //复用 checkAndInitConfig 中已解析的 dbBaseInfo，避免重复解析
+        DbBaseInfo dbBaseInfo = dbExportConfig.getDbBaseInfo();
+        if(dbBaseInfo == null){
+            dbBaseInfo = JdbcUrlParseUtils.parseConnectionUrlToBaseInfo(dataSource);
+        }
         dbBaseInfoThreadLocal.set(dbBaseInfo);
         dbExportConfigThreadLocal.set(dbExportConfig);
         dataSourdceInfoThreadLocal.set(dataSource);
-        //判断传入的生成文档地址，如果没有则使用默认地址
-        String generationFileTempDir = dbExportConfig.getGenerationFileTempDir();
+        try {
+            //判断传入的生成文档地址，如果没有则使用默认地址
+            String generationFileTempDir = dbExportConfig.getGenerationFileTempDir();
 
-        File fileDir = new File(generationFileTempDir);
-        if (!fileDir.isDirectory() || !fileDir.exists()) {
-            log.info("generation File Dir is not exist ,create it={}", fileDir.getAbsolutePath());
-            fileDir.mkdirs();
-        } else {
-            log.info("generation File Dir={}", fileDir.getAbsolutePath());
+            File fileDir = new File(generationFileTempDir);
+            if (!fileDir.isDirectory() || !fileDir.exists()) {
+                log.info("generation File Dir is not exist ,create it={}", fileDir.getAbsolutePath());
+                fileDir.mkdirs();
+            } else {
+                log.info("generation File Dir={}", fileDir.getAbsolutePath());
+            }
+            //文件名的名称=dbName+时间戳.格式
+            String fileName = dbBaseInfo.getDbName() + "_" + System.currentTimeMillis() + dbExportConfig.getExportFileTypeEnum().getFileSuffixName();
+            File file = new File(generationFileTempDir + File.separator + fileName);
+            if (file.exists() && file.isFile()) {
+                FileUtils.deleteQuietly(file);
+            } else {
+                file.createNewFile();
+            }
+            this.makeFileStream(tableList, file);
+            return file;
+        } finally {
+            dbBaseInfoThreadLocal.remove();
+            dbExportConfigThreadLocal.remove();
+            dataSourdceInfoThreadLocal.remove();
         }
-        //文件名的名称=dbName+时间戳.格式
-        String fileName = dbBaseInfo.getDbName() + "_" + System.currentTimeMillis() + dbExportConfig.getExportFileTypeEnum().getFileSuffixName();
-        File file = new File(generationFileTempDir + File.separator + fileName);
-        if (file.exists() && file.isFile()) {
-            FileUtils.deleteQuietly(file);
-        } else {
-            file.createNewFile();
-        }
-        this.makeFileStream(tableList, file);
-        return file;
 
     }
 
@@ -124,6 +146,14 @@ public abstract class AbstractFileGenerationService implements FileGenerationSer
         return dataBodys;
     }
 
+    /**
+     * 获取单行表字段数据。
+     *
+     * @param columnInfoClazz 列信息class
+     * @param dbColumnInfo    单行列信息
+     * @return 单行表字段数据
+     * @throws Exception 抛出异常信息
+     */
     protected List<String> getTableData(Class<? extends DbColumnInfo> columnInfoClazz, DbColumnInfo dbColumnInfo) throws Exception {
         List<String> dataBody = new ArrayList<>();
         for (Field declaredField : ClassUtils.sortColumnField(columnInfoClazz)) {
@@ -133,6 +163,14 @@ public abstract class AbstractFileGenerationService implements FileGenerationSer
         return dataBody;
     }
 
+    /**
+     * 获取单行表索引数据。
+     *
+     * @param indexInfoClazz 索引信息class
+     * @param dbColumnInfo   单行索引信息
+     * @return 单行表索引数据
+     * @throws Exception 抛出异常信息
+     */
     protected List<String> getTableIndexData(Class<? extends DbIndexInfo> indexInfoClazz, DbIndexInfo dbColumnInfo) throws Exception {
         List<String> dataBody = new ArrayList<>();
         for (Field declaredField : ClassUtils.sortIndexField(indexInfoClazz)) {
@@ -142,6 +180,13 @@ public abstract class AbstractFileGenerationService implements FileGenerationSer
         return dataBody;
     }
 
+    /**
+     * 将表数据写入目标文件流，由具体子类实现不同文件格式的写入逻辑。
+     *
+     * @param tableList  表数据列表
+     * @param targetFile 目标文件
+     * @throws Exception 抛出异常信息
+     */
     protected abstract void makeFileStream(List<DbTable> tableList, File targetFile) throws Exception;
 
 

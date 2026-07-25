@@ -17,9 +17,17 @@ import io.github.pomzwj.dbexport.core.utils.JdbcUrlParseUtils;
 import javax.sql.DataSource;
 
 /**
+ * 数据库服务工厂类
+ *
  * @author PomZWJ
  */
 public class DbServiceFactory {
+    /**
+     * 根据数据源获取数据库服务实例
+     *
+     * @param dataSource 数据源
+     * @return 数据库服务实例
+     */
     public DbService getDbServiceBean(DataSource dataSource){
         if (dataSource == null) {
             throw new DatabaseExportException(MessageCode.DATABASE_SOURCE_IS_NULL_ERROR);
@@ -27,6 +35,13 @@ public class DbServiceFactory {
         DbBaseInfo dbBaseInfo = JdbcUrlParseUtils.parseConnectionUrlToBaseInfo(dataSource);
         return this.getDbServiceBean(dbBaseInfo.getDbKindEnum());
     }
+
+    /**
+     * 根据数据库类型获取数据库服务实例
+     *
+     * @param dataBaseType 数据库类型
+     * @return 数据库服务实例
+     */
     public DbService getDbServiceBean(DataBaseType dataBaseType) {
         if (dataBaseType == null) {
             throw new DatabaseExportException(MessageCode.DATABASE_KIND_IS_NULL_ERROR);

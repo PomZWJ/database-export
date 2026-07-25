@@ -28,9 +28,14 @@ import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * 导出 PDF 文件，基于 iText 生成包含表字段与索引信息的表格。
+ *
+ * @author PomZWJ
+ */
 public class PdfOperatorService extends AbstractFileGenerationService {
     static final Logger log = LoggerFactory.getLogger(PdfOperatorService.class);
-    //表格头颜色
+    //表格头颜�?
     static final Color headerCustomColor = new DeviceRgb(68, 114, 196);
     static final PdfFont font;
     static final Paragraph indexParagraph;
@@ -42,7 +47,7 @@ public class PdfOperatorService extends AbstractFileGenerationService {
             throw new RuntimeException(e);
         }
         indexParagraph = new Paragraph("索引信息");
-        //设置字体，解决中文显示问题
+        //设置字体，解决中文显示问�?
         indexParagraph.setFont(font);
         indexParagraph.setFontSize(15);
         indexParagraph.setBold();
@@ -53,17 +58,29 @@ public class PdfOperatorService extends AbstractFileGenerationService {
 
     }
 
-    private static volatile PdfOperatorService siglegle;
+    private static volatile PdfOperatorService instance;
 
+    /**
+     * 获取单例实例（双重检查锁定）。
+     *
+     * @return 单例实例
+     */
     public static PdfOperatorService getInstance() {
-        if (siglegle == null)
+        if (instance == null)
             synchronized (PdfOperatorService.class) {
-                if (siglegle == null)
-                    siglegle = new PdfOperatorService();
+                if (instance == null)
+                    instance = new PdfOperatorService();
             }
-        return siglegle;
+        return instance;
     }
 
+    /**
+     * 将表数据写入 PDF 文件流。
+     *
+     * @param tableList  表数据列表
+     * @param targetFile 目标文件
+     * @throws Exception 抛出异常信息
+     */
     @Override
     protected void makeFileStream(List<DbTable> tableList, File targetFile) throws Exception {
         DbExportConfig dbExportConfig = dbExportConfigThreadLocal.get();
@@ -77,9 +94,9 @@ public class PdfOperatorService extends AbstractFileGenerationService {
         List<Cell> indexHeaderCells = createIndexHeaderCell(indexFields);
         //1、创建流对象
         PdfWriter pdfWriter = new PdfWriter(targetFile);
-        //2、创建文档对象
+        //2、创建文档对�?
         PdfDocument pdfDocument = new PdfDocument(pdfWriter);
-        //3、创建内容文档对象
+        //3、创建内容文档对�?
         Document document = new Document(pdfDocument);
         try {
             for (int i = 0; i < tableList.size(); i++) {
@@ -89,7 +106,7 @@ public class PdfOperatorService extends AbstractFileGenerationService {
 
                 //设置表格每列宽度
                 Table table = new Table(columHeaderCells.size());
-                //设置表格宽度百分比
+                //设置表格宽度百分�?
                 table.setWidth(UnitValue.createPercentValue(100));
                 //加入表格
                 for (Cell cell : columHeaderCells) {
@@ -107,7 +124,7 @@ public class PdfOperatorService extends AbstractFileGenerationService {
 
                     //设置表格每列宽度
                     Table indexTable = new Table(indexHeaderCells.size());
-                    //设置表格宽度百分比
+                    //设置表格宽度百分�?
                     indexTable.setWidth(UnitValue.createPercentValue(100));
                     //加入表格
                     for (Cell cell : indexHeaderCells) {
@@ -130,7 +147,7 @@ public class PdfOperatorService extends AbstractFileGenerationService {
         String tableName = dbTable.getTableName();
         String tableComments = dbTable.getTableComments();
         Paragraph paragraph = new Paragraph((index+1) + "." + tableName + "(" + tableComments + ")");
-        //设置字体，解决中文显示问题
+        //设置字体，解决中文显示问�?
         paragraph.setFont(font);
         paragraph.setFontSize(15);
         paragraph.setBold();
@@ -140,26 +157,26 @@ public class PdfOperatorService extends AbstractFileGenerationService {
 
     private void createColumnCell(Table table, List<String> tableColumnItem) {
         for (String item : tableColumnItem) {
-            table.addCell(new Cell().add(new Paragraph(item == null ? "" : item).setFont(font).setFontSize(8))); // 设置自定义背景颜色
+            table.addCell(new Cell().add(new Paragraph(item == null ? "" : item).setFont(font).setFontSize(8))); // 设置自定义背景颜�?
         }
     }
     private void createIndexCell(Table table, List<String> tableIndexItem) {
         for (String item : tableIndexItem) {
-            table.addCell(new Cell().add(new Paragraph(item == null ? "" : item).setFont(font).setFontSize(8))); // 设置自定义背景颜色
+            table.addCell(new Cell().add(new Paragraph(item == null ? "" : item).setFont(font).setFontSize(8))); // 设置自定义背景颜�?
         }
     }
 
     private List<Cell> createColumnHeaderCell(List<Field> columnFields) {
         List<Cell> resultList = new ArrayList<>(columnFields.size());
         for (Field field : columnFields) {
-            Cell header = new Cell(1, 1); //一行9列
+            Cell header = new Cell(1, 1); //一�?�?
             DataColumnName annotation = field.getAnnotation(DataColumnName.class);
             header.add(new Paragraph(annotation.name()))
                     .setFont(font) // 设置字体
                     .setFontSize(8)
                     .setFontColor(new DeviceRgb(255, 255, 255))
                     .setTextAlignment(TextAlignment.LEFT) // 居左
-                    .setBackgroundColor(headerCustomColor); // 设置自定义背景颜色
+                    .setBackgroundColor(headerCustomColor); // 设置自定义背景颜�?
             resultList.add(header);
         }
         return resultList;
@@ -168,14 +185,14 @@ public class PdfOperatorService extends AbstractFileGenerationService {
     private List<Cell> createIndexHeaderCell(List<Field> indexFields) {
         List<Cell> resultList = new ArrayList<>(indexFields.size());
         for (Field field : indexFields) {
-            Cell header = new Cell(1, 1); //一行9列
+            Cell header = new Cell(1, 1); //一�?�?
             DbIndexName annotation = field.getAnnotation(DbIndexName.class);
             header.add(new Paragraph(annotation.name()))
                     .setFont(font) // 设置字体
                     .setFontSize(8)
                     .setFontColor(new DeviceRgb(255, 255, 255))
                     .setTextAlignment(TextAlignment.LEFT) // 居左
-                    .setBackgroundColor(headerCustomColor); // 设置自定义背景颜色
+                    .setBackgroundColor(headerCustomColor); // 设置自定义背景颜�?
             resultList.add(header);
         }
         return resultList;

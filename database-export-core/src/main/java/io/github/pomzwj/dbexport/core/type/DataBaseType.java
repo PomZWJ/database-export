@@ -66,28 +66,60 @@ public enum DataBaseType {
     private Class<? extends DbColumnInfo> columnInfoClazz;
     private Class<? extends DbIndexInfo> indexInfoClazz;
 
-    DataBaseType(Class<? extends DbColumnInfo> columnInfoClazz,Class<? extends DbIndexInfo> indexInfoClazz) {
+    /**
+     * 构造方法
+     *
+     * @param columnInfoClazz 字段信息处理类
+     * @param indexInfoClazz  索引信息处理类
+     */
+    DataBaseType(Class<? extends DbColumnInfo> columnInfoClazz, Class<? extends DbIndexInfo> indexInfoClazz) {
         this.columnInfoClazz = columnInfoClazz;
         this.indexInfoClazz = indexInfoClazz;
     }
 
+    /**
+     * 获取字段信息处理类
+     *
+     * @return 字段信息处理类
+     */
     public Class<? extends DbColumnInfo> getColumnInfoClazz() {
         return columnInfoClazz;
     }
 
+    /**
+     * 设置字段信息处理类
+     *
+     * @param columnInfoClazz 字段信息处理类
+     */
     public void setColumnInfoClazz(Class<? extends DbColumnInfo> columnInfoClazz) {
         this.columnInfoClazz = columnInfoClazz;
     }
 
 
+    /**
+     * 获取索引信息处理类
+     *
+     * @return 索引信息处理类
+     */
     public Class<? extends DbIndexInfo> getIndexInfoClazz() {
         return indexInfoClazz;
     }
 
+    /**
+     * 设置索引信息处理类
+     *
+     * @param indexInfoClazz 索引信息处理类
+     */
     public void setIndexInfoClazz(Class<? extends DbIndexInfo> indexInfoClazz) {
         this.indexInfoClazz = indexInfoClazz;
     }
 
+    /**
+     * 根据字符串匹配对应的数据库类型
+     *
+     * @param value 数据库类型字符串
+     * @return 匹配到的数据库类型，未匹配返回null
+     */
     public static DataBaseType matchType(String value) {
         if (StringUtils.isNotEmpty(value)) {
             for (DataBaseType dataBase : DataBaseType.values()) {

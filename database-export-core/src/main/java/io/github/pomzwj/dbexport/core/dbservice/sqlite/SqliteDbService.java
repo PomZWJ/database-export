@@ -14,7 +14,7 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * sqlite数据库支持
+ * sqlite数据库支持服务
  *
  * @author PomZWJ
  */
@@ -25,17 +25,27 @@ public class SqliteDbService extends AbstractDbService {
 
     }
 
-    private static volatile SqliteDbService siglegle;
+    private static volatile SqliteDbService instance;
 
+    /**
+     * 获取SqliteDbService单例实例
+     *
+     * @return SqliteDbService单例实例
+     */
     public static SqliteDbService getInstance() {
-        if(siglegle == null)
+        if(instance == null)
             synchronized(SqliteDbService.class) {
-                if (siglegle == null)
-                    siglegle = new SqliteDbService();
+                if (instance == null)
+                    instance = new SqliteDbService();
             }
-        return siglegle;
+        return instance;
     }
 
+    /**
+     * 获取查询表信息的sql
+     *
+     * @return 查询表信息的sql,获取表名和备注
+     */
     @Override
     public List<DbTable> getQueryTableInfoSql() {
         String sql = FileReaderUtils.getSqlFile("sql/sqlite/query-table.sql");
@@ -43,16 +53,37 @@ public class SqliteDbService extends AbstractDbService {
         return this.getTableNameAndComments(resultList);
     }
 
+    /**
+     * 查询表详细信息的sql位置
+     *
+     * @param dbBaseInfo 数据源基本信息
+     * @param tableName  表名
+     * @return 查询表详细信息的sql
+     */
     @Override
     public String getQueryTableDetailSql(DbBaseInfo dbBaseInfo,String tableName) {
         return String.format(FileReaderUtils.getSqlFile("sql/sqlite/query-table-detail.sql"),tableName);
     }
 
+    /**
+     * 获取索引SQL
+     *
+     * @param dbBaseInfo 数据源基本信息
+     * @param tableName  表名
+     * @return 获取索引SQL
+     */
     @Override
     public String getIndexSql(DbBaseInfo dbBaseInfo,String tableName) {
         return String.format(FileReaderUtils.getSqlFile("sql/sqlite/query-index.sql"),tableName);
     }
 
+    /**
+     * 解析表字段
+     *
+     * @param resultList  结果集
+     * @param dbColumBean 解析对象
+     * @return 解析表字段
+     */
     @Override
     public List<DbColumnInfo> setColumnDataInfo(List<Map<String, Object>> resultList,Class<? extends DbColumnInfo> dbColumBean) {
         List<DbColumnInfo> dbColumnInfos = new ArrayList<>();
@@ -72,6 +103,13 @@ public class SqliteDbService extends AbstractDbService {
         return dbColumnInfos;
     }
 
+    /**
+     * 解析表索引
+     *
+     * @param resultList  结果集
+     * @param dbIndexBean 解析对象
+     * @return 解析表索引
+     */
     @Override
     public List<DbIndexInfo> setIndexDataInfo(List<Map<String, Object>> resultList, Class<? extends DbIndexInfo> dbIndexBean) {
         List<DbIndexInfo> dbIndexInfos = new ArrayList<>();

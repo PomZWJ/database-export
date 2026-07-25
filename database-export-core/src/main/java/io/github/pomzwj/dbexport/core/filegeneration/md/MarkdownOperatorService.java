@@ -28,24 +28,36 @@ public class MarkdownOperatorService extends AbstractFileGenerationService {
 
     }
 
-    private static volatile MarkdownOperatorService siglegle;
+    private static volatile MarkdownOperatorService instance;
 
+    /**
+     * 获取单例实例（双重检查锁定）。
+     *
+     * @return 单例实例
+     */
     public static MarkdownOperatorService getInstance() {
-        if (siglegle == null)
+        if (instance == null)
             synchronized (MarkdownOperatorService.class) {
-                if (siglegle == null)
-                    siglegle = new MarkdownOperatorService();
+                if (instance == null)
+                    instance = new MarkdownOperatorService();
             }
-        return siglegle;
+        return instance;
     }
 
+    /**
+     * 将表数据写入 Markdown 文件流。
+     *
+     * @param tableList  表数据列表
+     * @param targetFile 目标文件
+     * @throws Exception 抛出异常信息
+     */
     @Override
     protected void makeFileStream(List<DbTable> tableList, File targetFile) throws Exception {
         DbExportConfig dbExportConfig = dbExportConfigThreadLocal.get();
         DbBaseInfo dbBaseInfo = dbBaseInfoThreadLocal.get();
         Class<? extends DbColumnInfo> columnInfoClazz = dbExportConfig.getDbColumnInfoDynamicClazz();
         Class<? extends DbIndexInfo> indexInfoClazz = dbExportConfig.getDbIndexInfoDynamicClazz();
-        StringBuffer content = new StringBuffer("");
+        StringBuilder content = new StringBuilder();
         List<String> tableSpliter = new ArrayList<>();
         List<String> tableIndexSpliter = new ArrayList<>();
         for (int i = 0; i < ClassUtils.sortColumnField(columnInfoClazz).size(); i++) {
@@ -56,7 +68,7 @@ public class MarkdownOperatorService extends AbstractFileGenerationService {
         }
         for (int i = 0; i < tableList.size(); i++) {
             DbTable dbTable = tableList.get(i);
-            //创建表名列
+            //创建表名�?
             this.createTitleRow(i, dbTable.getTableName(), dbTable.getTableComments(), content);
 
             this.createDataRow(dbTable, columnInfoClazz,indexInfoClazz, tableSpliter,tableIndexSpliter, content);
@@ -65,7 +77,7 @@ public class MarkdownOperatorService extends AbstractFileGenerationService {
     }
 
     private void createTableRow(DbTable dbTable, Class<? extends DbColumnInfo> columnInfoClazz,
-                                List<String> tableSpliter, StringBuffer content) throws Exception {
+                                List<String> tableSpliter, StringBuilder content) throws Exception {
         List<String> columnHeaderName = this.getColumnHeaderName(columnInfoClazz);
         content.append("|").append(Joiner.on("|").join(columnHeaderName)).append("|").append(lineSeparator);
         content.append("|").append(Joiner.on("|").join(tableSpliter)).append("|").append(lineSeparator);
@@ -77,7 +89,7 @@ public class MarkdownOperatorService extends AbstractFileGenerationService {
     }
 
     private void createTableIndexRow(DbTable dbTable, Class<? extends DbIndexInfo> indexInfoClazz,
-                                     List<String> tableSpliter, StringBuffer content) throws Exception {
+                                     List<String> tableSpliter, StringBuilder content) throws Exception {
         List<String> indexHeaderName = this.getIndexHeaderName(indexInfoClazz);
         content.append("|").append(Joiner.on("|").join(indexHeaderName)).append("|").append(lineSeparator);
         content.append("|").append(Joiner.on("|").join(tableSpliter)).append("|").append(lineSeparator);
@@ -89,7 +101,7 @@ public class MarkdownOperatorService extends AbstractFileGenerationService {
 
     }
 
-    private void createDataRow(DbTable dbTable, Class<? extends DbColumnInfo> columnInfoClazz,Class<? extends DbIndexInfo> indexInfoClazz, List<String> tableSpliter,List<String> tableIndexSpliter, StringBuffer content) throws Exception {
+    private void createDataRow(DbTable dbTable, Class<? extends DbColumnInfo> columnInfoClazz,Class<? extends DbIndexInfo> indexInfoClazz, List<String> tableSpliter,List<String> tableIndexSpliter, StringBuilder content) throws Exception {
         this.createTableRow(dbTable, columnInfoClazz, tableSpliter, content);
         content.append(lineSeparator);
         if(CollectionUtils.isNotEmpty(dbTable.getTabsIndex())){
@@ -99,10 +111,11 @@ public class MarkdownOperatorService extends AbstractFileGenerationService {
         }
     }
 
-    private void createTitleRow(int index, String tableName, String tableComments, StringBuffer content) {
+    private void createTitleRow(int index, String tableName, String tableComments, StringBuilder content) {
         content.append(lineSeparator).append("### ").append(index + 1).append(".").append(tableName);
         if (StringUtils.isNotEmpty(tableComments)) {
-            content.append("(").append(tableComments).append(")").append(lineSeparator).append(lineSeparator);
+            content.append("(").append(tableComments).append(")");
         }
+        content.append(lineSeparator).append(lineSeparator);
     }
 }

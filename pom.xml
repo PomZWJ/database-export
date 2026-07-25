@@ -5,7 +5,7 @@
 
 	<groupId>io.github.pomzwj</groupId>
 	<artifactId>database-export</artifactId>
-	<version>5.0.0</version>
+	<version>6.0.0</version>
 	<packaging>pom</packaging>
 
 	<name>database-export</name>
@@ -40,7 +40,7 @@
     </modules>
 
 	<properties>
-		<database.core>5.0.0</database.core>
+		<database.core>6.0.0</database.core>
 		<dbutils.version>1.8.1</dbutils.version>
 		<spring.boot.version>2.6.3</spring.boot.version>
 		<druid.version>1.2.22</druid.version>
@@ -52,7 +52,8 @@
 		<sqlserver.version>12.6.0.jre8</sqlserver.version>
 		<postgresql.version>42.7.3</postgresql.version>
 		<poitl.version>1.12.2</poitl.version>
-		<common-io.version>2.11.0</common-io.version>
+		<poi.version>5.2.5</poi.version>
+		<common-io.version>2.16.1</common-io.version>
 		<common-lang3.version>3.12.0</common-lang3.version>
 		<commons-beanutils.version>1.9.4</commons-beanutils.version>
 		<orai18n.version>12.1.0.2.0</orai18n.version>
@@ -61,14 +62,14 @@
 		<clickhouse.version>0.6.0</clickhouse.version>
 		<sqlite.version>3.45.0.0</sqlite.version>
 		<db2.version>11.5.7.0</db2.version>
-		<database-export-core.verion>5.0.0</database-export-core.verion>
+		<database-export-core.verion>6.0.0</database-export-core.verion>
 		<dm.version>8.1.3.140</dm.version>
 		<buddy.version>1.14.15</buddy.version>
 		<httpclient5.version>5.3</httpclient5.version>
 		<itext.version>7.2.6</itext.version>
 
 		<maven-source-plugin.version>2.2.1</maven-source-plugin.version>
-		<maven-javadoc-plugin.version>2.9.1</maven-javadoc-plugin.version>
+		<maven-javadoc-plugin.version>3.6.3</maven-javadoc-plugin.version>
 		<maven-gpg-plugin.version>1.5</maven-gpg-plugin.version>
 		<central-publishing-maven-plugin.version>0.4.0</central-publishing-maven-plugin.version>
 	</properties>
@@ -90,6 +91,12 @@
 						<artifactId>commons-io</artifactId>
 					</exclusion>
 				</exclusions>
+			</dependency>
+			<!--POI，用于Excel导出-->
+			<dependency>
+				<groupId>org.apache.poi</groupId>
+				<artifactId>poi-ooxml</artifactId>
+				<version>${poi.version}</version>
 			</dependency>
 
 			<!--slf4j 自带的简单日志实现 -->
@@ -295,6 +302,13 @@
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-javadoc-plugin</artifactId>
 				<version>${maven-javadoc-plugin.version}</version>
+				<configuration>
+					<doclint>none</doclint>
+					<charset>UTF-8</charset>
+					<encoding>UTF-8</encoding>
+					<docencoding>UTF-8</docencoding>
+					<failOnError>false</failOnError>
+				</configuration>
 				<executions>
 					<execution>
 						<id>attach-javadocs</id>
@@ -311,7 +325,7 @@
 				<version>${maven-gpg-plugin.version}</version>
 				<configuration>
 					<executable>C:\Program Files (x86)\GnuPG\bin\gpg.exe</executable>
-					<keyname>pomzwj</keyname>
+					<keyname>zwj</keyname>
 				</configuration>
 				<executions>
 					<execution>

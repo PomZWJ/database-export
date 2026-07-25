@@ -12,6 +12,7 @@ import java.util.Date;
 public class DateUtils {
     /**
      * 获取当前日期,需要定义格式
+     * @param format 日期格式，如 yyyyMMdd
      * @return 当前时间字符串 yyyyMMdd
      */
     public static String getCurrentDate(String format) {

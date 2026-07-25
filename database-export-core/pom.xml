@@ -6,10 +6,14 @@
     <parent>
         <groupId>io.github.pomzwj</groupId>
         <artifactId>database-export</artifactId>
-        <version>5.0.0</version>
+        <version>6.0.0</version>
     </parent>
 
     <artifactId>database-export-core</artifactId>
+    <name>database-export-core</name>
+    <description>database export core module</description>
+    <url>https://github.com/PomZWJ/database-export</url>
+
     <properties>
         <maven.compiler.source>8</maven.compiler.source>
         <maven.compiler.target>8</maven.compiler.target>
@@ -33,6 +37,11 @@
         <dependency>
             <groupId>com.deepoove</groupId>
             <artifactId>poi-tl</artifactId>
+        </dependency>
+        <!--POI，用于Excel导出-->
+        <dependency>
+            <groupId>org.apache.poi</groupId>
+            <artifactId>poi-ooxml</artifactId>
         </dependency>
         <!--工具包-->
         <dependency>

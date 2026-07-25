@@ -15,7 +15,7 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * sqlserver数据库
+ * sqlserver数据库操作服务
  *
  * @author PomZWJ
  */
@@ -26,17 +26,27 @@ public class SqlServerDbService extends AbstractDbService {
 
     }
 
-    private static volatile SqlServerDbService siglegle;
+    private static volatile SqlServerDbService instance;
 
+    /**
+     * 获取SqlServerDbService单例实例
+     *
+     * @return SqlServerDbService单例实例
+     */
     public static SqlServerDbService getInstance() {
-        if(siglegle == null)
+        if(instance == null)
             synchronized(SqlServerDbService.class) {
-                if (siglegle == null)
-                    siglegle = new SqlServerDbService();
+                if (instance == null)
+                    instance = new SqlServerDbService();
             }
-        return siglegle;
+        return instance;
     }
 
+    /**
+     * 获取查询表信息的sql
+     *
+     * @return 查询表信息的sql,获取表名和备注
+     */
     @Override
     public List<DbTable> getQueryTableInfoSql()  {
         String sql = FileReaderUtils.getSqlFile("sql/sqlserver/query-table.sql");
@@ -44,18 +54,39 @@ public class SqlServerDbService extends AbstractDbService {
         return this.getTableNameAndComments(resultList);
     }
 
+    /**
+     * 查询表详细信息的sql位置
+     *
+     * @param dbBaseInfo 数据源基本信息
+     * @param tableName  表名
+     * @return 查询表详细信息的sql
+     */
     @Override
     public String getQueryTableDetailSql(DbBaseInfo dbBaseInfo,String tableName) {
         String sql = FileReaderUtils.getSqlFile("sql/sqlserver/query-table-detail.sql");
         return String.format(sql,tableName);
     }
 
+    /**
+     * 获取索引SQL
+     *
+     * @param dbBaseInfo 数据源基本信息
+     * @param tableName  表名
+     * @return 获取索引SQL
+     */
     @Override
     public String getIndexSql(DbBaseInfo dbBaseInfo,String tableName) {
         String sql = FileReaderUtils.getSqlFile("sql/sqlserver/query-index.sql");
         return String.format(sql,tableName);
     }
 
+    /**
+     * 解析表字段
+     *
+     * @param resultList  结果集
+     * @param dbColumBean 解析对象
+     * @return 解析表字段
+     */
     @Override
     public List<DbColumnInfo> setColumnDataInfo(List<Map<String, Object>> resultList,Class<? extends DbColumnInfo> dbColumBean) {
         List<DbColumnInfo> dbColumnInfos = new ArrayList<>();
@@ -82,6 +113,13 @@ public class SqlServerDbService extends AbstractDbService {
         return dbColumnInfos;
     }
 
+    /**
+     * 解析表索引
+     *
+     * @param resultList  结果集
+     * @param dbIndexBean 解析对象
+     * @return 解析表索引
+     */
     @Override
     public List<DbIndexInfo> setIndexDataInfo(List<Map<String, Object>> resultList, Class<? extends DbIndexInfo> dbIndexBean) {
         List<DbIndexInfo> dbIndexInfos = new ArrayList<>();
@@ -94,7 +132,7 @@ public class SqlServerDbService extends AbstractDbService {
                 sqlServerIndexInfo.setIndexId(MapUtils.getInteger(resultSet, "index_id"));
                 sqlServerIndexInfo.setIndexType(MapUtils.getString(resultSet,"index_type"));
                 Integer isDescending = MapUtils.getInteger(resultSet, "is_descending");
-                sqlServerIndexInfo.setDescending(isDescending == null || !isDescending.equals(1));
+                sqlServerIndexInfo.setDescending(isDescending != null && isDescending.equals(1));
                 dbIndexInfos.add(ClassUtils.copyDbIndexTarget(dbIndexBean,sqlServerIndexInfo));
             }
         }

@@ -93,10 +93,14 @@ public class DataExportController {
         DataSource dbPool = druidPoolUtils.createDbPool(dbBaseInfoVo);
         //查询表信息
         DbExportConfig dbExportConfig = new DbExportConfig().setSearchIndex(dbBaseInfoVo.getShowIndex() == 1);
-        dbExportConfig.setShowColumnList(Stream.of(dbBaseInfoVo.getColumnSetList().split(","))
-                .collect(Collectors.toList()));
-        dbExportConfig.setShowIndexList(Stream.of(dbBaseInfoVo.getIndexSetList().split(","))
-                .collect(Collectors.toList()));
+        if(StringUtils.isNotEmpty(dbBaseInfoVo.getColumnSetList())){
+            dbExportConfig.setShowColumnList(Stream.of(dbBaseInfoVo.getColumnSetList().split(","))
+                    .collect(Collectors.toList()));
+        }
+        if(StringUtils.isNotEmpty(dbBaseInfoVo.getIndexSetList())){
+            dbExportConfig.setShowIndexList(Stream.of(dbBaseInfoVo.getIndexSetList().split(","))
+                    .collect(Collectors.toList()));
+        }
         String selectTableStr = dbBaseInfoVo.getSelectTableStr();
         dbExportConfig.setGenerationFileTempDir(GENERATION_FILE_TEMP_DIR);
         dbExportConfig.setExportFileTypeEnum(ExportFileType.matchType(dbBaseInfoVo.getExportFileType()));
@@ -121,7 +125,16 @@ public class DataExportController {
         response.setHeader("Content-type", "text/html;charset=UTF-8");
         try {
             String fileName = downloadFile.getFileName();
+            //校验文件名，防止路径穿越攻击
+            if(StringUtils.isEmpty(fileName) || fileName.contains(File.separator) || fileName.contains("/") || fileName.contains("\\") || fileName.contains("..")){
+                response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+                return;
+            }
             file = new File(GENERATION_FILE_TEMP_DIR + File.separator + fileName);
+            if(!file.exists()){
+                response.setStatus(HttpServletResponse.SC_NOT_FOUND);
+                return;
+            }
             response.setContentType("application/octet-stream");
             SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMddHHmmss");
             response.setHeader("Content-Disposition", "attachment;fileName=" + fileName);
@@ -143,10 +156,14 @@ public class DataExportController {
         //查询表信息
         try {
             DbExportConfig dbExportConfig = new DbExportConfig().setSearchIndex(dbBaseInfoVo.getShowIndex() == 1 ? true:false);
-            dbExportConfig.setShowColumnList(Stream.of(dbBaseInfoVo.getColumnSetList().split(","))
-                    .collect(Collectors.toList()));
-            dbExportConfig.setShowIndexList(Stream.of(dbBaseInfoVo.getIndexSetList().split(","))
-                    .collect(Collectors.toList()));
+            if(StringUtils.isNotEmpty(dbBaseInfoVo.getColumnSetList())){
+                dbExportConfig.setShowColumnList(Stream.of(dbBaseInfoVo.getColumnSetList().split(","))
+                        .collect(Collectors.toList()));
+            }
+            if(StringUtils.isNotEmpty(dbBaseInfoVo.getIndexSetList())){
+                dbExportConfig.setShowIndexList(Stream.of(dbBaseInfoVo.getIndexSetList().split(","))
+                        .collect(Collectors.toList()));
+            }
             String selectTableStr = dbBaseInfoVo.getSelectTableStr();
             if(StringUtils.isNotEmpty(selectTableStr)){
                 dbExportConfig.setSelectTableList(Splitter.on(",").splitToList(selectTableStr));

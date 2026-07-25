@@ -17,28 +17,58 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.lang.reflect.Field;
+import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Collectors;
 
+/**
+ * 类操作工具类，提供字段排序、校验、对象复制及动态Bean创建等功能
+ *
+ * @author PomZWJ
+ */
 public class ClassUtils {
     static final Logger log = LoggerFactory.getLogger(ClassUtils.class);
+    /** 字段排序结果缓存，避免大表导出时每行都重复反射+排序 */
+    private static final ConcurrentHashMap<Class<?>, List<Field>> COLUMN_FIELD_CACHE = new ConcurrentHashMap<>();
+    private static final ConcurrentHashMap<Class<?>, List<Field>> INDEX_FIELD_CACHE = new ConcurrentHashMap<>();
+
+    /**
+     * 对列字段进行排序并缓存结果
+     *
+     * @param columnInfoClazz 列信息类，需为 {@code DbColumnInfo} 的子类
+     * @return 按 {@link DataColumnName#order()} 排序后的字段列表
+     */
     public static List<Field>sortColumnField(Class<? extends DbColumnInfo> columnInfoClazz){
-        List<Field> orderedFields = Lists.newArrayList(columnInfoClazz.getFields());
-        orderedFields.sort(Comparator.comparingInt(field -> {
-            return field.getAnnotation(DataColumnName.class).order();
-        }));
-        return orderedFields;
+        return COLUMN_FIELD_CACHE.computeIfAbsent(columnInfoClazz, clazz -> {
+            List<Field> orderedFields = new ArrayList<>(Lists.newArrayList(clazz.getFields()));
+            orderedFields.sort(Comparator.comparingInt(field -> field.getAnnotation(DataColumnName.class).order()));
+            return orderedFields;
+        });
     }
 
+    /**
+     * 对索引字段进行排序并缓存结果
+     *
+     * @param indexInfoClazz 索引信息类，需为 {@code DbIndexInfo} 的子类
+     * @return 按 {@link DbIndexName#order()} 排序后的字段列表
+     */
     public static List<Field>sortIndexField(Class<? extends DbIndexInfo> indexInfoClazz){
-        List<Field> orderedFields = Lists.newArrayList(indexInfoClazz.getFields());
-        orderedFields.sort(Comparator.comparingInt(field -> {
-            return field.getAnnotation(DbIndexName.class).order();
-        }));
-        return orderedFields;
+        return INDEX_FIELD_CACHE.computeIfAbsent(indexInfoClazz, clazz -> {
+            List<Field> orderedFields = new ArrayList<>(Lists.newArrayList(clazz.getFields()));
+            orderedFields.sort(Comparator.comparingInt(field -> field.getAnnotation(DbIndexName.class).order()));
+            return orderedFields;
+        });
     }
 
+    /**
+     * 校验指定的列名是否全部存在于列字段中
+     *
+     * @param clazz          列信息类，需为 {@code DbColumnInfo} 的子类
+     * @param showColumnName 待校验的列名列表
+     * @return 全部存在返回 true，否则返回 false；列表为空返回 true
+     */
     public static boolean checkColumnField(Class<? extends DbColumnInfo>clazz , List<String>showColumnName){
         if(CollectionUtils.isEmpty(showColumnName)){
             return true;
@@ -52,6 +82,14 @@ public class ClassUtils {
         }
         return true;
     }
+
+    /**
+     * 校验指定的索引名是否全部存在于索引字段中
+     *
+     * @param clazz          索引信息类，需为 {@code DbIndexInfo} 的子类
+     * @param showColumnName 待校验的索引名列表
+     * @return 全部存在返回 true，否则返回 false；列表为空返回 true
+     */
     public static boolean checkIndexField(Class<? extends DbIndexInfo>clazz , List<String>showColumnName){
         if(CollectionUtils.isEmpty(showColumnName)){
             return true;
@@ -67,6 +105,11 @@ public class ClassUtils {
     }
 
 
+    /**
+     * 从列名列表中移除基础列字段对应的名称
+     *
+     * @param showColumnName 待处理的列名列表，会被直接修改
+     */
     public static void excludeBaseColumnField(List<String>showColumnName){
         if(CollectionUtils.isEmpty(showColumnName)){
             return;
@@ -78,6 +121,12 @@ public class ClassUtils {
             }
         }
     }
+
+    /**
+     * 从索引名列表中移除基础索引字段对应的名称
+     *
+     * @param showIndexName 待处理的索引名列表，会被直接修改
+     */
     public static void excludeBaseIndexField(List<String>showIndexName){
         if(CollectionUtils.isEmpty(showIndexName)){
             return;
@@ -90,6 +139,13 @@ public class ClassUtils {
         }
     }
 
+    /**
+     * 复制列信息对象到指定子类实例
+     *
+     * @param dbColumBean   目标列信息类，需为 {@code DbColumnInfo} 的子类
+     * @param dbColumnInfo  源列信息对象
+     * @return 复制后的目标对象，失败返回 null
+     */
     public static DbColumnInfo copyDbColumnTarget(Class<? extends DbColumnInfo> dbColumBean,DbColumnInfo dbColumnInfo){
         DbColumnInfo target = null;
         try {
@@ -102,6 +158,13 @@ public class ClassUtils {
         return null;
     }
 
+    /**
+     * 复制索引信息对象到指定子类实例
+     *
+     * @param dbIndexBean  目标索引信息类，需为 {@code DbIndexInfo} 的子类
+     * @param dbIndexInfo  源索引信息对象
+     * @return 复制后的目标对象，失败返回 null
+     */
     public static DbIndexInfo copyDbIndexTarget(Class<? extends DbIndexInfo> dbIndexBean,DbIndexInfo dbIndexInfo){
         DbIndexInfo target = null;
         try {
@@ -114,6 +177,13 @@ public class ClassUtils {
         return null;
     }
 
+    /**
+     * 动态创建列信息Bean，仅包含指定列字段
+     *
+     * @param clazz          列信息类，需为 {@code DbColumnInfo} 的子类
+     * @param showColumnName 需要保留的列名列表，为空或null表示保留全部
+     * @return 动态生成的未加载Bean类型
+     */
     public static DynamicType.Unloaded<DbColumnInfo> createDbColumBean(Class<? extends DbColumnInfo>clazz, List<String>showColumnName){
         boolean showColumnFlag = CollectionUtils.isNotEmpty(showColumnName);
         List<String> baseColumnList = ClassUtils.sortColumnField(DbColumnInfo.class).stream().map(Field::getName).collect(Collectors.toList());
@@ -149,6 +219,13 @@ public class ClassUtils {
         return subclass.make();
     }
 
+    /**
+     * 动态创建索引信息Bean，仅包含指定索引字段
+     *
+     * @param clazz         索引信息类，需为 {@code DbIndexInfo} 的子类
+     * @param showIndexName 需要保留的索引名列表，为空或null表示保留全部
+     * @return 动态生成的未加载Bean类型
+     */
     public static DynamicType.Unloaded<DbIndexInfo> createDbIndexBean(Class<? extends DbIndexInfo>clazz, List<String>showIndexName){
         boolean showIndexFlag = CollectionUtils.isNotEmpty(showIndexName);
         List<String> baseIndexList = ClassUtils.sortIndexField(DbIndexInfo.class).stream().map(Field::getName).collect(Collectors.toList());

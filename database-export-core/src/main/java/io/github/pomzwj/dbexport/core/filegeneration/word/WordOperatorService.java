@@ -18,7 +18,7 @@ import java.util.Map;
 
 
 /**
- * 类说明:POI-TL操作服务
+ * 基于 POI-TL 操作服务，根据模板渲染生成 Word 文档。
  *
  * @author PomZWJ
  */
@@ -28,17 +28,29 @@ public class WordOperatorService extends AbstractFileGenerationService {
 
 	}
 
-	private static volatile WordOperatorService siglegle;
+	private static volatile WordOperatorService instance;
 
+	/**
+	 * 获取单例实例（双重检查锁定）。
+	 *
+	 * @return 单例实例
+	 */
 	public static WordOperatorService getInstance() {
-		if(siglegle == null)
+		if(instance == null)
 			synchronized(WordOperatorService.class) {
-				if (siglegle == null)
-					siglegle = new WordOperatorService();
+				if (instance == null)
+					instance = new WordOperatorService();
 			}
-		return siglegle;
+		return instance;
 	}
 
+	/**
+	 * 将表数据写入 Word 文件流。
+	 *
+	 * @param tableList  表数据列表
+	 * @param targetFile 目标文件
+	 * @throws Exception 抛出异常信息
+	 */
 	@Override
 	protected void makeFileStream(List<DbTable> tableList, File targetFile)throws Exception {
 		String templateCopyPath = DataBaseConfigConstant.SYSTEM_FILE_DIR;
@@ -76,6 +88,15 @@ public class WordOperatorService extends AbstractFileGenerationService {
 		template.writeToFile(targetFile.getAbsolutePath());
 	}
 
+	/**
+	 * 获取表字段行数据（含表头）。
+	 *
+	 * @param dbTable          表信息
+	 * @param columnInfoClazz  列信息class
+	 * @param headerRow        表头行数据
+	 * @return 表字段行数据列表
+	 * @throws Exception 抛出异常信息
+	 */
 	public List<RowRenderData> getRow(DbTable dbTable, Class<? extends DbColumnInfo> columnInfoClazz, RowRenderData headerRow) throws Exception {
 		List<DbColumnInfo> tabsColumn = dbTable.getTabsColumn();
 		List<RowRenderData> rows = new ArrayList<>();
@@ -91,6 +112,15 @@ public class WordOperatorService extends AbstractFileGenerationService {
 		return rows;
 	}
 
+	/**
+	 * 获取表索引行数据（含表头）。
+	 *
+	 * @param dbTable         表信息
+	 * @param indexInfoClazz  索引信息class
+	 * @param headerRow       表头行数据
+	 * @return 表索引行数据列表
+	 * @throws Exception 抛出异常信息
+	 */
 	public List<RowRenderData> getRowIndex(DbTable dbTable, Class<? extends DbIndexInfo> indexInfoClazz, RowRenderData headerRow) throws Exception {
 		List<DbIndexInfo> tabsIndexInfos = dbTable.getTabsIndex();
 		List<RowRenderData> rows = new ArrayList<>();

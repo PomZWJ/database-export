@@ -12,54 +12,81 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * db2数据库操作服务
+ *
+ * @author PomZWJ
+ */
 public class Db2DbService extends AbstractDbService {
     private Db2DbService() {
 
     }
 
-    private static volatile Db2DbService siglegle;
+    private static volatile Db2DbService instance;
 
+    /**
+     * 获取Db2DbService单例实例
+     *
+     * @return Db2DbService单例实例
+     */
     public static Db2DbService getInstance() {
-        if (siglegle == null)
+        if (instance == null)
             synchronized (Db2DbService.class) {
-                if (siglegle == null)
-                    siglegle = new Db2DbService();
+                if (instance == null)
+                    instance = new Db2DbService();
             }
-        return siglegle;
+        return instance;
     }
 
+    /**
+     * 获取查询表信息的sql
+     *
+     * @return 查询表信息的sql,获取表名和备注
+     */
     @Override
     public List<DbTable> getQueryTableInfoSql() {
         String sql = FileReaderUtils.getSqlFile("sql/db2/query-table.sql");
         DbBaseInfo dbBaseInfo = dbBaseInfoThreadLocal.get();
-        String schemas = dbBaseInfo.getSchemas();
-        if(!schemas.equalsIgnoreCase("CURRENT SCHEMA")){
-            schemas = "'"+schemas+"'";
-        }
+        String schemas = StringUtils.isEmpty(dbBaseInfo.getSchemas()) ? "CURRENT SCHEMA" : "'" + dbBaseInfo.getSchemas() + "'";
         List<Map<String, Object>> resultList = this.queryListMapDataBase(dataSourceThreadLocal.get(),String.format(sql,schemas));
         return this.getTableNameAndComments(resultList);
     }
 
+    /**
+     * 查询表详细信息的sql位置
+     *
+     * @param dbBaseInfo 数据源基本信息
+     * @param tableName  表名
+     * @return 查询表详细信息的sql
+     */
     @Override
     public String getQueryTableDetailSql(DbBaseInfo dbBaseInfo,String tableName) {
-        String schemas = dbBaseInfo.getSchemas();
-        if(!schemas.equalsIgnoreCase("CURRENT SCHEMA")){
-            schemas = "'"+schemas+"'";
-        }
+        String schemas = StringUtils.isEmpty(dbBaseInfo.getSchemas()) ? "CURRENT SCHEMA" : "'" + dbBaseInfo.getSchemas() + "'";
         String sql = FileReaderUtils.getSqlFile("sql/db2/query-table-detail.sql");
         return String.format(sql,schemas,tableName);
     }
 
+    /**
+     * 获取索引SQL
+     *
+     * @param dbBaseInfo 数据源基本信息
+     * @param tableName  表名
+     * @return 获取索引SQL
+     */
     @Override
     public String getIndexSql(DbBaseInfo dbBaseInfo,String tableName) {
-        String schemas = dbBaseInfo.getSchemas();
-        if(!schemas.equalsIgnoreCase("CURRENT SCHEMA")){
-            schemas = "'"+schemas+"'";
-        }
+        String schemas = StringUtils.isEmpty(dbBaseInfo.getSchemas()) ? "CURRENT SCHEMA" : "'" + dbBaseInfo.getSchemas() + "'";
         String sql = FileReaderUtils.getSqlFile("sql/db2/query-index.sql");
         return String.format(sql,schemas,tableName);
     }
 
+    /**
+     * 解析表字段
+     *
+     * @param resultList  结果集
+     * @param dbColumBean 解析对象
+     * @return 解析表字段
+     */
     @Override
     public List<DbColumnInfo> setColumnDataInfo(List<Map<String, Object>> resultList,Class<? extends DbColumnInfo> dbColumBean) {
         List<DbColumnInfo> dbColumnInfos = new ArrayList<>();
@@ -84,6 +111,13 @@ public class Db2DbService extends AbstractDbService {
         return dbColumnInfos;
     }
 
+    /**
+     * 解析表索引
+     *
+     * @param resultList  结果集
+     * @param dbIndexBean 解析对象
+     * @return 解析表索引
+     */
     @Override
     public List<DbIndexInfo> setIndexDataInfo(List<Map<String, Object>> resultList, Class<? extends DbIndexInfo> dbIndexBean) {
         List<DbIndexInfo> dbIndexInfos = new ArrayList<>();

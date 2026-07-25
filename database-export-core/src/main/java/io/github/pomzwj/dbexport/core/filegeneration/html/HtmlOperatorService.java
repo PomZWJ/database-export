@@ -10,31 +10,49 @@ import java.io.*;
 import java.nio.charset.StandardCharsets;
 import java.util.List;
 
+/**
+ * 导出 HTML 文件，基于模板渲染目录与表数据。
+ *
+ * @author PomZWJ
+ */
 public class HtmlOperatorService extends AbstractFileGenerationService {
 
     private HtmlOperatorService(){
 
     }
 
-    private static volatile HtmlOperatorService siglegle;
+    private static volatile HtmlOperatorService instance;
 
+    /**
+     * 获取单例实例（双重检查锁定）。
+     *
+     * @return 单例实例
+     */
     public static HtmlOperatorService getInstance() {
-        if(siglegle == null)
+        if(instance == null)
             synchronized(HtmlOperatorService.class) {
-                if (siglegle == null)
-                    siglegle = new HtmlOperatorService();
+                if (instance == null)
+                    instance = new HtmlOperatorService();
             }
-        return siglegle;
+        return instance;
     }
+
+    /**
+     * 将表数据写入 HTML 文件流。
+     *
+     * @param tableList  表数据列表
+     * @param targetFile 目标文件
+     * @throws Exception 抛出异常信息
+     */
     @Override
     protected void makeFileStream(List<DbTable> tableList, File targetFile) throws Exception {
         FileInputStream inputStream = null;
         try{
-            StringBuffer title = new StringBuffer("<ol>");
-            StringBuffer content = new StringBuffer("");
+            StringBuilder title = new StringBuilder("<ol>");
+            StringBuilder content = new StringBuilder();
             for (int i = 0; i < tableList.size(); i++) {
                 DbTable dbTable = tableList.get(i);
-                //创建表名列
+                //创建表名�?
                 this.createTileRow(i,dbTable.getTableName(), dbTable.getTableComments(), title);
                 this.createDataRow(i,dbTable, content);
             }
@@ -57,14 +75,14 @@ public class HtmlOperatorService extends AbstractFileGenerationService {
 
     }
 
-    private void createDataRow(int index,DbTable dbTable,StringBuffer content) throws Exception {
+    private void createDataRow(int index,DbTable dbTable,StringBuilder content) throws Exception {
         this.createTableRow(index,dbTable,content);
         if(CollectionUtils.isNotEmpty(dbTable.getTabsIndex())){
             this.createTableIndexRow(index,dbTable,content);
         }
     }
 
-    private void createTableRow(int index,DbTable dbTable, StringBuffer content)throws Exception{
+    private void createTableRow(int index,DbTable dbTable, StringBuilder content)throws Exception{
         Class<? extends DbColumnInfo> columnInfoClazz = dbExportConfigThreadLocal.get().getDbColumnInfoDynamicClazz();
         List<String> columnHeaderName = this.getColumnHeaderName(columnInfoClazz);
         content.append(String.format("<h2 id='%s'>%s.%s(%s)</h2>", dbTable.getTableName(),index+1, dbTable.getTableName(), dbTable.getTableComments()));
@@ -81,14 +99,14 @@ public class HtmlOperatorService extends AbstractFileGenerationService {
         for (int i = 0; i < tableColumnData.size(); i++) {
             content.append("<tr>");
             for(int j = 0 ; j < tableColumnData.get(i).size() ; j++){
-                content.append(String.format("<td>%s</th>", tableColumnData.get(i).get(j)));
+                content.append(String.format("<td>%s</td>", tableColumnData.get(i).get(j)));
             }
             content.append("</tr>");
         }
         content.append("</table>");
     }
 
-    private void createTableIndexRow(int index, DbTable dbTable, StringBuffer content)throws Exception {
+    private void createTableIndexRow(int index, DbTable dbTable, StringBuilder content)throws Exception {
         if(CollectionUtils.isEmpty(dbTable.getTabsIndex())){
             return;
         }
@@ -107,14 +125,14 @@ public class HtmlOperatorService extends AbstractFileGenerationService {
         for (int i = 0; i < tableColumnData.size(); i++) {
             content.append("<tr>");
             for(int j = 0 ; j < tableColumnData.get(i).size() ; j++){
-                content.append(String.format("<td>%s</th>", tableColumnData.get(i).get(j)));
+                content.append(String.format("<td>%s</td>", tableColumnData.get(i).get(j)));
             }
             content.append("</tr>");
         }
         content.append("</table>");
     }
 
-    private void createTileRow(int index,String tableName, String tableComments, StringBuffer title) {
+    private void createTileRow(int index,String tableName, String tableComments, StringBuilder title) {
         title.append(String.format("<li><a href='#%s' title='%s(%s)'>%s.%s(%s)</a>", tableName, tableName, tableComments,index+1, tableName, tableComments));
     }
 
