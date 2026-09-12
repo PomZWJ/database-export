@@ -133,7 +133,7 @@ public class HtmlOperatorService extends AbstractFileGenerationService {
     }
 
     private void createTileRow(int index,String tableName, String tableComments, StringBuilder title) {
-        title.append(String.format("<li><a href='#%s' title='%s(%s)'>%s.%s(%s)</a>", tableName, tableName, tableComments,index+1, tableName, tableComments));
+        title.append(String.format("<li><a href='#%s' title='%s(%s)'>%s.%s(%s)</a></li>", tableName, tableName, tableComments,index+1, tableName, tableComments));
     }
 
 
